@@ -421,18 +421,51 @@
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
         
-        // THE HOLLOW – SIMPLE, EASY-TO-READ NIGHT-BY-NIGHT DATA
+        // THE HOLLOW – CORRECT NIGHT ORDER (Source: Official Roblox Announcement)
         const data = {
             1: {
+                game: "99 Nights in the Forest",
+                normal: {
+                    title: "Quest - Night 1 Survival",
+                    steps: [
+                        { t: "Enter 99 Nights", d: "From The Hollow hub, portal into 99 Nights in the Forest." },
+                        { t: "Start a Run", d: "Begin a standard run and survive the first night." },
+                        { t: "Avoid The Deer", d: "Keep moving and use cover when The Deer appears." },
+                        { t: "Survive Until Dawn", d: "Make it through Night 1 without being caught." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 1 statue." }
+                    ],
+                    loc: "99 Nights in the Forest – Night 1",
+                    tip: "Stick with other players; The Deer targets isolated survivors.",
+                    warn: "",
+                    reward: "Night 1 badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - The Deer's Trail",
+                    intro: "You need the Night 1 badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Find The Deer's Footprints", d: "After surviving Night 1, look for glowing hoofprints near the forest edge." },
+                        { t: "Follow The Trail", d: "Follow the hoofprints through the trees until they lead to a hidden clearing." },
+                        { t: "Interact With The Shrine", d: "Approach the small wooden shrine and interact with it." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and claim your prize at the Night 1 statue." }
+                    ],
+                    loc: "Hidden clearing behind the forest edge",
+                    tip: "The hoofprints only appear after you've survived Night 1.",
+                    warn: "You MUST have the Night 1 badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Forest edge → follow glowing hoofprints → hidden clearing → wooden shrine → interact."
+                }
+            },
+            2: {
                 game: "DOORS",
                 normal: {
                     title: "Quest - The Candy Vault",
                     steps: [
-                        { t: "Enter DOORS", d: "From The Hollow hub, walk through the first portal into DOORS." },
+                        { t: "Enter DOORS", d: "From The Hollow hub, walk through the second portal into DOORS." },
                         { t: "Host the Candy Vault", d: "Choose 'The Candy Vault Floor' and start the run." },
                         { t: "Descend 50 Floors", d: "Go down all 50 floors. Eat candy you find and put unwanted candy in the cauldron." },
                         { t: "Escape in 20 Minutes", d: "Reach the bottom and exit the vault before the timer ends." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 1 statue." }
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 2 statue." }
                     ],
                     loc: "DOORS – Candy Vault Floor",
                     tip: "One person should watch Abe while the rest search for candy and keys.",
@@ -456,39 +489,6 @@
                     warn: "You MUST complete the DOORS Candy Vault first!",
                     reward: "Lord Umberhallow BLOXikin UGC + badge",
                     visualDesc: "Elevator → Floor 1 → collect 5 pieces → puzzle board → relic → back to elevator."
-                }
-            },
-            2: {
-                game: "99 Nights in the Forest",
-                normal: {
-                    title: "Quest - Night 1 Survival",
-                    steps: [
-                        { t: "Enter 99 Nights", d: "From The Hollow hub, portal into 99 Nights in the Forest." },
-                        { t: "Start a Run", d: "Begin a standard run and survive the first night." },
-                        { t: "Avoid The Deer", d: "Keep moving and use cover when The Deer appears." },
-                        { t: "Survive Until Dawn", d: "Make it through Night 1 without being caught." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 2 statue." }
-                    ],
-                    loc: "99 Nights in the Forest – Night 1",
-                    tip: "Stick with other players; The Deer targets isolated survivors.",
-                    warn: "",
-                    reward: "Night 1 badge + UGC"
-                },
-                secret: {
-                    title: "Side Quest - The Deer's Trail",
-                    intro: "You need the Night 1 badge first!",
-                    verified: true,
-                    steps: [
-                        { t: "Find The Deer's Footprints", d: "After surviving Night 1, look for glowing hoofprints near the forest edge." },
-                        { t: "Follow The Trail", d: "Follow the hoofprints through the trees until they lead to a hidden clearing." },
-                        { t: "Interact With The Shrine", d: "Approach the small wooden shrine and interact with it." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and claim your prize at the Night 2 statue." }
-                    ],
-                    loc: "Hidden clearing behind the forest edge",
-                    tip: "The hoofprints only appear after you've survived Night 1.",
-                    warn: "You MUST have the Night 1 badge first!",
-                    reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Forest edge → follow glowing hoofprints → hidden clearing → wooden shrine → interact."
                 }
             },
             3: {
@@ -748,7 +748,7 @@
                 { name: "Atlantiszen", handle: "Atlantiszen" }
             ],
             blue: [
-                { name: "Meowsiio", handle: "Meowsiio" }, // Duplicate in blue as requested
+                { name: "Meowsiio", handle: "Meowsiio" },
                 { name: "Th3_avocad0", handle: "Th3_avocad0" },
                 { name: "Brightgreenpart", handle: "Brightgreenpart" },
                 { name: "Guavamatchaa", handle: "Guavamatchaa" },
@@ -757,10 +757,7 @@
                 { name: "Echoplusjupiter", handle: "Echoplusjupiter" },
                 { name: "Nauticalcaptain", handle: "Nauticalcaptain" }
             ],
-            white: [
-                // Waiting for user input
-                { name: "Coming Soon", handle: "TBD" }
-            ]
+            white: "To join the White Ghost group, you must find an active Roblox Plus member in-game and join their group, or send a request in the Hollow Hub!"
         };
 
         let currentYear = null;
@@ -1044,22 +1041,27 @@
         }
 
         function renderFriendList(groupKey, groupName) {
-            const players = friendGroups[groupKey] || [];
+            const players = friendGroups[groupKey];
             friendsTitle.textContent = `👻 ${groupName}`;
             
             let html = `
                 <div class="back-btn-container">
                     <button class="btn-back" style="width: auto; padding: 8px 15px; margin-top: 0; font-size: 14px;" onclick="renderGhostGroups()">← Back to Ghosts</button>
                 </div>
-                <div class="friends-grid">
             `;
 
-            if (players.length === 0) {
-                html += `<div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 20px;">No friends found in this group yet.</div>`;
-            } else {
+            if (typeof players === 'string') {
+                // Special message for White Ghost
+                html += `
+                    <div style="text-align: center; padding: 40px 20px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333;">
+                        <div style="font-size: 40px; margin-bottom: 20px;">👻</div>
+                        <h3 style="color: #ffd9a8; margin-bottom: 15px;">White Ghost Group</h3>
+                        <p style="color: #b9a8d0; font-size: 16px; line-height: 1.6;">${players}</p>
+                    </div>
+                `;
+            } else if (Array.isArray(players) && players.length > 0) {
+                html += `<div class="friends-grid">`;
                 players.forEach(p => {
-                    // Attempt to fetch real Roblox headshot using username
-                    // Fallback to a clean placeholder if it fails
                     const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                     const imageUrl = `https://www.roblox.com/headshot-thumbnail/image?username=${encodeURIComponent(p.handle)}&width=150&height=150&format=png`;
                     const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
@@ -1070,7 +1072,6 @@
                                 <div class="friend-avatar-wrap">
                                     <img src="${imageUrl}" onerror="this.onerror=null; this.src='${fallbackUrl}';" alt="${p.name}" class="friend-avatar">
                                     <div class="friend-status-icon">
-                                        <!-- Generic user icon to mimic the offline indicator -->
                                         <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                                     </div>
                                 </div>
@@ -1084,9 +1085,11 @@
                         </a>
                     `;
                 });
+                html += `</div>`;
+            } else {
+                html += `<div style="text-align: center; color: #888; padding: 20px;">No friends found in this group yet.</div>`;
             }
 
-            html += `</div>`;
             friendsBody.innerHTML = html;
         }
 
@@ -1130,7 +1133,7 @@
             resultsEl.style.display = 'none';
 
             const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions to get the SIDE QUEST badges for The Hollow (Roblox Halloween event) for upcoming nights. 
-Nights to cover: Night 2 (99 Nights in the Forest), Night 3 (Dandy's World), Night 4 (Piggy), Night 5 (The Mimic), Night 6 (Scary Shawarma Kiosk), Night 7 (Animal Hospital), Night 8 (Demonology), Night 9 (WARDEN).
+Nights to cover: Night 2 (DOORS), Night 3 (Dandy's World), Night 4 (Piggy), Night 5 (The Mimic), Night 6 (Scary Shawarma Kiosk), Night 7 (Animal Hospital), Night 8 (Demonology), Night 9 (WARDEN).
 For EACH game, provide:
 1. The exact step-by-step instructions (numbered).
 2. The exact location of the secret podium or final step.
