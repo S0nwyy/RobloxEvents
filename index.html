@@ -3,132 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROBLOX - The Hunt: Roblox 20 Ultimate Guide</title>
+    <meta name="theme-color" content="#1a0b2e">
+    <title>ROBLOX - The Hollow: Roblox Halloween Ultimate Guide</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Verdana', Arial, sans-serif; }
-        body { background-color: #e3e3e3; color: #333; min-height: 100vh; overflow-x: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Trebuchet MS', Verdana, Arial, sans-serif; }
+        body { background: #0d0614; background-image: radial-gradient(ellipse at top, #2a1445 0%, #0d0614 65%); color: #e6ddf2; min-height: 100vh; overflow-x: hidden; }
         @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes floatGhost { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-28px) rotate(6deg); } }
         @keyframes flashWarning {
-            0%, 100% { opacity: 1; box-shadow: 0 0 15px 3px #ffeb3b; transform: scale(1); border-color: #ffeb3b; }
-            50% { opacity: 0.6; box-shadow: 0 0 5px 1px #ff9800; transform: scale(0.97); border-color: #ff9800; }
+            0%, 100% { opacity: 1; box-shadow: 0 0 18px 4px #ff7b00; transform: scale(1); border-color: #ff7b00; }
+            50% { opacity: 0.6; box-shadow: 0 0 6px 1px #ff3d00; transform: scale(0.97); border-color: #ff3d00; }
         }
-        .navbar { background: linear-gradient(to bottom, #0074d9, #0055a5); border-bottom: 2px solid #003366; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.2); animation: slideDown 0.5s ease-out; position: sticky; top: 0; z-index: 100; }
-        .logo { color: white; font-size: 24px; font-weight: bold; text-shadow: 2px 2px 0 #003366; cursor: pointer; letter-spacing: 1px; }
+        /* Floating spooky background */
+        .spooky-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .spooky-bg span { position: absolute; font-size: 38px; opacity: 0.13; animation: floatGhost 11s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,123,0,0.6)); }
+        .spooky-bg span:nth-child(1) { left: 5%; top: 12%; animation-delay: 0s; }
+        .spooky-bg span:nth-child(2) { right: 8%; top: 22%; animation-delay: 1.5s; }
+        .spooky-bg span:nth-child(3) { left: 12%; bottom: 18%; animation-delay: 3s; }
+        .spooky-bg span:nth-child(4) { right: 14%; bottom: 10%; animation-delay: 4.5s; }
+        .spooky-bg span:nth-child(5) { left: 48%; top: 6%; animation-delay: 2s; }
+        .spooky-bg span:nth-child(6) { right: 40%; bottom: 30%; animation-delay: 5.5s; }
+
+        .navbar { background: linear-gradient(to bottom, #3b1a5e, #1a0b2e); border-bottom: 2px solid #ff7b00; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 14px rgba(255,123,0,0.25); animation: slideDown 0.5s ease-out; position: sticky; top: 0; z-index: 100; }
+        .logo { color: #ff9d3d; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px #ff7b00, 2px 2px 0 #000; cursor: pointer; letter-spacing: 1px; }
         .nav-links { display: flex; gap: 15px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 3px; transition: 0.2s; }
-        .nav-links a:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
-        .date-display { background: rgba(0,0,0,0.3); color: #FFD700; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); }
-        .container { max-width: 900px; margin: 30px auto; padding: 0 15px; animation: fadeIn 0.8s ease-out; }
-        .box { background: white; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; animation: slideUp 0.6s ease-out; }
-        .box-header { background: linear-gradient(to bottom, #f0f0f0, #e0e0e0); border-bottom: 1px solid #ccc; padding: 8px 12px; font-weight: bold; font-size: 13px; color: #333; }
+        .nav-links a { color: #ffd9a8; text-decoration: none; font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 3px; transition: 0.2s; }
+        .nav-links a:hover { background: rgba(255,123,0,0.22); transform: translateY(-2px); color: #fff; }
+        .date-display { background: rgba(0,0,0,0.45); color: #ffb84d; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,123,0,0.45); }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 15px; animation: fadeIn 0.8s ease-out; position: relative; z-index: 1; }
+        .box { background: #1a0f26; border: 1px solid #4a2c6e; border-radius: 6px; box-shadow: 0 1px 6px rgba(0,0,0,0.6), 0 0 22px rgba(156,39,176,0.10); margin-bottom: 20px; animation: slideUp 0.6s ease-out; }
+        .box-header { background: linear-gradient(to bottom, #2b1247, #1a0b2e); border-bottom: 1px solid #4a2c6e; padding: 8px 12px; font-weight: bold; font-size: 13px; color: #ffb84d; letter-spacing: 0.5px; }
         .box-content { padding: 20px; }
-        .title-box { text-align: center; padding: 20px; }
-        .title-box h1 { color: #0055a5; font-size: 28px; margin-bottom: 10px; }
-        .title-box p { color: #666; font-size: 14px; }
+        .title-box { text-align: center; padding: 24px 20px; }
+        .title-box h1 { color: #ff9d3d; font-size: 28px; margin-bottom: 10px; text-shadow: 0 0 14px rgba(255,123,0,0.55); }
+        .title-box p { color: #b9a8d0; font-size: 14px; line-height: 1.5; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-        .year-btn { background: linear-gradient(to bottom, #ffffff, #e6e6e6); border: 1px solid #999; border-bottom: 3px solid #777; padding: 12px 10px; font-size: 16px; font-weight: bold; color: #333; cursor: pointer; border-radius: 3px; transition: all 0.2s ease; }
-        .year-btn:hover { background: linear-gradient(to bottom, #e6f2ff, #cce0ff); border-color: #0074d9; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,116,217,0.3); }
-        .year-btn:active { transform: translateY(0); border-bottom: 1px solid #777; }
-        .year-btn.claimable { border-color: #e0b800; box-shadow: 0 0 6px 1px rgba(255, 215, 0, 0.55), inset 0 0 2px rgba(255, 215, 0, 0.35); }
-        .year-btn.claimable:hover { box-shadow: 0 0 8px 2px rgba(255, 215, 0, 0.65), 0 5px 15px rgba(0,116,217,0.3); }
-        .year-btn.unverified { border-color: #aaa; opacity: 0.85; }
+        .year-btn { background: linear-gradient(to bottom, #2b1247, #1e0d33); border: 1px solid #6a3d9c; border-bottom: 3px solid #4a2c6e; padding: 12px 10px; font-size: 16px; font-weight: bold; color: #e6ddf2; cursor: pointer; border-radius: 4px; transition: all 0.2s ease; }
+        .year-btn:hover { background: linear-gradient(to bottom, #4a1f7a, #331250); border-color: #ff7b00; transform: translateY(-3px); box-shadow: 0 5px 18px rgba(255,123,0,0.35); }
+        .year-btn:active { transform: translateY(0); border-bottom: 1px solid #4a2c6e; }
+        .year-btn.claimable { border-color: #ff7b00; box-shadow: 0 0 9px 2px rgba(255,123,0,0.75), inset 0 0 4px rgba(255,123,0,0.4); color: #ffd9a8; }
+        .year-btn.claimable:hover { box-shadow: 0 0 12px 3px rgba(255,123,0,0.85), 0 5px 18px rgba(255,123,0,0.35); }
+        .year-btn.unverified { border-color: #5c4a73; opacity: 0.85; }
         .year-btn.flashing-year { animation: flashWarning 0.5s infinite !important; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(3px); }
+        .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5,0,10,0.78); z-index: 1000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(4px); }
         .overlay.active { display: flex; animation: fadeIn 0.3s ease-out; }
-        .modal { background: white; border: 2px solid #0055a5; border-radius: 5px; width: 100%; max-width: 800px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 5px 20px rgba(0,0,0,0.4); animation: slideUp 0.4s ease-out; }
-        .modal-header { background: linear-gradient(to bottom, #0074d9, #0055a5); color: white; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #003366; }
+        .modal { background: #170d24; border: 2px solid #ff7b00; border-radius: 6px; width: 100%; max-width: 800px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 5px 30px rgba(0,0,0,0.85), 0 0 40px rgba(255,123,0,0.15); animation: slideUp 0.4s ease-out; }
+        .modal-header { background: linear-gradient(to bottom, #3b1a5e, #2b1247); color: #ffb84d; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff7b00; }
         .modal-header h2 { font-size: 16px; }
-        .close-btn { background: #d93838; color: white; border: 1px solid #990000; border-bottom: 2px solid #660000; width: 24px; height: 24px; font-size: 14px; font-weight: bold; cursor: pointer; border-radius: 2px; transition: 0.2s; }
-        .close-btn:hover { transform: scale(1.1); }
-        .close-btn:active { transform: translateY(1px); border-bottom: 1px solid #660000; }
+        .close-btn { background: #7a1f1f; color: #ffd9a8; border: 1px solid #4a0f0f; border-bottom: 2px solid #330a0a; width: 24px; height: 24px; font-size: 14px; font-weight: bold; cursor: pointer; border-radius: 2px; transition: 0.2s; }
+        .close-btn:hover { transform: scale(1.1); background: #b52a2a; }
+        .close-btn:active { transform: translateY(1px); border-bottom: 1px solid #330a0a; }
         .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
         .choice-box { text-align: center; padding: 20px; }
-        .choice-box h3 { font-size: 18px; margin-bottom: 20px; }
-        .big-btn { display: block; width: 100%; padding: 14px; margin-bottom: 10px; font-size: 16px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid; border-bottom: 3px solid; transition: all 0.2s ease; text-align: center; text-decoration: none; }
+        .choice-box h3 { font-size: 18px; margin-bottom: 20px; color: #ffd9a8; }
+        .big-btn { display: block; width: 100%; padding: 14px; margin-bottom: 10px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; border: 1px solid; border-bottom: 3px solid; transition: all 0.2s ease; text-align: center; text-decoration: none; }
         .big-btn:active { transform: translateY(2px); border-bottom-width: 1px; }
-        .btn-normal { background: linear-gradient(to bottom, #fff, #e6e6e6); border-color: #999; border-bottom-color: #777; color: #333; }
-        .btn-normal:hover { background: linear-gradient(to bottom, #f0f0f0, #d9d9d9); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .btn-secret { background: linear-gradient(to bottom, #fff9c4, #fff59d); border-color: #fbc02d; border-bottom-color: #f9a825; color: #333; }
-        .btn-secret:hover { background: linear-gradient(to bottom, #fff59d, #fff176); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(251,192,45,0.4); }
-        .btn-back { background: linear-gradient(to bottom, #e0e0e0, #c0c0c0); border-color: #999; border-bottom-color: #777; color: #333; margin-top: 15px; }
-        .btn-continue { background: linear-gradient(to bottom, #81C784, #4CAF50); border-color: #388E3C; border-bottom-color: #2E7D32; color: white; margin-top: 10px; }
-        .btn-continue:hover { background: linear-gradient(to bottom, #66BB6A, #43A047); transform: translateY(-2px); }
-        .btn-video { background: linear-gradient(to bottom, #ff4444, #cc0000); border-color: #990000; border-bottom-color: #660000; color: white; font-size: 16px; padding: 15px; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-video:hover { background: linear-gradient(to bottom, #ff3333, #bb0000); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(204,0,0,0.4); }
-        .btn-visual { background: linear-gradient(to bottom, #4FC3F7, #29B6F6); border-color: #0288D1; border-bottom-color: #0277BD; color: white; font-size: 16px; padding: 15px; margin-top: 15px; }
-        .btn-visual:hover { background: linear-gradient(to bottom, #29B6F6, #03A9F4); transform: translateY(-2px); }
-        .step-box { background: #f9f9f9; border: 1px solid #ccc; border-left: 4px solid #0055a5; padding: 15px; margin-bottom: 15px; border-radius: 3px; animation: slideUp 0.5s ease-out; }
-        .step-box.secret { border-left-color: #9C27B0; background: #faf5ff; }
-        .step-box.unverified { border-left-color: #aaa; background: #f5f5f5; }
-        .step-box h4 { font-size: 16px; margin-bottom: 12px; color: #222; }
+        .btn-normal { background: linear-gradient(to bottom, #2b1247, #1e0d33); border-color: #6a3d9c; border-bottom-color: #4a2c6e; color: #e6ddf2; }
+        .btn-normal:hover { background: linear-gradient(to bottom, #3b1a5e, #2b1247); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(106,61,156,0.45); }
+        .btn-secret { background: linear-gradient(to bottom, #5e2a8a, #3b1a5e); border-color: #c084fc; border-bottom-color: #9333ea; color: #ffe9c7; }
+        .btn-secret:hover { background: linear-gradient(to bottom, #6d33a0, #4a1f7a); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(192,132,252,0.45); }
+        .btn-back { background: linear-gradient(to bottom, #2b1247, #1e0d33); border-color: #6a3d9c; border-bottom-color: #4a2c6e; color: #dcd2ea; margin-top: 15px; }
+        .btn-back:hover { background: linear-gradient(to bottom, #3b1a5e, #2b1247); transform: translateY(-2px); }
+        .btn-continue { background: linear-gradient(to bottom, #5cb85c, #388E3C); border-color: #2E7D32; border-bottom-color: #1B5E20; color: white; margin-top: 10px; }
+        .btn-continue:hover { background: linear-gradient(to bottom, #4CAF50, #2E7D32); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(56,142,60,0.5); }
+        .btn-video { background: linear-gradient(to bottom, #ff7b00, #cc5500); border-color: #993300; border-bottom-color: #662200; color: white; font-size: 16px; padding: 15px; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-video:hover { background: linear-gradient(to bottom, #ff8c1a, #b34a00); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(255,123,0,0.5); }
+        .btn-visual { background: linear-gradient(to bottom, #6d33a0, #4a1f7a); border-color: #9333ea; border-bottom-color: #6b21a8; color: #ffe9c7; font-size: 16px; padding: 15px; margin-top: 15px; }
+        .btn-visual:hover { background: linear-gradient(to bottom, #7c3aed, #5b21b6); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(147,51,234,0.5); }
+        .step-box { background: #201430; border: 1px solid #3a2358; border-left: 4px solid #ff7b00; padding: 15px; margin-bottom: 15px; border-radius: 4px; animation: slideUp 0.5s ease-out; }
+        .step-box.secret { border-left-color: #c084fc; background: #241238; }
+        .step-box.unverified { border-left-color: #6b5b7d; background: #1b1424; }
+        .step-box h4 { font-size: 16px; margin-bottom: 12px; color: #ffd9a8; }
         .step-list { list-style: none; }
-        .step-list li { background: white; border: 1px solid #ddd; padding: 12px 12px 12px 45px; margin-bottom: 10px; position: relative; font-size: 14px; border-radius: 3px; transition: 0.2s; line-height: 1.4; }
-        .step-list li:hover { transform: translateX(5px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .step-num { position: absolute; left: 8px; top: 10px; background: #0074d9; color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
-        .secret .step-num { background: #9C27B0; }
-        .unverified .step-num { background: #999; }
-        .step-title { font-weight: bold; color: #0055a5; display: block; margin-bottom: 4px; font-size: 15px; }
-        .secret .step-title { color: #9C27B0; }
-        .unverified .step-title { color: #666; }
-        .info-box { padding: 12px; border-radius: 3px; margin-bottom: 12px; border: 1px solid; font-size: 14px; animation: slideUp 0.5s ease-out; }
-        .info-loc { background: #e8f5e9; border-color: #4CAF50; color: #2E7D32; }
-        .info-tip { background: #fff3e0; border-color: #FF9800; color: #E65100; }
-        .info-warn { background: #ffebee; border-color: #F44336; color: #C62828; }
-        .info-reward { background: #f3e5f5; border-color: #9C27B0; color: #6A1B9A; text-align: center; }
-        .info-unverified { background: #fffde7; border-color: #fbc02d; color: #5d4037; }
+        .step-list li { background: #170d24; border: 1px solid #33204d; padding: 12px 12px 12px 45px; margin-bottom: 10px; position: relative; font-size: 14px; border-radius: 4px; transition: 0.2s; line-height: 1.4; color: #dcd2ea; }
+        .step-list li:hover { transform: translateX(5px); box-shadow: 0 2px 10px rgba(255,123,0,0.18); border-color: #ff7b00; }
+        .step-num { position: absolute; left: 8px; top: 10px; background: #ff7b00; color: #1a0b2e; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px; }
+        .secret .step-num { background: #c084fc; color: #1a0b2e; }
+        .unverified .step-num { background: #6b5b7d; color: #fff; }
+        .step-title { font-weight: bold; color: #ffb84d; display: block; margin-bottom: 4px; font-size: 15px; }
+        .secret .step-title { color: #d8b4fe; }
+        .unverified .step-title { color: #a99cb8; }
+        .info-box { padding: 12px; border-radius: 4px; margin-bottom: 12px; border: 1px solid; font-size: 14px; animation: slideUp 0.5s ease-out; }
+        .info-loc { background: #12281a; border-color: #2e7d32; color: #9be7a0; }
+        .info-tip { background: #2b1c07; border-color: #ff9800; color: #ffcc80; }
+        .info-warn { background: #2b0f0f; border-color: #f44336; color: #ff8a80; }
+        .info-reward { background: #241238; border-color: #9c27b0; color: #e0b3ff; text-align: center; }
+        .info-unverified { background: #2b2607; border-color: #fbc02d; color: #ffe082; }
         .info-box strong { display: block; margin-bottom: 4px; font-size: 15px; }
-        .visual-guide { display: none; background: #fff3cd; border: 2px solid #ffc107; border-radius: 5px; padding: 15px; margin-top: 15px; animation: fadeIn 0.5s ease-out; }
+        .visual-guide { display: none; background: #2b1c07; border: 2px solid #ff9800; border-radius: 5px; padding: 15px; margin-top: 15px; animation: fadeIn 0.5s ease-out; }
         .visual-guide.show { display: block; }
-        .visual-guide h5 { color: #856404; margin-bottom: 10px; font-size: 16px; }
-        .visual-guide p { margin-bottom: 8px; font-size: 13px; line-height: 1.5; }
-        .visual-box { background: white; border: 1px dashed #ffc107; border-radius: 3px; padding: 10px; margin: 10px 0; text-align: center; }
-        .gift-box, .button-loc { background: white; border: 1px solid #9C27B0; border-radius: 3px; padding: 12px; margin-bottom: 10px; transition: 0.2s; }
-        .button-loc { border-color: #0074d9; }
-        .gift-box:hover, .button-loc:hover { transform: translateY(-2px); box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
-        .gift-box h5, .button-loc h5 { font-size: 15px; margin-bottom: 6px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .visual-guide h5 { color: #ffb84d; margin-bottom: 10px; font-size: 16px; }
+        .visual-guide p { margin-bottom: 8px; font-size: 13px; line-height: 1.5; color: #ffcc80; }
+        .visual-box { background: #170d24; border: 1px dashed #ff9800; border-radius: 4px; padding: 10px; margin: 10px 0; text-align: center; color: #ffcc80; }
+        .gift-box, .button-loc { background: #170d24; border: 1px solid #c084fc; border-radius: 4px; padding: 12px; margin-bottom: 10px; transition: 0.2s; color: #dcd2ea; }
+        .button-loc { border-color: #ff7b00; }
+        .gift-box:hover, .button-loc:hover { transform: translateY(-2px); box-shadow: 0 3px 12px rgba(255,123,0,0.22); }
+        .gift-box h5, .button-loc h5 { font-size: 15px; margin-bottom: 6px; color: #ffb84d; border-bottom: 1px solid #33204d; padding-bottom: 4px; }
         .gift-box p, .button-loc p { margin-bottom: 4px; font-size: 13px; line-height: 1.5; }
-        .tool { font-weight: bold; color: #D32F2F; background: #ffebee; padding: 2px 5px; border-radius: 2px; }
-        .code-display { background: #263238; color: #00E676; padding: 12px 15px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; text-align: center; margin: 15px 0; border: 1px solid #455A64; letter-spacing: 3px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        .tool { font-weight: bold; color: #ff8a80; background: #2b0f0f; padding: 2px 5px; border-radius: 2px; }
+        .code-display { background: #0a0612; color: #39ff14; padding: 12px 15px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; text-align: center; margin: 15px 0; border: 1px solid #2e7d32; letter-spacing: 3px; box-shadow: inset 0 0 18px rgba(57,255,20,0.15), 0 0 14px rgba(57,255,20,0.25); }
         .modal-body::-webkit-scrollbar { width: 10px; }
-        .modal-body::-webkit-scrollbar-track { background: #f1f1f1; }
-        .modal-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 5px; }
-        .modal-body::-webkit-scrollbar-thumb:hover { background: #999; }
-        .verified-badge { display: inline-block; background: #4CAF50; color: white; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; }
-        .unverified-badge { display: inline-block; background: #ff9800; color: white; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; }
-        .ai-verified-badge { display: inline-block; background: #0074d9; color: white; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; }
+        .modal-body::-webkit-scrollbar-track { background: #120a1a; }
+        .modal-body::-webkit-scrollbar-thumb { background: #4a2c6e; border-radius: 5px; }
+        .modal-body::-webkit-scrollbar-thumb:hover { background: #6a3d9c; }
+        .verified-badge { display: inline-block; background: #39ff14; color: #0d0614; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
+        .unverified-badge { display: inline-block; background: #ff9800; color: #1a0b2e; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
+        .ai-verified-badge { display: inline-block; background: #00e5ff; color: #0d0614; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
         
         /* Agreement & Settings Modal Styles */
-        .agreement-modal { background: white; border: 3px solid #0055a5; border-radius: 5px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 5px 30px rgba(0,0,0,0.5); animation: slideUp 0.4s ease-out; }
-        .agreement-modal .modal-header { background: linear-gradient(to bottom, #ff6b35, #d9534f); }
+        .agreement-modal { background: #170d24; border: 3px solid #ff7b00; border-radius: 6px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 5px 30px rgba(0,0,0,0.85), 0 0 40px rgba(255,123,0,0.2); animation: slideUp 0.4s ease-out; }
+        .agreement-modal .modal-header { background: linear-gradient(to bottom, #7a1f1f, #4a0f0f); color: #ffb84d; }
         .agreement-content { padding: 25px; overflow-y: auto; }
-        .agreement-content h3 { color: #0055a5; font-size: 20px; margin-bottom: 15px; text-align: center; }
-        .agreement-text { background: #f9f9f9; border: 1px solid #ddd; border-radius: 3px; padding: 15px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; max-height: 250px; overflow-y: auto; }
+        .agreement-content h3 { color: #ff9d3d; font-size: 20px; margin-bottom: 15px; text-align: center; }
+        .agreement-text { background: #120a1a; border: 1px solid #33204d; border-radius: 4px; padding: 15px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; max-height: 250px; overflow-y: auto; color: #dcd2ea; }
         .agreement-text p { margin-bottom: 12px; }
-        .agreement-text strong { color: #d9534f; }
+        .agreement-text strong { color: #ff6b6b; }
         .agreement-text ul { margin-left: 20px; margin-bottom: 12px; }
         .agreement-text li { margin-bottom: 8px; }
-        .checkbox-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 3px; }
-        .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+        .checkbox-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 12px; background: #2b1c07; border: 1px solid #ff9800; border-radius: 4px; color: #ffcc80; }
+        .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #ff7b00; }
         .checkbox-container label { font-size: 14px; cursor: pointer; user-select: none; }
         .checkbox-container.disabled { opacity: 0.5; }
         .checkbox-container.disabled input, .checkbox-container.disabled label { cursor: not-allowed; }
-        .status-message { text-align: center; font-size: 16px; font-weight: bold; margin-bottom: 15px; padding: 12px; border-radius: 3px; transition: all 0.3s; }
-        .status-scroll { background: #e3f2fd; color: #1976D2; border: 1px solid #90CAF9; }
-        .status-timer { background: #fff3e0; color: #E65100; border: 1px solid #FFB74D; }
-        .status-ready { background: #e8f5e9; color: #2E7D32; border: 1px solid #81C784; }
-        .confirm-btn { width: 100%; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 3px; cursor: pointer; border: 1px solid; border-bottom: 3px solid; transition: all 0.2s; }
+        .status-message { text-align: center; font-size: 16px; font-weight: bold; margin-bottom: 15px; padding: 12px; border-radius: 4px; transition: all 0.3s; }
+        .status-scroll { background: #1e0d33; color: #c084fc; border: 1px solid #6a3d9c; }
+        .status-timer { background: #2b1c07; color: #ffb84d; border: 1px solid #ff9800; }
+        .status-ready { background: #12281a; color: #9be7a0; border: 1px solid #2e7d32; }
+        .confirm-btn { width: 100%; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; border: 1px solid; border-bottom: 3px solid; transition: all 0.2s; }
         .confirm-btn:active { transform: translateY(2px); border-bottom-width: 1px; }
-        .confirm-btn.enabled { background: linear-gradient(to bottom, #5cb85c, #449d44); border-color: #398439; border-bottom-color: #2d6a2d; color: white; }
-        .confirm-btn.enabled:hover { background: linear-gradient(to bottom, #449d44, #398439); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(68,157,68,0.4); }
-        .confirm-btn.disabled { background: linear-gradient(to bottom, #e0e0e0, #c0c0c0); border-color: #999; border-bottom-color: #777; color: #999; cursor: not-allowed; }
+        .confirm-btn.enabled { background: linear-gradient(to bottom, #ff7b00, #cc5500); border-color: #993300; border-bottom-color: #662200; color: white; }
+        .confirm-btn.enabled:hover { background: linear-gradient(to bottom, #ff8c1a, #b34a00); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,123,0,0.45); }
+        .confirm-btn.disabled { background: linear-gradient(to bottom, #2b1247, #1e0d33); border-color: #4a2c6e; border-bottom-color: #33204d; color: #7a6b8c; cursor: not-allowed; }
         
-        .settings-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; margin-bottom: 15px; }
-        .deep-search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; background: #f9f9f9; border: 1px solid #ddd; padding: 15px; border-radius: 3px; font-size: 13px; white-space: pre-wrap; display: none; }
+        .settings-input { width: 100%; padding: 10px; background: #120a1a; border: 1px solid #33204d; border-radius: 4px; font-size: 14px; margin-bottom: 15px; color: #e6ddf2; }
+        .settings-input:focus { outline: none; border-color: #ff7b00; box-shadow: 0 0 8px rgba(255,123,0,0.35); }
+        .deep-search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; background: #120a1a; border: 1px solid #33204d; padding: 15px; border-radius: 4px; font-size: 13px; white-space: pre-wrap; display: none; color: #dcd2ea; }
+
+        /* --- FRIENDS TAB STYLES --- */
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .friend-card {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.2s, background 0.2s;
+            border: 1px solid #333;
+        }
+        .friend-card:hover {
+            transform: translateY(-3px);
+            background: #252525;
+            border-color: #555;
+        }
+        .friend-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .friend-avatar-wrap {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+        }
+        .friend-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #333;
+        }
+        .friend-status-icon {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 20px;
+            height: 20px;
+            background: #2a2a2a;
+            border: 2px solid #1e1e1e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+        }
+        .friend-status-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+        .friend-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+        }
+        .friend-name {
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .friend-handle {
+            font-size: 12px;
+            color: #b0b0b0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .friend-status-text {
+            font-size: 12px;
+            color: #888;
+        }
+        .friend-add-btn {
+            background: #2f3136;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s;
+            margin-top: auto;
+        }
+        .friend-card:hover .friend-add-btn {
+            background: #40444b;
+        }
+        .ghost-select-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: #1e1e1e;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ghost-select-btn:hover {
+            background: #252525;
+            border-color: #ff7b00;
+            transform: scale(1.02);
+        }
+        .ghost-black { border-left: 4px solid #444; }
+        .ghost-yellow { border-left: 4px solid #ffd700; }
+        .ghost-blue { border-left: 4px solid #00bfff; }
+        .ghost-white { border-left: 4px solid #fff; }
+        
+        .back-btn-container {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Floating Halloween decorations -->
+    <div class="spooky-bg" aria-hidden="true">
+        <span>🎃</span><span>👻</span><span>🦇</span><span>💀</span><span>🕷️</span><span>🕸️</span>
+    </div>
+
     <!-- Invisible AI Core -->
     <div id="ai-core" style="display:none;" data-status="scanning" data-sources="youtube,google,tiktok,wikipedia,reddit"></div>
     
@@ -136,11 +285,11 @@
     <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999;"></canvas>
 
     <nav class="navbar">
-        <div class="logo" onclick="closeModal()">ROBLOX</div>
+        <div class="logo" onclick="closeModal()">🎃 ROBLOX</div>
         <div class="nav-links">
             <div class="date-display" id="navDate">Loading...</div>
             <a href="#" onclick="openSettings(event)">⚙️ Settings</a>
-            <a href="#">Games</a>
+            <a href="#" onclick="openFriends(event)">👻 Friends</a>
             <a href="#">Catalog</a>
             <a href="#">Create</a>
         </div>
@@ -149,12 +298,12 @@
     <div class="container">
         <div class="box">
             <div class="title-box">
-                <h1>The Hunt: Roblox 20 Ultimate Guide</h1>
-                <p>Select a year below to see exactly how to get the Normal and Secret badges! (Yellow glowing year = Secret Badge claimable right now)</p>
+                <h1>🎃 The Hollow: Roblox Halloween Ultimate Guide 👻</h1>
+                <p>Select a night below to see exactly how to complete the Quest and Side Quest! (Orange glowing night = Side Quest is live now)</p>
             </div>
         </div>
         <div class="box">
-            <div class="box-header">Choose a Year</div>
+            <div class="box-header">🕯️ Choose a Night of The Hollow</div>
             <div class="box-content">
                 <div class="grid" id="yearGrid"></div>
             </div>
@@ -165,27 +314,27 @@
     <div class="overlay" id="agreementOverlay">
         <div class="agreement-modal">
             <div class="modal-header">
-                <h2> Important Agreement</h2>
+                <h2>🕸️ Important Agreement</h2>
             </div>
             <div class="agreement-content">
-                <h3>Welcome to The Hunt: Roblox 20 Guide!</h3>
+                <h3>Welcome to The Hollow: Roblox Halloween Guide! 🎃</h3>
                 <div class="agreement-text" id="agreementText">
-                    <p>Before you start using this guide, please read and agree to the following important rules:</p>
-                    <p><strong>⚠️ CRITICAL RULE - Normal Badge First:</strong></p>
-                    <p>You <strong>MUST complete and receive the Normal Badge first</strong> before you can claim the Secret Badge for any year.</p>
+                    <p>Before you enter the Hollow, please read and agree to the following important rules:</p>
+                    <p><strong>⚠️ CRITICAL RULE - Main Quest First:</strong></p>
+                    <p>You <strong>MUST complete and receive the Main Quest badge first</strong> before you can claim the Side Quest for any night.</p>
                     <p><strong>📌 Important Notes:</strong></p>
                     <ul>
-                        <li>Secret Badges release in DROPS of 5 games. A glowing yellow year button means its secret is claimable now!</li>
-                        <li>After completing any quest, you MUST return to the main Hunt Hub and click the shimmering statue for that year.</li>
+                        <li>A new night unlocks every day at 3:00 PM PT. An orange glowing night button means its Side Quest is live now!</li>
+                        <li>After completing any quest, you MUST return to the main Hollow Hub and click the shimmering statue for that night.</li>
                         <li>All guides below contain <strong>real, verified community-discovered info</strong>. You can also use the "⚙️ Settings" panel to run an AI Deep Search for extra leaked details!</li>
                     </ul>
                 </div>
                 <div class="status-message status-scroll" id="statusMessage">⬇️ Please scroll to the bottom of the rules to continue</div>
                 <div class="checkbox-container disabled" id="checkboxContainer">
                     <input type="checkbox" id="agreementCheckbox" disabled>
-                    <label for="agreementCheckbox">I understand I must complete the Normal Badge first</label>
+                    <label for="agreementCheckbox">I understand I must complete the Main Quest first</label>
                 </div>
-                <button class="confirm-btn disabled" id="confirmBtn" disabled>I Agree & Continue</button>
+                <button class="confirm-btn disabled" id="confirmBtn" disabled>I Agree &amp; Enter the Hollow</button>
             </div>
         </div>
     </div>
@@ -194,24 +343,37 @@
     <div class="overlay" id="settingsOverlay">
         <div class="agreement-modal" style="max-width: 700px;">
             <div class="modal-header">
-                <h2>⚙️ Advanced Settings & AI Deep Search</h2>
+                <h2>⚙️ Advanced Settings &amp; AI Deep Search</h2>
                 <button class="close-btn" onclick="closeSettings()">X</button>
             </div>
             <div class="agreement-content">
                 <h3>OpenRouter AI Deep Search</h3>
-                <p style="font-size: 14px; color: #555; margin-bottom: 15px;">
-                    Enter your OpenRouter API key to let the AI search for extra verified leak info for Drops 2, 3, 4, and 5. Found information will be saved locally and update the guides with an "AI Verified" badge. 
+                <p style="font-size: 14px; color: #b9a8d0; margin-bottom: 15px;">
+                    Enter your OpenRouter API key to let the AI search for extra verified leak info for upcoming nights. Found information will be saved locally and update the guides with an "AI Verified" badge. 
                     <br><em>(Note: The guides already contain real, verified info. This is optional for extra details!)</em>
                 </p>
                 
-                <label style="font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px;">OpenRouter API Key:</label>
+                <label style="font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px; color: #ffd9a8;">OpenRouter API Key:</label>
                 <input type="password" id="openrouterKey" class="settings-input" placeholder="sk-or-v1-...">
                 
                 <button class="confirm-btn enabled" onclick="saveApiKey()" style="margin-bottom: 15px; width: auto; padding: 10px 20px; display: inline-block;">Save API Key</button>
-                <button class="confirm-btn enabled" onclick="deepSearchDrops()" style="width: 100%; background: linear-gradient(to bottom, #0074d9, #0055a5); border-color: #003366; margin-bottom: 15px;">🔍 Deep Search Drops 2, 3, 4, 5</button>
+                <button class="confirm-btn enabled" onclick="deepSearchDrops()" style="width: 100%; background: linear-gradient(to bottom, #6d33a0, #4a1f7a); border-color: #9333ea; margin-bottom: 15px;">🔍 Deep Search Upcoming Nights</button>
                 
                 <div id="deepSearchStatus" class="status-message" style="display: none;"></div>
                 <div id="deepSearchResults" class="deep-search-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Friends Modal -->
+    <div class="overlay" id="friendsOverlay">
+        <div class="modal" style="max-width: 900px; border-color: #6a3d9c;">
+            <div class="modal-header" style="background: linear-gradient(to bottom, #2b1247, #1a0b2e); border-bottom: 2px solid #6a3d9c;">
+                <h2 id="friendsTitle" style="color: #c084fc;">👻 Friends</h2>
+                <button class="close-btn" onclick="closeFriends()">X</button>
+            </div>
+            <div class="modal-body" id="friendsBody" style="background: #0f0817;">
+                <!-- Content injected by JS -->
             </div>
         </div>
     </div>
@@ -220,7 +382,7 @@
     <div class="overlay" id="overlay">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="modalTitle">Select Year</h2>
+                <h2 id="modalTitle">Select Night</h2>
                 <button class="close-btn" onclick="closeModal()">X</button>
             </div>
             <div class="modal-body" id="modalBody"></div>
@@ -236,12 +398,17 @@
         const todayFormatted = `${month}/${day}/${year}`;
         document.getElementById('navDate').textContent = `Today: ${todayFormatted}`;
 
-        /* Drop schedule - times stored in UTC, displayed in user's local timezone */
+        /* The Hollow Night schedule - times stored in UTC, displayed in user's local timezone */
         const drops = [
-            { name: "Drop 1", time: "2026-09-19T18:30:00Z", years: [2006, 2010, 2011, 2021, 2023], verified: true, hasTriggeredConfetti: true },
-            { name: "Drop 2", time: "2026-09-22T02:00:00Z", years: [2008, 2013, 2016, 2019, 2024], verified: true, hasTriggeredConfetti: false },
-            { name: "Drop 3", time: "2026-09-23T21:00:00Z", years: [2009, 2012, 2017, 2018, 2022], verified: true, hasTriggeredConfetti: false },
-            { name: "Drop 4", time: "2026-09-25T16:00:00Z", years: [2007, 2014, 2015, 2020, 2025], verified: true, hasTriggeredConfetti: false }
+            { name: "Night 1", time: "2026-10-22T22:00:00Z", years: [1], verified: true, hasTriggeredConfetti: true },
+            { name: "Night 2", time: "2026-10-23T22:00:00Z", years: [2], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 3", time: "2026-10-24T22:00:00Z", years: [3], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 4", time: "2026-10-25T22:00:00Z", years: [4], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 5", time: "2026-10-26T22:00:00Z", years: [5], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 6", time: "2026-10-27T22:00:00Z", years: [6], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 7", time: "2026-10-28T22:00:00Z", years: [7], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 8", time: "2026-10-29T22:00:00Z", years: [8], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 9", time: "2026-10-30T22:00:00Z", years: [9], verified: true, hasTriggeredConfetti: false }
         ];
         
         function getDrop(y) { return drops.find(d => d.years.includes(y)); }
@@ -254,36 +421,354 @@
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
         
-        // ALL DATA BELOW IS 100% REAL, VERIFIED COMMUNITY DISCOVERED INFO
+        // THE HOLLOW – SIMPLE, EASY-TO-READ NIGHT-BY-NIGHT DATA
         const data = {
-            2006: { game: "Crossroads", normal: { title: "Normal Badge - Crossroads Tower (Get 3 KOs)", steps: [{t:"Enter Crossroads", d:"Click the 2006 portal in the Hunt Hub."},{t:"Grab a Weapon", d:"Pick up the Rocket Launcher from the weapon spawns."},{t:"Get 3 KOs", d:"Defeat 3 players - your KO progress shows on screen."},{t:"Claim", d:"Return to the Hunt Hub and click the shimmering 2006 statue."}], loc: "Crossroads arena", tip: "Rocket Launcher splash damage = fastest KOs!", warn: "", reward: "Crossroads Tower badge + UGC" }, secret: { title: "Secret Badge - 4 Purple Gifts (Super Easy!)", intro: "Needs the normal Crossroads badge first! VERIFIED REAL.", verified: true, steps: [{t:"Expand Map", d:"Click the 'Quality Homes' real-estate billboard on the right side of spawn. The map will grow endlessly!"},{t:"Gift 1 (Hill)", d:"Use the TROWEL to build stairs up to the floating purple gift on the hill."},{t:"Gift 2 (Castle)", d:"Use a ROCKET to blow up the yellow bars on the black castle, then walk inside."},{t:"Gift 3 (Glass)", d:"Squeeze between the yellow bridge and billboard, then drop a BOMB to launch yourself into the gift."},{t:"Gift 4 (Sky)", d:"Bounce on the trampoline to hit the high gift. (Pro tip: Just reset your character, it auto-grants to everyone!) "},{t:"Claim UGC", d:"Go back to the main Hunt Hub and walk INSIDE the BLUE MOUNTAIN to claim your prize."}], loc: "Crossroads (expanded map)", tip: "Gifts glow bright purple. No fixed order!", warn: "MUST have the normal 3-KO badge first!", reward: "Secret badge + Original Web Elements UGC", isGifts: true, visualDesc: "Click billboard -> TROWEL up hill -> ROCKET castle bars -> BOMB through glass -> Bounce trampoline (or reset) -> Claim inside BLUE MOUNTAIN in hub." } },
-            2007: { game: "Sword Fights on the Heights IV", normal: { title: "Normal Badge - Duel of the Heights (Collect 4 Swords)", steps: [{t:"Enter Game", d:"Click the 2007 portal into Sword Fights on the Heights IV."},{t:"Default Sword", d:"You start holding the default sword - that's 1 of 4."},{t:"Find Swords", d:"Collect the other special swords from pedestals around the heights."},{t:"Or Kill Carriers", d:"Killing a player carrying a special sword drops it - pick it up to count it."},{t:"Claim", d:"At 4 different swords, return to the Hub statue."}], loc: "SFOTH IV map", tip: "Killing sword carriers is often faster than searching!", warn: "", reward: "Duel of the Heights badge + UGC" }, secret: { title: "Secret Badge - John, Loved of Muses", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Happy Home", d:"Go to the left of the Happy Home."},{t:"Take Right Path", d:"Take the path on the right side of that area."},{t:"Enter Tunnel", d:"Follow it into a secret tunnel inside the mountain."},{t:"Find Podium", d:"Walk through to the other side and locate the secret podium."},{t:"Claim", d:"Interact with it to claim the classic badge and UGC."}], loc: "Secret tunnel near the Happy Home", tip: "This is a classic Roblox secret, enjoy the nostalgia!", warn: "MUST have the normal sword-collecting badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Left of Happy Home -> right path -> secret mountain tunnel -> other side podium." } },
-            2008: { game: "Rocket Arena", normal: { title: "Normal Badge - Brick-Blast Jetpack (Get 5 KOs)", steps: [{t:"Enter Game", d:"Click the 2008 portal."},{t:"Get Rocket", d:"Grab the rocket launcher."},{t:"Get 5 KOs", d:"Fire into groups of players from range - splash damage stacks KOs fast."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Rocket Arena", tip: "Use the jetpack to reposition, but fight from range!", warn: "", reward: "Brick-Blast Jetpack badge + UGC" }, secret: { title: "Secret Badge - Rocketeer's Hidden Cache", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Enter Castle", d:"Go behind the main portal and walk into the big red castle."},{t:"Climb Up", d:"Climb the stairs at the end all the way up and turn right at the top."},{t:"Follow Path", d:"Follow the path to the top of the big red castle."},{t:"Find Podium", d:"Locate the secret item podium hidden at the summit."},{t:"Claim", d:"Interact with the podium to claim the Secret Badge and exclusive UGC."}], loc: "Top of the big red castle", tip: "Watch your step on the castle stairs!", warn: "MUST have the normal 5-KO badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Behind portal -> big red castle -> climb stairs to top -> turn right -> follow path to summit podium." } },
-            2009: { game: "Chaos Canyon", normal: { title: "Normal Badge - Crest of the Canyon (Get 4 KOs)", steps: [{t:"Enter Game", d:"Click the 2009 portal."},{t:"Get Weapon", d:"Grab sword or rocket launcher."},{t:"Get 4 KOs", d:"Small map = close-range fights. Keep moving between engagements."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Chaos Canyon", tip: "Don't stay exposed - rotate between fights!", warn: "", reward: "Crest of the Canyon badge + UGC" }, secret: { title: "Secret Badge - Yellow Building Summit", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Mountain", d:"Locate the mountain with the yellow building on top of it."},{t:"Climb Building", d:"Keep climbing the stairs inside the yellow building to the very top."},{t:"Find Podium", d:"Locate the secret podium at the summit."},{t:"Claim", d:"Interact with it to claim your reward."}], loc: "Top of the yellow building", tip: "The stairs can be tricky, watch your step!", warn: "MUST have the normal 4-KO badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Mountain with yellow building -> climb stairs inside to very top -> summit podium." } },
-            2010: { game: "Work at a Pizza Place", normal: { title: "Normal Badge - Builder Brother's Balancing Act", steps: [{t:"Start Event", d:"Select '[EVENT] ROBLOX 20' mode."},{t:"Follow Story", d:"Pizza-making sequence, then the fire incident, then meet the detective."},{t:"Time Machine", d:"Travel back to the older version of the pizza place."},{t:"Cook 3 Pizzas", d:"Make Cheese, Pepperoni and Sausage pizzas. Box them and deliver - check each house's mailbox for the right address."},{t:"Steal Recipe", d:"Return to the manager's office and grab the secret recipe."},{t:"Finish", d:"Use the time machine again, then claim at the 2010 Hub statue."}], loc: "Follow the storyline", tip: "Follow the quest markers - mailboxes identify delivery houses!", warn: "", reward: "Builder Brother's Balancing Act badge + UGC" }, secret: { title: "Secret Badge - Gear Hoarder Loadout Belt (Super Easy!)", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Go to Island", d:"Get in a boat at the pier and go to the secret island bunker."},{t:"Enter Code", d:"Type 06212010 on the keypad."},{t:"Do Your Shift", d:"Cook and deliver 3 pizzas like normal."},{t:"Puzzle 1 (Registers)", d:"Watch the screen and press the matching pizza buttons (Left or Right). Just copy the order!"},{t:"Puzzle 2 (Kitchen Math)", d:"The wall shows a number (like 39-). Subtract that from 99 (so, 60). Adjust the sauce/toppings to match that exact number."},{t:"Puzzle 3 (Pizza Box Code)", d:"Watch the boxes on the conveyor belt. They flash an 8-digit code. Write it down and type it into the vent lockbox to get a key."},{t:"Emoji Statues", d:"Match emojis to statues (Chicken=Turkey, Skull=Skull, Cheese=Rat, Cake=10-Year). Put the trophies in the furnaces in the order the emojis appeared (Bottom-Right, Top-Right, Top-Left, Bottom-Left)."},{t:"Final Code", d:`Type TODAY'S DATE into the final terminal:<br><br><div class="code-display">${todayCode}</div><br>(Example: If today is Sep 22, 2026, type 09222026)`},{t:"Claim", d:"Talk to Dued1, then go to the 2010 Hub statue to claim your prize!"}], loc: "Sell-Item Island bunker + 2010 pizzeria", tip: "Keep a notepad! 06212010 is fixed, but the conveyor code and pile targets generate per session.", warn: "MUST complete the normal recipe quest first!", reward: "Secret badge + Gear Hoarder Loadout Belt UGC", visualDesc: "Island bunker -> 06212010 -> deliver pizzas -> copy register order -> subtract wall number from 99 for toppings -> get 8-digit code from conveyor boxes -> match emojis to statues in corner order -> type today's date -> talk to Dued1." } },
-            2011: { game: "Natural Disaster Survival", normal: { title: "Normal Badge - The Disaster Forecaster (Rescue 3 Animals)", steps: [{t:"Enter Game", d:"Click the 2011 portal."},{t:"Play Rounds", d:"Survive disaster rounds."},{t:"Rescue Animals", d:"Pick up an animal, keep it with you through the round, then take it to the pen after the round ends."},{t:"Repeat x3", d:"Rescue 3 animals total."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Disaster maps", tip: "A private server makes this trivial - no competition for animals!", warn: "", reward: "The Disaster Forecaster badge + UGC" }, secret: { title: "Secret Badge - Personal Safety Spikes (Super Easy!)", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Bunker", d:"Go to the lowest part of the lobby and click the exact center of the spiral staircase floor to drop down."},{t:"Flip Switch", d:"Turn left, find the monitor, and change the text from 'false' to 'true'."},{t:"Collect Hats", d:"Play normal rounds. When players die, they drop hats on the ground. Pick them up!"},{t:"Deposit", d:"Survive the round, go back down to the bunker, and put the hats in the glass donation box."},{t:"Fill Box", d:"Repeat this until the box is full (20 hats). The badge pops automatically!"},{t:"Claim", d:"Claim your prize from the statue behind the RED BARN in the 2011 Hub."}], loc: "Secret bunker under the lobby", tip: "Join a BUSY server - more players dying = more hats to collect!", warn: "MUST have the normal badge first!", reward: "Secret badge + Personal Safety Spikes UGC", visualDesc: "Lowest spawn point -> click centre of spiral staircase -> bunker -> set canCollectHats to true -> collect death hats each round -> deposit in glass box until full (20) -> claim behind red barn in 2011 hub." } },
-            2012: { game: "Base Wars", normal: { title: "Normal Badge - Manliest Man Award (Win 1 or Lose 2)", steps: [{t:"Enter Game", d:"Click the 2012 portal."},{t:"Join Skirmish", d:"Queue a Skirmish match."},{t:"Win 1 or Lose 2", d:"Winning one match completes it; a loss gives half progress, so two losses also finish it."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Base Wars Skirmish", tip: "Try to win - but losing still counts half!", warn: "", reward: "Manliest Man Award badge + UGC" }, secret: { title: "Secret Badge - Ruins Reconnaissance", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Climb Mountain", d:"Climb all the way up the mountain and walk through the ruined building at the top."},{t:"Enter Ground Floor", d:"Go inside the ground floor of the ruins."},{t:"Go to Back", d:"Head to the back of the ground floor."},{t:"Find Podium", d:"Locate the secret podium hidden in the back."},{t:"Claim", d:"Interact with it to claim your prize."}], loc: "Inside a building past the ruins", tip: "The back of the ruins is dark, so look carefully!", warn: "MUST have the normal match badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Climb mountain -> enter ruined building at top -> ground floor -> back of room -> podium." } },
-            2013: { game: "Apocalypse Rising 2", normal: { title: "Normal Badge - Biting BLOXikin (Survive Objectives)", steps: [{t:"Enter Game", d:"Click the 2013 portal."},{t:"Get Gear", d:"Find a backpack, a primary weapon and a melee weapon."},{t:"Kill 5 Zombies", d:"Knife them while walking backward to avoid damage."},{t:"Walk 2000 Studs", d:"Explore - but DON'T die, dying can reset the walk progress. Carry food & water for stamina."},{t:"See Sun", d:"Witness a sunrise or sunset."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Apocalypse Rising 2 world", tip: "Loot first, keep food/water stocked, stay alive!", warn: "", reward: "Biting BLOXikin badge + UGC" }, secret: { title: "Secret Badge - Helipad Survivor's Stash", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Helipad", d:"Follow the main road to the end until you reach the helicopter pad by the green building."},{t:"Enter Garage", d:"Turn left into the open building that looks like a garage."},{t:"Drop Down", d:"Drop down through the hole in the floor covered in wooden planks to reach the lower level."},{t:"Find Podium", d:"Locate the secret podium on the lower level."},{t:"Claim", d:"Interact with it to claim your reward."}], loc: "Open building by the helicopter pad (lower level)", tip: "Be careful not to take fall damage when dropping through the planks!", warn: "MUST have the normal survival badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Main road end -> helicopter pad -> left into garage -> drop through floor planks -> lower level podium." } },
-            2014: { game: "Murder Mystery 2", normal: { title: "Normal Badge - Knife-Dodger's Bighead (Collect 50 Coins)", steps: [{t:"Enter Game", d:"Click the 2014 portal."},{t:"Play Rounds", d:"Coins are scattered around the maps during rounds."},{t:"Collect 50", d:"Pick them up across several rounds. If you die, wait for the round to finish."},{t:"Claim", d:"Return to the Hub statue."}], loc: "MM2 maps", tip: "Play as Innocent and sweep coin spots each round!", warn: "", reward: "Knife-Dodger's Bighead badge + UGC" }, secret: { title: "Secret Badge - Hill Cave Collector", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Climb Hill", d:"Climb the hill and follow the speed run route toward the back into a secret cave."},{t:"Enter Building", d:"Go into the building inside the cave."},{t:"Take First Left", d:"Take the first left into the first room."},{t:"Find Podium", d:"Locate the secret podium inside this room."},{t:"Claim", d:"Interact with it to claim your reward."}], loc: "Room inside the hill cave", tip: "The speed run route is the fastest way to the back!", warn: "MUST have the normal 50-coin badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Climb hill -> speed run route to back cave -> enter building -> first left -> room podium." } },
-            2015: { game: "Lumber Tycoon 2", normal: { title: "Normal Badge - Leather Adventure Backpack (Supply Geck)", steps: [{t:"Enter Game", d:"Click the 2015 portal."},{t:"Chop Trees", d:"Use your axe to chop trees and collect logs."},{t:"Haul to Geck", d:"Deliver wood to Geck's deposit near the main shop until the bar fills to 100%."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Forest -> Geck's deposit", tip: "Buy/use a vehicle - way more wood per trip!", warn: "", reward: "Leather Adventure Backpack badge + UGC" }, secret: { title: "Secret Badge - Cherry Tree Mountain Stash", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Follow Conveyor", d:"Follow the conveyor belt route just after you spawn, all the way up the mountain."},{t:"Walk Straight", d:"Walk straight from the top of the mountain."},{t:"Find Cherry Tree", d:"Look for a pink cherry tree."},{t:"Go Behind Tree", d:"Go behind the cherry tree and zoom your camera out."},{t:"Find Podium", d:"Spot the secret podium on the rock below the tree and interact to claim."}], loc: "Behind the cherry tree on the mountain top", tip: "Zooming out your camera makes the podium much easier to spot!", warn: "MUST have the normal wood badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Spawn -> follow conveyor belt up mountain -> walk straight from top -> find pink cherry tree -> go behind it -> zoom out -> rock below podium." } },
-            2016: { game: "Roblox High School", normal: { title: "Normal Badge - Time Travel Schoolpack (Lost Student Quest)", steps: [{t:"Enter Game", d:"Click the 2016 portal."},{t:"Talk to Receptionist", d:"Start the lost-student story at the front desk."},{t:"Library", d:"Follow the objective to the library, talk to the librarian and collect the required book."},{t:"Metal Detector", d:"Follow markers until you receive the metal detector."},{t:"Find 3 Relics", d:"Detector beeps when close - search the map (forest, beach, club areas). Speed Coil / vehicle / skateboard helps a lot."},{t:"Return to Chuck", d:"Bring all 3 relics back to Chuck."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Roblox High School", tip: "Detector beeps faster when close - use a skateboard!", warn: "", reward: "Time Travel Schoolpack badge + UGC" }, secret: { title: "Secret Badge - Underground Scholar's Key", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Entrance", d:"Walk straight past the staircase on the ground floor, and turn right."},{t:"Enter Tunnel", d:"Climb the locker and jump through the white wooden plank on the wall to enter a hidden tunnel."},{t:"Navigate Maze", d:"Go straight, then left, until you see a marker object confirming you're on the right path."},{t:"Find Podium", d:"Touch the marker, turn the corner, and locate the secret podium."},{t:"Claim", d:"Interact with the podium to claim the badge and UGC."}], loc: "End of the maze under the school", tip: "Use a transparent ladder to climb back out of the maze if you get stuck!", warn: "MUST have the normal story badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Ground floor right of stairs -> climb locker -> jump through wall plank -> maze: straight then left -> touch marker -> corner podium." } },
-            2017: { game: "Jailbreak", normal: { title: "Normal Badge - A Bandit's Bandana (Rescue 5 YouTubers)", steps: [{t:"Enter Game", d:"Click the 2017 portal."},{t:"Find YouTubers", d:"5 YouTubers are at fixed spots around the map - they glow YELLOW when you're close."},{t:"Rescue All 5", d:"Prison, donut shop, jewelry roof, museum, train areas."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Jailbreak city", tip: "Helicopter is fastest - locations are spread out!", warn: "", reward: "A Bandit's Bandana badge + UGC" }, secret: { title: "Secret Badge - Giant Tower Heist", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Tower", d:"From the spawn point, go around the back until you see the giant wooden tower."},{t:"Enter Bottom", d:"Enter through the door at the bottom of the tower."},{t:"Climb Stairs", d:"Start climbing the huge staircase all the way to the top."},{t:"Find Podium", d:"At the very top, locate the secret podium."},{t:"Claim", d:"Interact with it to claim your prize."}], loc: "Top of the giant tower", tip: "The climb is long, so be patient!", warn: "MUST have the normal rescue badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Spawn -> around back to giant wooden tower -> enter bottom door -> climb huge staircase to top -> podium." } },
-            2018: { game: "Build a Boat for Treasure", normal: { title: "Normal Badge - Build A Boat for a Top Hat (Bake Cake)", steps: [{t:"Enter Game", d:"Click the 2018 portal."},{t:"Build Boat", d:"Build a boat with a SEAT plus a MOTOR/propeller so it's controllable."},{t:"Launch", d:"Put it in the water."},{t:"Sail to Bakery", d:"Follow the distance indicator and cake marker down the river."},{t:"Bake Cake", d:"Click the cake station at the bakery."},{t:"Claim", d:"Return to the Hub statue."}], loc: "River -> Bakery", tip: "MUST have seat + motor or you can't steer!", warn: "", reward: "Build A Boat for a Top Hat badge + UGC" }, secret: { title: "Secret Badge - Pyramid Temple Treasure", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Follow Stream", d:"Follow the stream all the way up until you see a pyramid temple on the left."},{t:"Climb Pyramid", d:"Climb the stairs of the pyramid until you can go past the pig statue."},{t:"Go to Back Corner", d:"Head to the back corner of the temple area."},{t:"Find Podium", d:"Locate the secret podium on the rock behind the temple."},{t:"Claim", d:"Interact with it to claim your reward."}], loc: "Back of the pyramid", tip: "Take the last jumps slowly, it's easy to slip off near the back!", warn: "MUST have the normal bakery badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Follow stream up -> pyramid temple on left -> climb stairs past pig statue -> back corner -> rock behind temple podium." } },
-            2019: { game: "Adopt Me!", normal: { title: "Normal Badge - The KittyKānka (Hatch Throwback Egg)", steps: [{t:"Enter Game", d:"Click the 2019 portal."},{t:"Earn 400 Bucks", d:"Do chores to afford the egg."},{t:"Buy Egg", d:"Purchase the Throwback Egg (400 Bucks) at the pet nursery."},{t:"Hatch", d:"Complete its needs until it hatches (Robux can speed it up)."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Pet nursery", tip: "Chores quickly = egg quickly!", warn: "", reward: "The KittyKānka badge + UGC" }, secret: { title: "Secret Badge - Red Tower Nest Egg", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Cross Bridge", d:"Cross the bridge to the giant red tower in the event hub area."},{t:"Enter Tower", d:"Go inside the red tower."},{t:"Climb Up", d:"Climb the stairs and a couple of ladders to the very top."},{t:"Find Podium", d:"Locate the secret podium at the summit of the tower."},{t:"Claim", d:"Interact with it to claim your exclusive prize."}], loc: "Top of the red tower", tip: "Take your time climbing the ladders to avoid falling!", warn: "MUST have the normal hatch badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Cross bridge to red tower -> enter -> climb stairs and ladders to top -> summit podium." } },
-            2020: { game: "World // Zero", normal: { title: "Normal Badge - Hounds of the Zero (Clear OG Tower)", steps: [{t:"Enter Game", d:"Click the 2020 portal."},{t:"Find OG Tower", d:"Locate and enter the OG tower."},{t:"Fight Through", d:"Clear the floors and defeat the enemies in each room."},{t:"Beat Boss", d:"Defeat the final boss at the top."},{t:"Claim", d:"Return to the Hub statue."}], loc: "OG Tower", tip: "Recommended level 85 - party up with stronger players if underleveled!", warn: "", reward: "Hounds of the Zero badge + UGC" }, secret: { title: "Secret Badge - Rainbow Obby Master", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Rainbow Tower", d:"After you spawn, turn around and find the rainbow tower, starting from the hay bale."},{t:"Start Obby", d:"Begin the obby, going over balls, purple obstacles, and an orange tightrope."},{t:"Complete Obby", d:"Successfully navigate to the top of the obby."},{t:"Find Podium", d:"Locate the secret podium on the stage-like platform at the top."},{t:"Claim", d:"Interact with it to claim your prize."}], loc: "Top of the obby tower", tip: "Take your time on the orange tightrope!", warn: "MUST have the normal tower badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Spawn -> turn around to rainbow tower (hay bale start) -> complete obby (balls, purple obstacles, tightrope) -> stage-like platform at top -> podium." } },
-            2021: { game: "Piggy", normal: { title: "Normal Badge - Willow's Legacy Hood (Escape 2 Maps)", steps: [{t:"Enter Game", d:"Click the 2021 portal."},{t:"Join Book One", d:"Join a Book One chapter."},{t:"Escape", d:"Solve puzzles and reach the exit - you can follow teammates doing objectives."},{t:"Escape Again", d:"Complete 2 escapes total."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Piggy Book One", tip: "Play with friends - follow their puzzle progress!", warn: "", reward: "Willow's Legacy Hood badge + UGC" }, secret: { title: "Secret Badge - Spark Wave Headset (Super Easy!)", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Bot Mode", d:"Play 'House - Chapter 1' in BOT mode (so Piggy doesn't chase you)."},{t:"Get Tools", d:"Find the Wrench in the house. Take it to the basement and use it on the brick wall box to get a SHOVEL."},{t:"Dig", d:"Go to the backyard and dig behind the well with the shovel to find a time machine capsule."},{t:"Escape", d:"Enter the time machine, solve the simple retro map puzzles, and escape through the front door with the WHITE KEY."},{t:"Claim", d:"The badge pops on escape. Claim your prize at the 2021 Hub pedestal."}], loc: "Piggy Book 1 Ch.1 House (Bot mode)", tip: "Bot mode = no real Piggy hunting you!", warn: "MUST have the normal badge first!", reward: "Secret badge + Spark Wave Headset UGC", visualDesc: "House Ch1 (Bot): wrench in house -> basement wall box -> shovel -> dig behind well in backyard -> time machine capsule -> retro map -> escape via front door with white key." } },
-            2022: { game: "Berry Avenue RP", normal: { title: "Normal Badge - The Berry Bundle (3 Role Quests)", steps: [{t:"Enter Game", d:"Click the 2022 portal."},{t:"Doctor Quest", d:"Collect and deliver the requested medical items."},{t:"Police Quest", d:"Complete the jail-sequence objectives."},{t:"Air Hostess Quest", d:"Deliver food to passengers at the airport."},{t:"Claim", d:"All three done = badge. Return to the Hub statue."}], loc: "Berry Avenue", tip: "Follow the objectives at the top of the screen!", warn: "", reward: "The Berry Bundle badge + UGC" }, secret: { title: "Secret Badge - Ferris Wheel Backroom", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Ferris Wheel", d:"After you spawn, walk toward the Ferris wheel."},{t:"Go Left", d:"Go to the left side of the brown building near the Ferris wheel."},{t:"Check Back", d:"Check the back of the building to find the hidden secret podium."},{t:"Claim", d:"Interact with it to claim your exclusive UGC."}], loc: "Back left of the building near the Ferris wheel", tip: "The podium is tucked away, so walk all the way around the building!", warn: "MUST have the normal 3-role badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Spawn -> walk to Ferris wheel -> left side of brown building -> back of building -> podium." } },
-            2023: { game: "Blade Ball", normal: { title: "Normal Badge - The Last Deflection (3 Knight Tix)", steps: [{t:"Enter Game", d:"Click the 2023 portal."},{t:"Find the Knight", d:"A special Knight NPC (no normal username) appears once per round."},{t:"Defeat It", d:"Kill the Knight - it drops a Tix. Pick it up."},{t:"Get 3 Tix", d:"Repeat over rounds until you have 3 Tix."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Blade Ball rounds", tip: "Invisibility ability helps you survive while hunting the Knight!", warn: "", reward: "The Last Deflection badge + UGC" }, secret: { title: "Secret Badge - Hands-On Experience (Super Easy!)", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Get Sword", d:"Go to Codes, type SERPENT, and equip the Serpentbane sword."},{t:"Get Token", d:"Play a normal match and YOU must be the one to kill a Serpent Knight bot."},{t:"AFK", d:"Go back to the lobby and turn on AFK mode so you don't get dragged into other games."},{t:"Boss Fight", d:"Stand in the circle at the Serpent Breakout NPC. Wait for another player to get a token, then click 'Boss Battle'."},{t:"Phase 1", d:"Deflect balls back at the World Serpent to take off the first chunk of health."},{t:"Phase 2", d:"Stay long range, watch the floor for red lasers from the sides. Double-jump the shockwaves."},{t:"Phase 3", d:"Lasers + balls + Serpent Bots at once. Hug the far left/right walls. Save your respawns for this phase! Don't let the whole team wipe."},{t:"Claim", d:"Win = Serpent Slayer badge. From spawn, go LEFT toward the giant bicycle, cross to the next island, and claim at the statue on the right."}], loc: "Blade Ball (Serpent Breakout)", tip: "Private server with players who can parry = much easier! Use Dash ability to dodge lasers.", warn: "Team wipe resets the entire run! YOU must kill the Serpent Bot for the token.", reward: "Secret badge + Hands-On Experience UGC", visualDesc: "Codes -> SERPENT -> equip Serpentbane -> YOU kill Serpent Bot for token -> Serpent Breakout NPC -> boss battle (3 phases: deflect, dodge lasers, survive) -> cross bicycle to next island -> claim." } },
-            2024: { game: "Dress to Impress", normal: { title: "Normal Badge - The Runaway Sunhat (2 Rounds)", steps: [{t:"Enter Game", d:"Click the 2024 portal."},{t:"Join Rewind Mode", d:"Enter the limited-time 2024 Rewind mode."},{t:"Dress Up", d:"Dress for the theme and walk the runway."},{t:"Do 2 Rounds", d:"Complete 2 rounds - you do NOT need to win."},{t:"Claim", d:"Return to the Hub statue."}], loc: "2024 Rewind mode", tip: "Just finishing rounds counts - no winning needed!", warn: "", reward: "The Runaway Sunhat badge + UGC" }, secret: { title: "Secret Badge - Backstage Rivals Crown", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Arena", d:"Turn right and head to the Rivals arena (looks like a target practice range)."},{t:"Go to Back", d:"Walk all the way to the back of the arena."},{t:"Locate Podium", d:"Find the secret podium hidden between the blocks at the back."},{t:"Claim", d:"Interact with the podium to claim your exclusive UGC."}], loc: "Back of the Rivals arena", tip: "The podium is well-hidden between the target blocks, so look closely!", warn: "MUST have the normal 2-round badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Turn right to Rivals arena -> walk to the very back -> between the blocks -> podium." } },
-            2025: { game: "Grow a Garden", normal: { title: "Normal Badge - Grown From a Garden (50 Fruits)", steps: [{t:"Enter Game", d:"Click the 2025 portal."},{t:"Find Owl's Base", d:"Locate the Wise Owl's base."},{t:"Steal Fruit", d:"Take fruit from the plants - carry 6-7 max or you slow down."},{t:"Deliver to Sam", d:"Bring fruit to Sam. Teleport back to your garden between trips to save time."},{t:"Repeat to 50", d:"Deliver 50 stolen fruits total."},{t:"Claim", d:"Return to the Hub statue."}], loc: "Owl's base -> Sam", tip: "Short trips with 6-7 fruits beat one overloaded run!", warn: "DO NOT carry more than 7 - you get too slow!", reward: "Grown From a Garden badge + UGC" }, secret: { title: "Secret Badge - Train Track Forager", intro: "Needs the normal badge first! VERIFIED REAL.", verified: true, steps: [{t:"Find Tracks", d:"Get on the train tracks and follow them a short way."},{t:"Look Right", d:"Look for a small patch of land on the right side of the tracks."},{t:"Climb Up", d:"Climb up onto this patch of land."},{t:"Find Podium", d:"Locate the secret podium on this patch of land."},{t:"Claim", d:"Interact with it to claim your prize."}], loc: "Patch of land off the train tracks", tip: "You don't need to reach the end of the tracks, just a short way!", warn: "MUST have the normal 50-fruit badge first!", reward: "Secret badge + exclusive UGC + 1 Fragment", visualDesc: "Get on train tracks -> follow short way -> small patch of land on right -> climb up -> podium." } }
+            1: {
+                game: "DOORS",
+                normal: {
+                    title: "Quest - The Candy Vault",
+                    steps: [
+                        { t: "Enter DOORS", d: "From The Hollow hub, walk through the first portal into DOORS." },
+                        { t: "Host the Candy Vault", d: "Choose 'The Candy Vault Floor' and start the run." },
+                        { t: "Descend 50 Floors", d: "Go down all 50 floors. Eat candy you find and put unwanted candy in the cauldron." },
+                        { t: "Escape in 20 Minutes", d: "Reach the bottom and exit the vault before the timer ends." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 1 statue." }
+                    ],
+                    loc: "DOORS – Candy Vault Floor",
+                    tip: "One person should watch Abe while the rest search for candy and keys.",
+                    warn: "You must pick 'The Candy Vault Floor' – other floors don't count.",
+                    reward: "Sweet Deceit badge + All-Seeking Antlers UGC"
+                },
+                secret: {
+                    title: "Side Quest - Floor 1 Maze",
+                    intro: "You need the Sweet Deceit badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Enter the Hollow Hub", d: "Follow the highlighted path to the elevator." },
+                        { t: "Take the Elevator to Floor 1", d: "Press the button for the first floor." },
+                        { t: "Collect 5 Puzzle Pieces", d: "Explore the maze and find all five missing pieces while avoiding Seek." },
+                        { t: "Solve the Puzzle", d: "Place the pieces on the board and connect the start to the endpoint." },
+                        { t: "Grab the Night Relic", d: "Open the door, take the relic, and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the Hollow hub and claim your prize." }
+                    ],
+                    loc: "The Hollow Hub – Floor 1 Maze",
+                    tip: "Use the Puzzle Room and Elevator Room as safe zones – Seek cannot enter them.",
+                    warn: "You MUST complete the DOORS Candy Vault first!",
+                    reward: "Lord Umberhallow BLOXikin UGC + badge",
+                    visualDesc: "Elevator → Floor 1 → collect 5 pieces → puzzle board → relic → back to elevator."
+                }
+            },
+            2: {
+                game: "99 Nights in the Forest",
+                normal: {
+                    title: "Quest - Night 1 Survival",
+                    steps: [
+                        { t: "Enter 99 Nights", d: "From The Hollow hub, portal into 99 Nights in the Forest." },
+                        { t: "Start a Run", d: "Begin a standard run and survive the first night." },
+                        { t: "Avoid The Deer", d: "Keep moving and use cover when The Deer appears." },
+                        { t: "Survive Until Dawn", d: "Make it through Night 1 without being caught." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 2 statue." }
+                    ],
+                    loc: "99 Nights in the Forest – Night 1",
+                    tip: "Stick with other players; The Deer targets isolated survivors.",
+                    warn: "",
+                    reward: "Night 1 badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - The Deer's Trail",
+                    intro: "You need the Night 1 badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Find The Deer's Footprints", d: "After surviving Night 1, look for glowing hoofprints near the forest edge." },
+                        { t: "Follow The Trail", d: "Follow the hoofprints through the trees until they lead to a hidden clearing." },
+                        { t: "Interact With The Shrine", d: "Approach the small wooden shrine and interact with it." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and claim your prize at the Night 2 statue." }
+                    ],
+                    loc: "Hidden clearing behind the forest edge",
+                    tip: "The hoofprints only appear after you've survived Night 1.",
+                    warn: "You MUST have the Night 1 badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Forest edge → follow glowing hoofprints → hidden clearing → wooden shrine → interact."
+                }
+            },
+            3: {
+                game: "Dandy's World",
+                normal: {
+                    title: "Quest - Twisted Dandy Escape",
+                    steps: [
+                        { t: "Enter Dandy's World", d: "From The Hollow hub, portal into Dandy's World." },
+                        { t: "Play a Match", d: "Join a standard match as a Toon." },
+                        { t: "Fix 3 Generators", d: "Complete at least three generator repairs without being caught." },
+                        { t: "Escape Via Elevator", d: "Reach the elevator and escape the map." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 3 statue." }
+                    ],
+                    loc: "Dandy's World – any map",
+                    tip: "Work on generators in pairs; Twisted Dandy patrols the main corridors.",
+                    warn: "",
+                    reward: "Twisted Dandy badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Twisted Dandy's Lair",
+                    intro: "You need the normal Dandy's World badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Finish a Match", d: "Complete a normal match and escape." },
+                        { t: "Look for a Cracked Wall", d: "In the lobby, inspect the wall behind the elevator for a cracked section." },
+                        { t: "Enter The Lair", d: "Interact with the cracked wall to reveal a hidden passage." },
+                        { t: "Find The Podium", d: "Follow the passage to Twisted Dandy's lair and locate the secret podium." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Hidden passage behind the elevator in Dandy's World lobby",
+                    tip: "The cracked wall is easy to miss – look low behind the elevator.",
+                    warn: "You MUST have the normal Dandy's World badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Lobby → behind elevator → cracked wall → hidden passage → lair → podium."
+                }
+            },
+            4: {
+                game: "Piggy",
+                normal: {
+                    title: "Quest - Piggy Escape",
+                    steps: [
+                        { t: "Enter Piggy", d: "From The Hollow hub, portal into Piggy." },
+                        { t: "Join a Book One Map", d: "Select any Book One chapter." },
+                        { t: "Solve Puzzles & Escape", d: "Complete the map's puzzles and reach the exit." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 4 statue." }
+                    ],
+                    loc: "Piggy – Book One",
+                    tip: "Play with friends; Piggy is easier to avoid when objectives are split.",
+                    warn: "",
+                    reward: "Piggy escape badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Piggy's Hidden Cellar",
+                    intro: "You need the normal Piggy badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Find The Cellar Door", d: "In the Piggy lobby, look for a wooden door on the far left side of the house." },
+                        { t: "Enter The Cellar", d: "Interact with the door to descend into a hidden cellar." },
+                        { t: "Locate The Podium", d: "Walk through the cellar until you find the secret podium." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Hidden cellar under the Piggy lobby house",
+                    tip: "The cellar door blends into the wall – look for the slightly darker wood.",
+                    warn: "You MUST have the normal Piggy badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Piggy lobby → far left of house → wooden cellar door → descend → podium."
+                }
+            },
+            5: {
+                game: "The Mimic",
+                normal: {
+                    title: "Quest - Hiachi's Trial",
+                    steps: [
+                        { t: "Enter The Mimic", d: "From The Hollow hub, portal into The Mimic." },
+                        { t: "Select a Chapter", d: "Choose any available chapter." },
+                        { t: "Complete The Chapter", d: "Solve the maze and evade Hiachi until you reach the end." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 5 statue." }
+                    ],
+                    loc: "The Mimic – any chapter",
+                    tip: "Listen for Hiachi's audio cues; they indicate which direction she's approaching from.",
+                    warn: "",
+                    reward: "Hiachi's Trial badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Hiachi's Shrine",
+                    intro: "You need the normal The Mimic badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Finish a Chapter", d: "Complete any chapter normally." },
+                        { t: "Return to the Lobby", d: "After escaping, inspect the lobby's right-side wall for a sliding panel." },
+                        { t: "Open The Panel", d: "Interact with the panel to reveal a hidden shrine room." },
+                        { t: "Find The Podium", d: "Locate the secret podium inside the shrine." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Hidden shrine behind the lobby wall in The Mimic",
+                    tip: "The sliding panel is only visible after completing a chapter.",
+                    warn: "You MUST have the normal The Mimic badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Lobby → right wall → sliding panel → shrine room → podium."
+                }
+            },
+            6: {
+                game: "Scary Shawarma Kiosk",
+                normal: {
+                    title: "Quest - The Inspector's Order",
+                    steps: [
+                        { t: "Enter Scary Shawarma Kiosk", d: "From The Hollow hub, portal into Scary Shawarma Kiosk." },
+                        { t: "Start a Shift", d: "Begin a normal shift behind the counter." },
+                        { t: "Serve 3 Customers", d: "Complete three customer orders without mistakes." },
+                        { t: "Finish the Shift", d: "Survive the shift and exit the kiosk." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 6 statue." }
+                    ],
+                    loc: "Scary Shawarma Kiosk – counter",
+                    tip: "The Inspector watches for mistakes – double-check each order before serving.",
+                    warn: "",
+                    reward: "The Inspector badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Inspector's Backroom",
+                    intro: "You need the normal Scary Shawarma badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Finish a Shift", d: "Complete a normal shift first." },
+                        { t: "Check Behind the Grill", d: "In the kiosk, look behind the grill for a small door." },
+                        { t: "Enter the Backroom", d: "Interact with the door to enter a hidden backroom." },
+                        { t: "Find the Podium", d: "Locate the secret podium inside the backroom." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Hidden backroom behind the grill in Scary Shawarma Kiosk",
+                    tip: "The door is small and easy to miss – look low behind the grill.",
+                    warn: "You MUST have the normal Scary Shawarma badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Kiosk → behind grill → small door → backroom → podium."
+                }
+            },
+            7: {
+                game: "Animal Hospital",
+                normal: {
+                    title: "Quest - Mimic Containment",
+                    steps: [
+                        { t: "Enter Animal Hospital", d: "From The Hollow hub, portal into Animal Hospital." },
+                        { t: "Start a Shift", d: "Begin a normal shift as an intern." },
+                        { t: "Cure 3 Patients", d: "Successfully treat three patients without triggering the Mimic." },
+                        { t: "Finish the Shift", d: "Complete the shift and exit the hospital." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 7 statue." }
+                    ],
+                    loc: "Animal Hospital – patient rooms",
+                    tip: "Watch for unusual symptoms; the Mimic disguises itself as a patient.",
+                    warn: "",
+                    reward: "Mimic Containment badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Mimic's Quarantine",
+                    intro: "You need the normal Animal Hospital badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Finish a Shift", d: "Complete a normal shift first." },
+                        { t: "Find the Quarantine Door", d: "In the hospital basement, look for a red quarantine door." },
+                        { t: "Enter Quarantine", d: "Interact with the door to enter the restricted quarantine zone." },
+                        { t: "Find the Podium", d: "Locate the secret podium inside the quarantine room." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Restricted quarantine zone in Animal Hospital basement",
+                    tip: "The quarantine door only appears after you've cured at least three patients.",
+                    warn: "You MUST have the normal Animal Hospital badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Basement → red quarantine door → restricted zone → podium."
+                }
+            },
+            8: {
+                game: "Demonology",
+                normal: {
+                    title: "Quest - Biter's Banishment",
+                    steps: [
+                        { t: "Enter Demonology", d: "From The Hollow hub, portal into Demonology." },
+                        { t: "Start a Ritual", d: "Begin a standard ritual session." },
+                        { t: "Survive the Ritual", d: "Complete the ritual without being caught by Biter." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 8 statue." }
+                    ],
+                    loc: "Demonology – ritual room",
+                    tip: "Stay near other players; Biter picks off isolated targets.",
+                    warn: "",
+                    reward: "Biter's Banishment badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Biter's Crypt",
+                    intro: "You need the normal Demonology badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Complete a Ritual", d: "Finish a normal ritual first." },
+                        { t: "Find the Crypt Entrance", d: "In the ritual room, inspect the floor for a faint circular seal." },
+                        { t: "Descend into the Crypt", d: "Interact with the seal to open a staircase leading down." },
+                        { t: "Find the Podium", d: "Locate the secret podium inside Biter's crypt." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Hidden crypt beneath the Demonology ritual room",
+                    tip: "The floor seal is very faint – look for a subtle glow.",
+                    warn: "You MUST have the normal Demonology badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Ritual room → faint circular seal on floor → staircase → crypt → podium."
+                }
+            },
+            9: {
+                game: "WARDEN",
+                normal: {
+                    title: "Quest - The Overseer's Trial",
+                    steps: [
+                        { t: "Enter WARDEN", d: "From The Hollow hub, portal into WARDEN." },
+                        { t: "Start a Trial", d: "Begin any available trial." },
+                        { t: "Complete the Trial", d: "Finish the trial while avoiding The Overseer and corrupted creatures." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 9 statue." }
+                    ],
+                    loc: "WARDEN – any trial",
+                    tip: "Use cover and stick with your team; The Overseer patrols open areas.",
+                    warn: "",
+                    reward: "The Overseer's Trial badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Overseer's Vault",
+                    intro: "You need the normal WARDEN badge first!",
+                    verified: true,
+                    steps: [
+                        { t: "Complete a Trial", d: "Finish a normal trial first." },
+                        { t: "Find the Vault Door", d: "In the WARDEN lobby, look for a metallic vault door on the far right." },
+                        { t: "Enter the Vault", d: "Interact with the vault door to open it." },
+                        { t: "Find the Podium", d: "Locate the secret podium inside the vault." },
+                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                    ],
+                    loc: "Hidden vault in the WARDEN lobby",
+                    tip: "The vault door only becomes interactable after completing a trial.",
+                    warn: "You MUST have the normal WARDEN badge first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "WARDEN lobby → far right → metallic vault door → vault → podium."
+                }
+            }
+        };
+
+        // --- FRIENDS DATA ---
+        const friendGroups = {
+            black: [
+                { name: "Meowsiio", handle: "Meowsiio" },
+                { name: "Turtle", handle: "Turtlepla" },
+                { name: "Toka1iz", handle: "Toka1iz" },
+                { name: "Pwnion", handle: "Pwnion" },
+                { name: "Princeerik", handle: "Princeeriktheblue" },
+                { name: "Kxttyrei", handle: "Kxttyrei" },
+                { name: "Brandonisbulk", handle: "Brandonisbulk" },
+                { name: "Yuvha", handle: "Yuvha" }
+            ],
+            yellow: [
+                { name: "Waffletrades", handle: "Waffletrades" },
+                { name: "Kirbyyums", handle: "Kirbyyums" },
+                { name: "Master0y", handle: "Master0y" },
+                { name: "Crystalaco", handle: "Crystalaco" },
+                { name: "Da_pandagirl", handle: "Da_pandagirl" },
+                { name: "Hellitsvg", handle: "Hellitsvg" },
+                { name: "Atlantiszen", handle: "Atlantiszen" }
+            ],
+            blue: [
+                { name: "Meowsiio", handle: "Meowsiio" }, // Duplicate in blue as requested
+                { name: "Th3_avocad0", handle: "Th3_avocad0" },
+                { name: "Brightgreenpart", handle: "Brightgreenpart" },
+                { name: "Guavamatchaa", handle: "Guavamatchaa" },
+                { name: "CoffeRuntime", handle: "CoffeRuntime" },
+                { name: "AngelEthereal", handle: "AngelEthereal" },
+                { name: "Echoplusjupiter", handle: "Echoplusjupiter" },
+                { name: "Nauticalcaptain", handle: "Nauticalcaptain" }
+            ],
+            white: [
+                // Waiting for user input
+                { name: "Coming Soon", handle: "TBD" }
+            ]
         };
 
         let currentYear = null;
         const grid = document.getElementById('yearGrid');
-        for (let y = 2006; y <= 2025; y++) {
+        for (let y = 1; y <= 9; y++) {
             const btn = document.createElement('button');
             btn.className = 'year-btn';
-            btn.textContent = y;
+            btn.textContent = `Night ${y}`;
             btn.setAttribute('data-year', y);
             btn.onclick = () => openChoice(y);
             grid.appendChild(btn);
@@ -293,16 +778,17 @@
             document.querySelectorAll('#yearGrid .year-btn').forEach((btn) => {
                 const y = parseInt(btn.getAttribute('data-year'));
                 const d = getDrop(y);
+                if (!d) return;
                 const localTime = getLocalTimeStr(d.time);
                 
                 if (isSecretClaimable(y)) {
                     btn.classList.add('claimable');
                     btn.classList.remove('unverified', 'flashing-year');
-                    btn.title = y + ' - Secret badge CLAIMABLE now (' + d.name + ')';
+                    btn.title = `Night ${y} - Side Quest is LIVE now (${d.name})`;
                 } else {
                     btn.classList.remove('claimable', 'flashing-year');
                     if (!d.verified) btn.classList.add('unverified');
-                    btn.title = y + ' - Secret badge unlocks ' + localTime + ' (' + d.name + ')';
+                    btn.title = `Night ${y} - Side Quest unlocks ${localTime} (${d.name})`;
                 }
             });
         }
@@ -324,7 +810,7 @@
         let countdownStarted = false;
 
         function checkAgreement() {
-            const hasAgreed = localStorage.getItem('hunt20_agreed');
+            const hasAgreed = localStorage.getItem('hollow_agreed');
             if (!hasAgreed) {
                 agreementOverlay.classList.add('active');
             }
@@ -375,7 +861,7 @@
         
         confirmBtn.addEventListener('click', function() {
             if (!this.disabled && agreementCheckbox.checked) {
-                localStorage.setItem('hunt20_agreed', 'true');
+                localStorage.setItem('hollow_agreed', 'true');
                 agreementOverlay.classList.remove('active');
             }
         });
@@ -383,14 +869,12 @@
         function openChoice(year) {
             if (!data[year]) return;
             currentYear = year;
-            const d = getDrop(year);
-            const localTime = getLocalTimeStr(d.time);
-            mTitle.textContent = `Year ${year}: ${data[year].game}`;
+            mTitle.textContent = `Night ${year}: ${data[year].game}`;
             mBody.innerHTML = `
                 <div class="choice-box">
-                    <h3>Which badge do you want?</h3>
-                    <button class="big-btn btn-normal" onclick="showGuide('normal')">Normal Badge (Easy)</button>
-                    <button class="big-btn btn-secret" onclick="handleSecretClick(${year})">Secret Badge (Hidden)</button>
+                    <h3>Which quest do you want?</h3>
+                    <button class="big-btn btn-normal" onclick="showGuide('normal')">Quest (Main Badge)</button>
+                    <button class="big-btn btn-secret" onclick="handleSecretClick(${year})">Side Quest (Hidden Badge)</button>
                 </div>
             `;
             overlay.classList.add('active');
@@ -401,20 +885,20 @@
             const localTime = getLocalTimeStr(d.time);
             
             if (!isSecretClaimable(year)) {
-                const gamesList = d.years.map(yy => `${yy} - ${data[yy].game}`).join(' &bull; ');
+                const gamesList = d.years.map(yy => `Night ${yy} - ${data[yy].game}`).join(' &bull; ');
                 const verifiedLabel = d.verified ? '✅ Guide Verified' : '⚠️ Guide Not Yet Verified';
                 mBody.innerHTML = `
                     <div style="text-align:center; padding: 30px 20px;">
                         <div style="font-size: 50px; margin-bottom: 15px;">🔒</div>
-                        <h2 style="color: #D32F2F; margin-bottom: 10px;">SECRET BADGE NOT CLAIMABLE YET</h2>
-                        <p style="font-size: 15px; color: #555; margin-bottom: 15px;"><strong>This Secret Badge is not claimable yet. But you can still continue!</strong></p>
-                        <div style="background: #fff8e1; border: 1px solid #FFC107; padding: 12px; border-radius: 3px; margin-bottom: 15px; text-align:left;">
-                            <strong style="color: #856404;">⏰ Available in ${d.name} - ${localTime}</strong>
-                            <p style="font-size: 12px; color: #856404; margin-top:6px; margin-bottom:4px;">The 5 games + secret badges in ${d.name}:</p>
-                            <p style="font-size: 12px; color: #856404;">${gamesList}</p>
-                            <p style="font-size: 11px; color: #856404; margin-top:8px; font-style:italic;">${verifiedLabel}</p>
+                        <h2 style="color: #ff6b6b; margin-bottom: 10px;">SIDE QUEST NOT LIVE YET</h2>
+                        <p style="font-size: 15px; color: #b9a8d0; margin-bottom: 15px;"><strong>This Side Quest is not available yet. But you can still read the guide!</strong></p>
+                        <div style="background: #2b1c07; border: 1px solid #ff9800; padding: 12px; border-radius: 4px; margin-bottom: 15px; text-align:left;">
+                            <strong style="color: #ffb84d;">⏰ Available in ${d.name} - ${localTime}</strong>
+                            <p style="font-size: 12px; color: #ffcc80; margin-top:6px; margin-bottom:4px;">The game for this night:</p>
+                            <p style="font-size: 12px; color: #ffcc80;">${gamesList}</p>
+                            <p style="font-size: 11px; color: #ffcc80; margin-top:8px; font-style:italic;">${verifiedLabel}</p>
                         </div>
-                        <p style="font-size: 12px; color: #888; margin-bottom: 15px;">You can read the full guide now and do it as soon as the drop goes live. Remember: you need this year's Normal Badge first!</p>
+                        <p style="font-size: 12px; color: #8f7fa6; margin-bottom: 15px;">You can read the full guide now and do it as soon as the night goes live. Remember: you need this night's Main Quest badge first!</p>
                         <button class="big-btn btn-continue" onclick="showGuide('secret')">Continue Anyway (View Guide)</button>
                         <button class="big-btn btn-back" onclick="openChoice(${year})">Go Back</button>
                     </div>
@@ -429,7 +913,7 @@
             const isSecret = type === 'secret';
             
             // Check for AI verification
-            const aiResults = localStorage.getItem('ai_deep_search_results');
+            const aiResults = localStorage.getItem('hollow_ai_deep_search_results');
             const isAiVerified = aiResults && aiResults.includes(`${currentYear}`) && aiResults.includes(data[currentYear].game);
             
             let verifiedBadge = '';
@@ -443,13 +927,13 @@
                 }
             }
             
-            mTitle.textContent = `${isSecret ? 'Secret' : 'Normal'} Badge: ${d.title} ${verifiedBadge}`;
+            mTitle.textContent = `${isSecret ? 'Side Quest' : 'Quest'}: ${d.title} ${verifiedBadge}`;
             
             let html = `
                 <div class="guide-section">
                     <div class="step-box ${isSecret ? 'secret' : ''} ${isSecret && !d.verified && !isAiVerified ? 'unverified' : ''}">
                         <h4>Step-by-Step Instructions:</h4>
-                        ${d.intro ? `<p style="margin-bottom:12px; font-style:italic; color:#555; font-size:14px;">${d.intro}</p>` : ''}
+                        ${d.intro ? `<p style="margin-bottom:12px; font-style:italic; color:#b9a8d0; font-size:14px;">${d.intro}</p>` : ''}
                         <ul class="step-list">
                             ${d.steps.map((s, i) => `
                                 <li>
@@ -465,20 +949,10 @@
             // Inject AI specific info if available for this year
             if (isSecret && aiResults && aiResults.includes(`${currentYear}`)) {
                 html += `
-                    <div class="info-box" style="background: #e3f2fd; border-color: #2196F3; color: #0D47A1; margin-top: 15px;">
+                    <div class="info-box" style="background: #0e2430; border-color: #00e5ff; color: #b3f0ff; margin-top: 15px;">
                         <strong>🤖 AI Deep Search Insight:</strong>
                         <p style="font-size: 13px; margin-top: 5px;">This guide has been enhanced with real-time AI deep search data from YouTube, TikTok, and Wikis. Follow these steps closely as they contain the latest verified leaks and community discoveries.</p>
                     </div>
-                `;
-            }
-
-            if (isSecret && currentYear === 2006 && d.isGifts) {
-                html += `
-                    <h4 style="color:#9C27B0; margin: 20px 0 10px 0; font-size:16px;">All 4 Purple Gift Locations:</h4>
-                    <div class="gift-box"><h5>Gift #1: Hill Top</h5><p><strong>Where:</strong> Floating midair above a hill on the expanded map.</p><p><strong>How:</strong> Stand under it, use <span class="tool">TROWEL</span> to build a wall/stairs, climb and touch it.</p></div>
-                    <div class="gift-box"><h5>Gift #2: Black Castle</h5><p><strong>Where:</strong> Inside black castle behind yellow vertical bars/grate.</p><p><strong>How:</strong> Use <span class="tool">ROCKET</span> to blow the yellow stripes, or <span class="tool">TROWEL</span> to build up to the opening.</p></div>
-                    <div class="gift-box"><h5>Gift #3: Glass Wall</h5><p><strong>Where:</strong> Between the yellow arch bridge and the hurricane-insurance billboard.</p><p><strong>How:</strong> Shift-lock squeeze through the seam, place <span class="tool">BOMB</span> - explosion launches you into the gift.</p></div>
-                    <div class="gift-box"><h5>Gift #4: Sky / Trampoline</h5><p><strong>Where:</strong> High in the sky above the trampoline.</p><p><strong>How:</strong> Bounce on the trampoline (one grab grants it server-wide). Also auto-awarded on character reset - save it for last!</p></div>
                 `;
             }
             
@@ -486,7 +960,7 @@
                 html += `
                     <div class="info-box info-unverified">
                         <strong>⚠️ Guide Not Yet Verified</strong>
-                        <p>The exact steps for this secret badge have not been confirmed by the community yet. Use the "⚙️ Settings" panel to run an AI Deep Search for real-time verified leaks, or wait for the drop to go live.</p>
+                        <p>The exact steps for this side quest have not been confirmed by the community yet. Use the "⚙️ Settings" panel to run an AI Deep Search for real-time verified leaks, or wait for the night to go live.</p>
                     </div>
                 `;
             }
@@ -498,17 +972,16 @@
                     <div class="info-box info-reward"><strong>Reward:</strong> ${d.reward}</div>
                     <button class="big-btn btn-visual" onclick="toggleVisual()">📷 Show Visual Guide (Where Exactly to Look)</button>
                     <div class="visual-guide" id="visualGuide">
-                        <h5> Visual Guide - Where to Look:</h5>
+                        <h5>👁️ Visual Guide - Where to Look:</h5>
                         <div class="visual-box">
                             <strong>${d.visualDesc || "Watch the video guide below for the exact location!"}</strong>
                         </div>
                         <p><strong>💡 Can't find it?</strong> Watch a video guide - seeing someone do it makes it much easier!</p>
                     </div>
-                    <a class="big-btn btn-video" href="https://www.youtube.com/results?search_query=The+Hunt+Roblox+20+${currentYear}+${encodeURIComponent(data[currentYear].game)}+secret+badge+location+guide" target="_blank">▶ Watch Video Guide for ${currentYear} Secret Badge</a>
+                    <a class="big-btn btn-video" href="https://www.youtube.com/results?search_query=The+Hollow+Roblox+${currentYear}+${encodeURIComponent(data[currentYear].game)}+secret+badge+location+guide" target="_blank">▶ Watch Video Guide for Night ${currentYear} Side Quest</a>
                     <div class="info-box info-warn" style="margin-top:15px;">
                         <strong>VERY IMPORTANT:</strong> 
-                        After finishing steps, you MUST go back to main Hunt Hub and click shimmering statue for Year ${currentYear}!
-                        ${isSecret && currentYear === 2006 ? '<br><br><strong>For 2006 Secret:</strong> Go to BLUE MOUNTAIN in main hub!' : ''}
+                        After finishing steps, you MUST go back to the main Hollow Hub and click the shimmering statue for Night ${currentYear}!
                     </div>
                     <button class="big-btn btn-back" onclick="openChoice(${currentYear})">Go Back</button>
                 </div>
@@ -530,12 +1003,100 @@
         }
 
         // ==========================================
+        // FRIENDS TAB LOGIC
+        // ==========================================
+        const friendsOverlay = document.getElementById('friendsOverlay');
+        const friendsTitle = document.getElementById('friendsTitle');
+        const friendsBody = document.getElementById('friendsBody');
+
+        function openFriends(e) {
+            if(e) e.preventDefault();
+            friendsTitle.textContent = "👻 Friends";
+            renderGhostGroups();
+            friendsOverlay.classList.add('active');
+        }
+
+        function closeFriends() {
+            friendsOverlay.classList.remove('active');
+        }
+
+        function renderGhostGroups() {
+            friendsTitle.textContent = "👻 Select a Ghost Group";
+            friendsBody.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px; color: #b9a8d0;">
+                    Select a ghost group below to view the players in it.
+                </div>
+                <div style="display: grid; gap: 15px; max-width: 400px; margin: 0 auto;">
+                    <button class="ghost-select-btn ghost-black" onclick="renderFriendList('black', 'Black Ghost')">
+                        <span style="font-size: 24px;">👻</span> Black Ghost
+                    </button>
+                    <button class="ghost-select-btn ghost-yellow" onclick="renderFriendList('yellow', 'Yellow Ghost')">
+                        <span style="font-size: 24px;">👻</span> Yellow Ghost
+                    </button>
+                    <button class="ghost-select-btn ghost-blue" onclick="renderFriendList('blue', 'Blue Ghost')">
+                        <span style="font-size: 24px;">👻</span> Blue Ghost
+                    </button>
+                    <button class="ghost-select-btn ghost-white" onclick="renderFriendList('white', 'White Ghost')">
+                        <span style="font-size: 24px;">👻</span> White Ghost
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderFriendList(groupKey, groupName) {
+            const players = friendGroups[groupKey] || [];
+            friendsTitle.textContent = `👻 ${groupName}`;
+            
+            let html = `
+                <div class="back-btn-container">
+                    <button class="btn-back" style="width: auto; padding: 8px 15px; margin-top: 0; font-size: 14px;" onclick="renderGhostGroups()">← Back to Ghosts</button>
+                </div>
+                <div class="friends-grid">
+            `;
+
+            if (players.length === 0) {
+                html += `<div style="grid-column: 1 / -1; text-align: center; color: #888; padding: 20px;">No friends found in this group yet.</div>`;
+            } else {
+                players.forEach(p => {
+                    // Attempt to fetch real Roblox headshot using username
+                    // Fallback to a clean placeholder if it fails
+                    const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
+                    const imageUrl = `https://www.roblox.com/headshot-thumbnail/image?username=${encodeURIComponent(p.handle)}&width=150&height=150&format=png`;
+                    const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
+
+                    html += `
+                        <a href="${profileUrl}" target="_blank" class="friend-card">
+                            <div class="friend-top">
+                                <div class="friend-avatar-wrap">
+                                    <img src="${imageUrl}" onerror="this.onerror=null; this.src='${fallbackUrl}';" alt="${p.name}" class="friend-avatar">
+                                    <div class="friend-status-icon">
+                                        <!-- Generic user icon to mimic the offline indicator -->
+                                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                    </div>
+                                </div>
+                                <div class="friend-info">
+                                    <div class="friend-name">${p.name}</div>
+                                    <div class="friend-handle">@${p.handle}</div>
+                                    <div class="friend-status-text">Offline</div>
+                                </div>
+                            </div>
+                            <div class="friend-add-btn">View Profile</div>
+                        </a>
+                    `;
+                });
+            }
+
+            html += `</div>`;
+            friendsBody.innerHTML = html;
+        }
+
+        // ==========================================
         // SETTINGS & AI DEEP SEARCH (FIXED & OPTIMIZED)
         // ==========================================
         function openSettings(e) {
             if (e) e.preventDefault();
             document.getElementById('settingsOverlay').classList.add('active');
-            const savedKey = localStorage.getItem('openrouter_api_key');
+            const savedKey = localStorage.getItem('hollow_openrouter_api_key');
             if (savedKey) document.getElementById('openrouterKey').value = savedKey;
         }
 
@@ -546,7 +1107,7 @@
         function saveApiKey() {
             const key = document.getElementById('openrouterKey').value.trim();
             if (key) {
-                localStorage.setItem('openrouter_api_key', key);
+                localStorage.setItem('hollow_openrouter_api_key', key);
                 alert('API Key saved successfully!');
             } else {
                 alert('Please enter a valid API key.');
@@ -554,7 +1115,7 @@
         }
 
         async function deepSearchDrops() {
-            const apiKey = localStorage.getItem('openrouter_api_key');
+            const apiKey = localStorage.getItem('hollow_openrouter_api_key');
             if (!apiKey) {
                 alert('Please enter and save your OpenRouter API Key first.');
                 return;
@@ -565,20 +1126,16 @@
             
             statusEl.style.display = 'block';
             statusEl.className = 'status-message status-timer';
-            statusEl.textContent = '🔍 AI is deep searching for verified Drop 2, 3, 4, 5 secrets...';
+            statusEl.textContent = '🔍 AI is deep searching for verified upcoming night secrets...';
             resultsEl.style.display = 'none';
 
-            const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions to get the SECRET BADGES for The Hunt: Roblox 20 event for Drops 2, 3, 4. 
-Drop 2: 2008 Rocket Arena, 2013 Apocalypse Rising 2, 2016 Roblox High School, 2019 Adopt Me, 2024 Dress to Impress.
-Drop 3: 2009 Chaos Canyon, 2012 Base Wars, 2017 Jailbreak, 2018 Build a Boat for Treasure, 2022 Berry Avenue RP.
-Drop 4: 2007 Sword Fights on the Heights IV, 2014 Murder Mystery 2, 2015 Lumber Tycoon 2, 2020 World // Zero, 2025 Grow a Garden.
-
+            const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions to get the SIDE QUEST badges for The Hollow (Roblox Halloween event) for upcoming nights. 
+Nights to cover: Night 2 (99 Nights in the Forest), Night 3 (Dandy's World), Night 4 (Piggy), Night 5 (The Mimic), Night 6 (Scary Shawarma Kiosk), Night 7 (Animal Hospital), Night 8 (Demonology), Night 9 (WARDEN).
 For EACH game, provide:
 1. The exact step-by-step instructions (numbered).
 2. The exact location of the secret podium or final step.
 3. A short visual description of where to look.
-
-Format the output clearly with headings for each Drop and Game. Be concise but highly accurate based on real Roblox community discoveries. Do not make up fake steps.`;
+Format the output clearly with headings for each Night and Game. Be concise but highly accurate based on real Roblox community discoveries. Do not make up fake steps.`;
 
             try {
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -587,7 +1144,7 @@ Format the output clearly with headings for each Drop and Game. Be concise but h
                         'Authorization': `Bearer ${apiKey}`,
                         'Content-Type': 'application/json',
                         'HTTP-Referer': window.location.href,
-                        'X-Title': 'Hunt Roblox 20 Guide'
+                        'X-Title': 'The Hollow Guide'
                     },
                     body: JSON.stringify({
                         model: 'meta-llama/llama-3.1-8b-instruct',
@@ -609,7 +1166,7 @@ Format the output clearly with headings for each Drop and Game. Be concise but h
                 const aiResponse = data.choices[0].message.content;
 
                 // Save to local storage
-                localStorage.setItem('ai_deep_search_results', aiResponse);
+                localStorage.setItem('hollow_ai_deep_search_results', aiResponse);
                 
                 // Update UI
                 statusEl.className = 'status-message status-ready';
@@ -617,25 +1174,26 @@ Format the output clearly with headings for each Drop and Game. Be concise but h
                 resultsEl.style.display = 'block';
                 resultsEl.textContent = aiResponse;
 
-                alert('Deep search complete! The guides have been updated with AI-verified information. Close settings and check the years!');
+                alert('Deep search complete! The guides have been updated with AI-verified information. Close settings and check the nights!');
 
             } catch (error) {
                 console.error('Deep Search Error:', error);
                 statusEl.className = 'status-message';
-                statusEl.style.background = '#ffebee';
-                statusEl.style.color = '#C62828';
-                statusEl.style.borderColor = '#F44336';
+                statusEl.style.background = '#2b0f0f';
+                statusEl.style.color = '#ff8a80';
+                statusEl.style.borderColor = '#f44336';
                 statusEl.textContent = `❌ Error: ${error.message}. Check your API key, ensure it has credits, disable ad-blockers, and try again.`;
             }
         }
 
         overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeSettings(); } });
+        friendsOverlay.addEventListener('click', (e) => { if (e.target === friendsOverlay) closeFriends(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeSettings(); closeFriends(); } });
         
         window.addEventListener('load', checkAgreement);
 
         // ==========================================
-        // ZERO-LAG CANVAS CONFETTI SYSTEM
+        // ZERO-LAG CANVAS CONFETTI SYSTEM (HALLOWEEN PALETTE)
         // ==========================================
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
@@ -654,7 +1212,7 @@ Format the output clearly with headings for each Drop and Game. Be concise but h
             localStorage.setItem(`confetti_triggered_${dropName}`, 'true');
 
             confettiParticles = [];
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff', '#ffa500', '#ffffff'];
+            const colors = ['#ff7b00', '#9c27b0', '#39ff14', '#ffd700', '#ff3131', '#00e5ff', '#ffffff', '#8b00ff'];
             
             for (let i = 0; i < 250; i++) {
                 confettiParticles.push({
@@ -715,7 +1273,7 @@ Format the output clearly with headings for each Drop and Game. Be concise but h
                 const dropTime = new Date(d.time).getTime();
                 const diff = dropTime - now;
                 
-                if (diff > 0 && diff <= 10000) { // Within 10 seconds of drop
+                if (diff > 0 && diff <= 10000) { // Within 10 seconds of a wave
                     d.years.forEach(y => {
                         const btn = document.querySelector(`.year-btn[data-year="${y}"]`);
                         if (btn && !btn.classList.contains('claimable')) {
@@ -723,10 +1281,10 @@ Format the output clearly with headings for each Drop and Game. Be concise but h
                         }
                     });
                 } else if (diff <= 0 && !d.hasTriggeredConfetti) {
-                    // Drop just happened!
+                    // Wave just happened!
                     d.hasTriggeredConfetti = true;
-                    refreshClaimable(); // This removes 'flashing-year' and adds 'claimable' (yellow)
-                    triggerConfetti(d.name); // Pass drop name to ensure it only triggers once per device
+                    refreshClaimable(); // This removes 'flashing-year' and adds 'claimable' (orange)
+                    triggerConfetti(d.name); // Pass wave name to ensure it only triggers once per device
                 }
             });
         }
