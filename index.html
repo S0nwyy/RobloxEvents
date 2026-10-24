@@ -381,7 +381,6 @@
         const todayFormatted = `${month}/${day}/${year}`;
         document.getElementById('navDate').textContent = `Today: ${todayFormatted}`;
 
-        // The Hollow schedule – keeping the requested order.
         const drops = [
             { name: "Night 1", time: "2026-10-22T21:00:00Z", years: [1], verified: true, hasTriggeredConfetti: true },
             { name: "Night 2", time: "2026-10-23T21:00:00Z", years: [2], verified: true, hasTriggeredConfetti: false },
@@ -404,8 +403,6 @@
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
         
-        // Base data – verified for Nights 1–2, placeholder for 3–9.
-        // The AI Deep Search will merge real steps into these.
         const data = {
             1: {
                 game: "DOORS",
@@ -523,16 +520,13 @@
             }
         };
 
-        // Load merged AI data from localStorage (if any) so updates persist.
         (function loadMergedData() {
             try {
                 const saved = localStorage.getItem('hollow_merged_data');
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     for (const key in parsed) {
-                        if (data[key]) {
-                            Object.assign(data[key], parsed[key]);
-                        }
+                        if (data[key]) Object.assign(data[key], parsed[key]);
                     }
                 }
             } catch (e) { console.warn('Could not load merged data', e); }
@@ -832,9 +826,7 @@
         
         function toggleVisual() {
             const guide = document.getElementById('visualGuide');
-            if (guide) {
-                guide.classList.toggle('show');
-            }
+            if (guide) guide.classList.toggle('show');
         }
         
         function closeModal() {
@@ -934,14 +926,16 @@
         }
 
         // ==================================================================
-        // PRESENCE POLLING
+        // PRESENCE POLLING – Online if the user is online in ANY game
         // ==================================================================
-        const THE_HOLLOW_PLACE_ID = 116463962153167;
-        const PRESENCE_PROXY = 'https://presence.roproxy.com';
         const USERS_PROXY = 'https://users.roproxy.com';
+        const PRESENCE_PROXY = 'https://presence.roproxy.com';
         const presencePollTimers = new Map();
+        const userIdCache = new Map();
 
         async function resolveUserId(username) {
+            if (userIdCache.has(username)) return userIdCache.get(username);
+
             const res = await fetch(`${USERS_PROXY}/v1/usernames/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -951,6 +945,7 @@
             const data = await res.json();
             const userId = data?.data?.[0]?.id;
             if (!userId) throw new Error('User not found');
+            userIdCache.set(username, userId);
             return userId;
         }
 
@@ -968,11 +963,15 @@
         async function updatePresenceForUser(username) {
             const statusEl = document.querySelector(`[data-status-for="${username}"]`);
             if (!statusEl) return;
+
             try {
                 const userId = await resolveUserId(username);
                 const presence = await fetchPresence(userId);
-                const isInHollow = presence && presence.placeId === THE_HOLLOW_PLACE_ID;
-                if (isInHollow) {
+
+                // userPresenceType: 0 = Offline, 1 = Website, 2 = In Game, 3 = In Studio
+                const isOnline = !!presence && presence.userPresenceType !== 0;
+
+                if (isOnline) {
                     statusEl.textContent = 'Online';
                     statusEl.style.color = '#39ff14';
                 } else {
@@ -988,12 +987,18 @@
 
         function startPresencePolling(players) {
             players.forEach(p => {
-                if (presencePollTimers.has(p.handle)) clearInterval(presencePollTimers.get(p.handle));
+                if (presencePollTimers.has(p.handle)) {
+                    clearInterval(presencePollTimers.get(p.handle));
+                    presencePollTimers.delete(p.handle);
+                }
             });
+
             players.forEach(p => updatePresenceForUser(p.handle));
+
             const intervalId = setInterval(() => {
                 players.forEach(p => updatePresenceForUser(p.handle));
-            }, 60000);
+            }, 30000);
+
             players.forEach(p => presencePollTimers.set(p.handle, intervalId));
         }
 
@@ -1148,7 +1153,6 @@ Only include steps you are confident about from real community guides. If you do
                     statusEl.textContent = `🔍 Trying ${provider.name}…`;
                     const result = await tryProvider(provider, prompt);
 
-                    // Extract JSON from possible markdown
                     let jsonText = result.text.trim();
                     const firstBrace = jsonText.indexOf('{');
                     const lastBrace = jsonText.lastIndexOf('}');
@@ -1168,15 +1172,12 @@ Only include steps you are confident about from real community guides. If you do
                     statusEl.className = 'status-message status-ready';
                     statusEl.textContent = `✅ ${result.provider} answered! ${updated} guide section(s) updated.`;
                     
-                    // Show a short summary, not raw dump
                     resultsEl.style.display = 'block';
                     resultsEl.textContent = `Updated via ${result.provider}.\nGuides merged successfully. Open any night to see the new steps.`;
 
                     alert(`Deep search complete via ${result.provider}! ${updated} guide sections were updated. Check the nights now.`);
 
-                    // If a guide is currently open, refresh it
                     if (currentYear !== null && overlay.classList.contains('active')) {
-                        // Re-render the current guide
                         if (mTitle.textContent.includes('Quest:')) showGuide('normal');
                         else if (mTitle.textContent.includes('Side Quest:')) showGuide('secret');
                     }
