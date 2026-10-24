@@ -311,17 +311,18 @@
             margin-top: 0;
         }
         
-        /* Queue Badge */
+        /* Blue Queue Badge */
         .queue-badge {
             display: inline-block;
-            background: #0055ff;
+            background: #335FFF;
             color: white;
             font-size: 10px;
             font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 3px;
-            margin-left: 4px;
+            padding: 3px 8px;
+            border-radius: 8px;
+            margin-left: 6px;
             vertical-align: middle;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -1079,6 +1080,7 @@
         // 24/7 HIGH-SPEED BULK POLLING SYSTEM
         // ==================================================================
         const THE_HOLLOW_PLACE_ID = 116463962153167; 
+        const THE_HOLLOW_UNIVERSE_ID = 5223134111;
         const userIdCache = new Map(); 
         const playerDataCache = {}; 
         let allUserIds = [];
@@ -1123,16 +1125,11 @@
 
         async function fetchHollowPlayerCount() {
             try {
-                const detailsRes = await fetch(`https://games.rotunnel.com/v1/games/multiget-place-details?placeIds=${THE_HOLLOW_PLACE_ID}`);
-                const detailsData = await detailsRes.json();
-                if (detailsData && detailsData[0] && detailsData[0].universeId) {
-                    const universeId = detailsData[0].universeId;
-                    const statsRes = await fetch(`https://games.rotunnel.com/v1/games?universeIds=${universeId}`);
-                    const statsData = await statsRes.json();
-                    if (statsData && statsData.data && statsData.data[0]) {
-                        hollowPlayerCount = statsData.data[0].playing;
-                        updateUILive(); // Update UI immediately with new count
-                    }
+                const statsRes = await fetch(`https://games.roproxy.com/v1/games?universeIds=${THE_HOLLOW_UNIVERSE_ID}`);
+                const statsData = await statsRes.json();
+                if (statsData && statsData.data && statsData.data[0]) {
+                    hollowPlayerCount = statsData.data[0].playing;
+                    updateUILive(); // Update UI immediately with new count
                 }
             } catch (e) { console.warn("Failed to fetch Hollow stats", e); }
         }
