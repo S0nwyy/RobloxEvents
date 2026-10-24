@@ -25,6 +25,16 @@
             100% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
         }
 
+        /* Owned Badge Animation */
+        @keyframes ownedPop {
+            0% { opacity: 0; transform: scale(0.5) translateY(5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes ownedGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(255,123,0,0.6); }
+            50% { box-shadow: 0 0 16px rgba(156,39,176,0.9); }
+        }
+
         .spooky-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .spooky-bg span { position: absolute; font-size: 38px; opacity: 0.13; animation: floatGhost 11s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,123,0,0.6)); }
         .spooky-bg span:nth-child(1) { left: 5%; top: 12%; animation-delay: 0s; }
@@ -325,6 +335,92 @@
         }
         .section-title:first-of-type {
             margin-top: 0;
+        }
+
+        /* Owned Badge */
+        .owned-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff7b00, #9c27b0);
+            color: #fff;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 8px rgba(255,123,0,0.6);
+            animation: ownedPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, ownedGlow 2s infinite;
+            width: fit-content;
+        }
+
+        /* Ghost Filter Bar */
+        .ghost-filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #1a0f26;
+            border-radius: 8px;
+            border: 1px solid #4a2c6e;
+        }
+
+        .ghost-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #2b1247;
+            border: 2px solid #4a2c6e;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .ghost-checkbox:hover {
+            border-color: #ff7b00;
+            transform: translateY(-2px);
+        }
+
+        .ghost-checkbox input {
+            display: none;
+        }
+
+        .ghost-checkbox .checkmark {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid #6a3d9c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: #170d24;
+        }
+
+        .ghost-checkbox input:checked + .checkmark {
+            background: #ff7b00;
+            border-color: #ff7b00;
+            box-shadow: 0 0 10px rgba(255,123,0,0.6);
+        }
+
+        .ghost-checkbox input:checked + .checkmark::after {
+            content: '✓';
+            color: #1a0b2e;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .ghost-checkbox .ghost-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #e6ddf2;
+        }
+
+        .ghost-checkbox input:checked ~ .ghost-label {
+            color: #ffd9a8;
         }
     </style>
 </head>
@@ -992,6 +1088,34 @@
                 </div>
             `;
 
+            // Ghost Filter Bar
+            if (!isAll) {
+                html += `
+                    <div class="ghost-filter-bar">
+                        <label class="ghost-checkbox">
+                            <input type="checkbox" id="check-black" onchange="toggleGhostOwned('black', this.checked)">
+                            <span class="checkmark"></span>
+                            <span class="ghost-label">👻 Black</span>
+                        </label>
+                        <label class="ghost-checkbox">
+                            <input type="checkbox" id="check-yellow" onchange="toggleGhostOwned('yellow', this.checked)">
+                            <span class="checkmark"></span>
+                            <span class="ghost-label">👻 Yellow</span>
+                        </label>
+                        <label class="ghost-checkbox">
+                            <input type="checkbox" id="check-blue" onchange="toggleGhostOwned('blue', this.checked)">
+                            <span class="checkmark"></span>
+                            <span class="ghost-label">👻 Blue</span>
+                        </label>
+                        <label class="ghost-checkbox">
+                            <input type="checkbox" id="check-white" onchange="toggleGhostOwned('white', this.checked)">
+                            <span class="checkmark"></span>
+                            <span class="ghost-label">👻 White</span>
+                        </label>
+                    </div>
+                `;
+            }
+
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
             
             const filteredPlayers = isAll 
@@ -1017,6 +1141,14 @@
 
             friendsBody.innerHTML = html;
 
+            // Restore checkbox states
+            if (!isAll) {
+                document.getElementById('check-black').checked = selectedGhosts.has('black');
+                document.getElementById('check-yellow').checked = selectedGhosts.has('yellow');
+                document.getElementById('check-blue').checked = selectedGhosts.has('blue');
+                document.getElementById('check-white').checked = selectedGhosts.has('white');
+            }
+
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
@@ -1027,6 +1159,11 @@
                 
                 // Guaranteed to never show "..." because we initialize to 0
                 const followerText = `Followers: ${(cache.followers || 0).toLocaleString()}`;
+
+                // Owned check
+                const playerGroups = allPlayers.filter(pl => pl.handle === p.handle).map(pl => pl.group);
+                const isOwned = playerGroups.some(g => selectedGhosts.has(g));
+                const ownedBadge = isOwned ? `<div class="owned-badge">✦ Owned</div>` : '';
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
@@ -1058,6 +1195,7 @@
                                 <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${statusColor}">${statusText}</div>
                                 <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">${followerText}</div>
                                 ${ghostBadge}
+                                ${ownedBadge}
                             </div>
                         </div>
                         <div class="friend-add-btn">View Profile</div>
@@ -1101,6 +1239,23 @@
         let isPolling = false;
         let isFirstPresencePoll = true; 
         let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
+        let selectedGhosts = new Set();
+
+        // Audio Setup
+        const onlineSound = new Audio('https://www.myinstants.com/media/sounds/divine-secret-catch-fisch.mp3');
+        onlineSound.volume = 0.6;
+
+        function playOnlineSound() {
+            onlineSound.currentTime = 0;
+            onlineSound.play().catch(() => {});
+        }
+
+        // Unlock audio context on first interaction
+        document.addEventListener('click', () => {
+            if (onlineSound.paused) {
+                onlineSound.play().then(() => onlineSound.pause()).catch(() => {});
+            }
+        }, { once: true });
 
         window.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('autoCopyToggle');
@@ -1110,6 +1265,31 @@
         function toggleAutoCopy(el) {
             autoCopyEnabled = el.checked;
             localStorage.setItem('hollow_auto_copy', autoCopyEnabled);
+        }
+
+        function toggleGhostOwned(group, isChecked) {
+            if (isChecked) selectedGhosts.add(group);
+            else selectedGhosts.delete(group);
+            
+            document.querySelectorAll('.friend-card').forEach(card => {
+                const handle = card.dataset.username;
+                const playerGroups = allPlayers.filter(p => p.handle === handle).map(p => p.group);
+                const isOwned = playerGroups.some(g => selectedGhosts.has(g));
+                updateOwnedBadge(card, isOwned);
+            });
+        }
+
+        function updateOwnedBadge(card, isOwned) {
+            let badge = card.querySelector('.owned-badge');
+            const info = card.querySelector('.friend-info');
+            if (isOwned && !badge) {
+                badge = document.createElement('div');
+                badge.className = 'owned-badge';
+                badge.textContent = '✦ Owned';
+                info.appendChild(badge);
+            } else if (!isOwned && badge) {
+                badge.remove();
+            }
         }
 
         async function fetchWithTimeout(resource, options = {}) {
@@ -1128,7 +1308,7 @@
             const allUsernames = allPlayers.map(p => p.handle);
             
             try {
-                const res = await fetchWithTimeout(`https://users.rotunnel.com/v1/usernames/users`, {
+                const res = await fetchWithTimeout(`https://users.roproxy.com/v1/usernames/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ usernames: allUsernames, excludeBannedUsers: true }),
@@ -1142,7 +1322,6 @@
                     
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
-                    // Initialize followers to 0 so it NEVER shows "..."
                     if (!playerDataCache[actualHandle]) {
                         playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
@@ -1183,13 +1362,13 @@
         async function fetchAllFollowers() {
             const entries = Object.entries(userIdCache);
             
-            // Fire them all at once (RoProxy handles this perfectly)
-            await Promise.all(entries.map(async ([uName, info]) => {
+            // Sequential fetch with delay to prevent rate limits
+            for (const [uName, info] of entries) {
                 const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                if (!actualHandle) return;
+                if (!actualHandle) continue;
                 
                 try {
-                    const res = await fetchWithTimeout(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`, { timeout: 4000 });
+                    const res = await fetchWithTimeout(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`, { timeout: 5000 });
                     if (res.ok) {
                         const data = await res.json();
                         if (data && typeof data.count === 'number') {
@@ -1199,7 +1378,9 @@
                         }
                     }
                 } catch(e) {}
-            }));
+                
+                await new Promise(r => setTimeout(r, 150)); // Delay to avoid rate limits
+            }
             
             updateUILive(); 
         }
@@ -1268,6 +1449,8 @@
                 updateUILive();
 
                 if (someoneCameOnline && newOnlineHandle && friendsOverlay.classList.contains('active')) {
+                    playOnlineSound();
+                    
                     setTimeout(() => {
                         const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
                         if (card) {
@@ -1334,9 +1517,8 @@
                     }
                 }
                 
-                // Since we initialized to 0, this will always render a number
                 if (followersEl) {
-                    followersEl.textContent = `Followers: ${cache.followers.toLocaleString()}`;
+                    followersEl.textContent = `Followers: ${(cache.followers || 0).toLocaleString()}`;
                 }
 
                 if (isAll) {
