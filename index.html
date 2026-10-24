@@ -154,7 +154,7 @@
             gap: 12px;
             text-decoration: none;
             color: #fff;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.4s ease, background 0.2s; /* Smooth transition for sorting */
             border: 1px solid #333;
         }
         .friend-card:hover {
@@ -891,7 +891,7 @@
                     </div>
                 `;
             } else if (Array.isArray(players) && players.length > 0) {
-                html += `<div class="friends-grid">`;
+                html += `<div class="friends-grid" id="friendsGrid">`;
                 players.forEach(p => {
                     const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                     const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
@@ -930,6 +930,7 @@
         // ==================================================================
         const presencePollTimers = new Map();
         const userIdCache = new Map();
+        const playerDataCache = {}; // Stores { isOnline: boolean, followers: number }
 
         async function resolveUserId(username) {
             if (userIdCache.has(username)) return userIdCache.get(username);
@@ -966,14 +967,13 @@
         }
 
         async function fetchAvatarUrl(userId) {
-            // Modern avatar API endpoint
             const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`);
             if (!res.ok) throw new Error(`Avatar fetch failed: ${res.status}`);
             const data = await res.json();
             return data?.data?.[0]?.imageUrl || null;
         }
 
-        async function updatePresenceAndFollowers(username) {
+        async function updatePresenceAndFollowers(username, players) {
             const statusEl = document.querySelector(`[data-status-for="${username}"]`);
             const followersEl = document.querySelector(`[data-followers-for="${username}"]`);
             const avatarImg = document.querySelector(`[data-avatar-for="${username}"]`);
@@ -981,7 +981,6 @@
             try {
                 const userId = await resolveUserId(username);
                 
-                // Fetch presence
                 const presence = await fetchPresence(userId);
                 const isOnline = !!presence && presence.userPresenceType > 0;
 
@@ -995,19 +994,18 @@
                     }
                 }
 
-                // Fetch follower count
+                const count = await fetchFollowerCount(userId);
                 if (followersEl) {
-                    const count = await fetchFollowerCount(userId);
                     followersEl.textContent = `Followers: ${count.toLocaleString()}`;
                 }
 
-                // Fetch and update avatar
                 if (avatarImg) {
                     const avatarUrl = await fetchAvatarUrl(userId);
-                    if (avatarUrl) {
-                        avatarImg.src = avatarUrl;
-                    }
+                    if (avatarUrl) avatarImg.src = avatarUrl;
                 }
+
+                // Save to cache for sorting
+                playerDataCache[username] = { isOnline, followers: count };
             } catch (err) {
                 console.warn(`Check failed for ${username}:`, err);
                 if (statusEl) {
@@ -1017,7 +1015,36 @@
                 if (followersEl) {
                     followersEl.textContent = 'Followers: —';
                 }
+                // Default failed data to offline and 0 followers for sorting
+                playerDataCache[username] = { isOnline: false, followers: 0 };
+            } finally {
+                // Re-sort the DOM after this specific user's data is updated
+                sortAndReorderDOM(players);
             }
+        }
+
+        function sortAndReorderDOM(players) {
+            const grid = document.getElementById('friendsGrid');
+            if (!grid) return;
+
+            // Sort logic: Online first, then by followers descending
+            const sortedPlayers = [...players].sort((a, b) => {
+                const dataA = playerDataCache[a.handle] || { isOnline: false, followers: 0 };
+                const dataB = playerDataCache[b.handle] || { isOnline: false, followers: 0 };
+
+                // 1. Online status
+                if (dataA.isOnline && !dataB.isOnline) return -1;
+                if (!dataA.isOnline && dataB.isOnline) return 1;
+
+                // 2. Followers count
+                return dataB.followers - dataA.followers;
+            });
+
+            // Re-append elements in the new order
+            sortedPlayers.forEach(p => {
+                const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
+                if (card) grid.appendChild(card);
+            });
         }
 
         function startPresencePolling(players) {
@@ -1028,10 +1055,10 @@
                 }
             });
 
-            players.forEach(p => updatePresenceAndFollowers(p.handle));
+            players.forEach(p => updatePresenceAndFollowers(p.handle, players));
 
             const intervalId = setInterval(() => {
-                players.forEach(p => updatePresenceAndFollowers(p.handle));
+                players.forEach(p => updatePresenceAndFollowers(p.handle, players));
             }, 30000);
 
             players.forEach(p => presencePollTimers.set(p.handle, intervalId));
