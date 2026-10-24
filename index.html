@@ -910,6 +910,7 @@
                                     <div class="friend-name">${p.name}</div>
                                     <div class="friend-handle">@${p.handle}</div>
                                     <div class="friend-status-text" data-status-for="${p.handle}">Checking…</div>
+                                    <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">Followers: …</div>
                                 </div>
                             </div>
                             <div class="friend-add-btn">View Profile</div>
@@ -926,7 +927,7 @@
         }
 
         // ==================================================================
-        // PRESENCE POLLING – Fixed to use corsproxy.io (RoProxy lacks Presence)
+        // PRESENCE & FOLLOWER COUNT POLLING
         // ==================================================================
         const USERS_PROXY = 'https://users.roproxy.com';
         const presencePollTimers = new Map();
@@ -949,7 +950,7 @@
         }
 
         async function fetchPresence(userId) {
-            // RoProxy does not support the Presence API branch, so we use corsproxy.io.
+            // Use corsproxy.io for reliable POST forwarding
             const targetUrl = 'https://presence.roblox.com/v1/presence/users';
             const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
 
@@ -963,28 +964,52 @@
             return data?.userPresences?.[0] || null;
         }
 
-        async function updatePresenceForUser(username) {
-            const statusEl = document.querySelector(`[data-status-for="${username}"]`);
-            if (!statusEl) return;
+        async function fetchFollowerCount(userId) {
+            const targetUrl = `https://friends.roblox.com/v1/users/${userId}/followers/count`;
+            // Use roproxy for GET requests, which works well
+            const proxyUrl = `https://friends.roproxy.com/v1/users/${userId}/followers/count`;
 
+            const res = await fetch(proxyUrl);
+            if (!res.ok) throw new Error(`Follower count fetch failed: ${res.status}`);
+            const data = await res.json();
+            return data.count || 0;
+        }
+
+        async function updatePresenceAndFollowers(username) {
+            const statusEl = document.querySelector(`[data-status-for="${username}"]`);
+            const followersEl = document.querySelector(`[data-followers-for="${username}"]`);
+            
             try {
                 const userId = await resolveUserId(username);
+                
+                // Fetch presence
                 const presence = await fetchPresence(userId);
+                const isOnline = !!presence && presence.userPresenceType > 0;
 
-                // userPresenceType: 0 = Offline, 1 = Website, 2 = In Game, 3 = In Studio
-                const isOnline = !!presence && presence.userPresenceType !== 0;
+                if (statusEl) {
+                    if (isOnline) {
+                        statusEl.textContent = 'Online';
+                        statusEl.style.color = '#39ff14';
+                    } else {
+                        statusEl.textContent = 'Offline';
+                        statusEl.style.color = '#888';
+                    }
+                }
 
-                if (isOnline) {
-                    statusEl.textContent = 'Online';
-                    statusEl.style.color = '#39ff14';
-                } else {
+                // Fetch follower count
+                if (followersEl) {
+                    const count = await fetchFollowerCount(userId);
+                    followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+                }
+            } catch (err) {
+                console.warn(`Check failed for ${username}:`, err);
+                if (statusEl) {
                     statusEl.textContent = 'Offline';
                     statusEl.style.color = '#888';
                 }
-            } catch (err) {
-                console.warn(`Presence check failed for ${username}:`, err);
-                statusEl.textContent = 'Offline';
-                statusEl.style.color = '#888';
+                if (followersEl) {
+                    followersEl.textContent = 'Followers: —';
+                }
             }
         }
 
@@ -996,10 +1021,10 @@
                 }
             });
 
-            players.forEach(p => updatePresenceForUser(p.handle));
+            players.forEach(p => updatePresenceAndFollowers(p.handle));
 
             const intervalId = setInterval(() => {
-                players.forEach(p => updatePresenceForUser(p.handle));
+                players.forEach(p => updatePresenceAndFollowers(p.handle));
             }, 30000);
 
             players.forEach(p => presencePollTimers.set(p.handle, intervalId));
