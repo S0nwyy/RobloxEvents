@@ -16,15 +16,12 @@
             0%, 100% { opacity: 1; box-shadow: 0 0 18px 4px #ff7b00; transform: scale(1); border-color: #ff7b00; }
             50% { opacity: 0.6; box-shadow: 0 0 6px 1px #ff3d00; transform: scale(0.97); border-color: #ff3d00; }
         }
-        
-        /* Halloween Glow Animation */
         @keyframes halloweenGlow {
             0% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
             33% { box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 15px rgba(156, 39, 176, 0.4); border-color: #9c27b0; }
             66% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.8), inset 0 0 10px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
             100% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
         }
-
         .spooky-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .spooky-bg span { position: absolute; font-size: 38px; opacity: 0.13; animation: floatGhost 11s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,123,0,0.6)); }
         .spooky-bg span:nth-child(1) { left: 5%; top: 12%; animation-delay: 0s; }
@@ -33,7 +30,6 @@
         .spooky-bg span:nth-child(4) { right: 14%; bottom: 10%; animation-delay: 4.5s; }
         .spooky-bg span:nth-child(5) { left: 48%; top: 6%; animation-delay: 2s; }
         .spooky-bg span:nth-child(6) { right: 40%; bottom: 30%; animation-delay: 5.5s; }
-
         .navbar { background: linear-gradient(to bottom, #3b1a5e, #1a0b2e); border-bottom: 2px solid #ff7b00; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 14px rgba(255,123,0,0.25); animation: slideDown 0.5s ease-out; position: sticky; top: 0; z-index: 100; }
         .logo { color: #ff9d3d; font-size: 24px; font-weight: bold; text-shadow: 0 0 10px #ff7b00, 2px 2px 0 #000; cursor: pointer; letter-spacing: 1px; }
         .nav-links { display: flex; gap: 15px; align-items: center; }
@@ -119,7 +115,6 @@
         .verified-badge { display: inline-block; background: #39ff14; color: #0d0614; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
         .unverified-badge { display: inline-block; background: #ff9800; color: #1a0b2e; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
         .ai-verified-badge { display: inline-block; background: #00e5ff; color: #0d0614; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
-        
         .agreement-modal { background: #170d24; border: 3px solid #ff7b00; border-radius: 6px; width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 5px 30px rgba(0,0,0,0.85), 0 0 40px rgba(255,123,0,0.2); animation: slideUp 0.4s ease-out; }
         .agreement-modal .modal-header { background: linear-gradient(to bottom, #7a1f1f, #4a0f0f); color: #ffb84d; }
         .agreement-content { padding: 25px; overflow-y: auto; }
@@ -143,189 +138,46 @@
         .confirm-btn.enabled { background: linear-gradient(to bottom, #ff7b00, #cc5500); border-color: #993300; border-bottom-color: #662200; color: white; }
         .confirm-btn.enabled:hover { background: linear-gradient(to bottom, #ff8c1a, #b34a00); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,123,0,0.45); }
         .confirm-btn.disabled { background: linear-gradient(to bottom, #2b1247, #1e0d33); border-color: #4a2c6e; border-bottom-color: #33204d; color: #7a6b8c; cursor: not-allowed; }
-        
         .settings-input { width: 100%; padding: 10px; background: #120a1a; border: 1px solid #33204d; border-radius: 4px; font-size: 14px; margin-bottom: 15px; color: #e6ddf2; }
         .settings-input:focus { outline: none; border-color: #ff7b00; box-shadow: 0 0 8px rgba(255,123,0,0.35); }
         .deep-search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; background: #120a1a; border: 1px solid #33204d; padding: 15px; border-radius: 4px; font-size: 13px; white-space: pre-wrap; display: none; color: #dcd2ea; }
-
-        .friends-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-        .friend-card {
-            background: #1e1e1e;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            text-decoration: none;
-            color: #fff;
-            transition: transform 0.4s ease, background 0.2s, box-shadow 1s ease-out, border-color 1s ease-out;
-            border: 1px solid #333;
-            position: relative;
-            overflow: hidden;
-        }
-        .friend-card:hover {
-            transform: translateY(-3px);
-            background: #252525;
-            border-color: #555;
-        }
-        
-        /* Class that gets added when a player transitions to online */
-        .friend-card.just-online {
-            animation: halloweenGlow 3s infinite;
-            border-color: #ff7b00;
-        }
-
-        .friend-top {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .friend-avatar-wrap {
-            position: relative;
-            width: 60px;
-            height: 60px;
-            flex-shrink: 0;
-        }
-        .friend-avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            background: #333;
-        }
-        .friend-status-icon {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            width: 20px;
-            height: 20px;
-            background: #2a2a2a;
-            border: 2px solid #1e1e1e;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-        }
-        .friend-status-icon svg {
-            width: 12px;
-            height: 12px;
-            fill: currentColor;
-        }
-        .friend-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            overflow: hidden;
-            width: 100%;
-        }
-        .friend-name {
-            font-size: 16px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .friend-handle {
-            font-size: 12px;
-            color: #b0b0b0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-            transition: color 0.2s;
-            user-select: none;
-            width: fit-content;
-        }
-        .friend-handle:hover {
-            color: #fff;
-        }
-        .friend-status-text {
-            font-size: 12px;
-            color: #888;
-        }
-        .friend-add-btn {
-            background: #2f3136;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: background 0.2s;
-            margin-top: auto;
-        }
-        .friend-card:hover .friend-add-btn {
-            background: #40444b;
-        }
-
-        /* Smaller Ghost Buttons */
-        .ghost-select-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px 15px;
-            background: #1e1e1e;
-            border: 2px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .ghost-select-btn:hover {
-            background: #252525;
-            border-color: #ff7b00;
-            transform: scale(1.02);
-        }
+        .friends-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; margin-top: 10px; margin-bottom: 20px; }
+        .friend-card { background: #1e1e1e; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: #fff; transition: transform 0.4s ease, background 0.2s, box-shadow 1s ease-out, border-color 1s ease-out; border: 1px solid #333; position: relative; overflow: hidden; }
+        .friend-card:hover { transform: translateY(-3px); background: #252525; border-color: #555; }
+        .friend-card.just-online { animation: halloweenGlow 3s infinite; border-color: #ff7b00; }
+        .friend-top { display: flex; align-items: center; gap: 12px; }
+        .friend-avatar-wrap { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
+        .friend-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #333; }
+        .friend-status-icon { position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; background: #2a2a2a; border: 2px solid #1e1e1e; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #888; }
+        .friend-status-icon svg { width: 12px; height: 12px; fill: currentColor; }
+        .friend-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; width: 100%; }
+        .friend-name { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .friend-handle { font-size: 12px; color: #b0b0b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; transition: color 0.2s; user-select: none; width: fit-content; }
+        .friend-handle:hover { color: #fff; }
+        .friend-status-text { font-size: 12px; color: #888; }
+        .friend-add-btn { background: #2f3136; color: #fff; border: none; border-radius: 6px; padding: 10px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s; margin-top: auto; }
+        .friend-card:hover .friend-add-btn { background: #40444b; }
+        .ghost-select-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 15px; background: #1e1e1e; border: 2px solid #333; border-radius: 8px; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .ghost-select-btn:hover { background: #252525; border-color: #ff7b00; transform: scale(1.02); }
         .ghost-all { border-left: 4px solid #39ff14; }
         .ghost-black { border-left: 4px solid #444; }
         .ghost-yellow { border-left: 4px solid #ffd700; }
         .ghost-blue { border-left: 4px solid #00bfff; }
         .ghost-white { border-left: 4px solid #fff; }
-        
-        .back-btn-container {
-            margin-bottom: 20px;
-        }
-
-        /* Ghost Badge on Cards */
-        .ghost-badge {
-            display: inline-block;
-            font-size: 9px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            width: fit-content;
-        }
+        .back-btn-container { margin-bottom: 20px; }
+        .ghost-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+        .ghost-badge { display: inline-block; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; width: fit-content; }
+        .ghost-badges .ghost-badge { margin-top: 0; }
         .badge-black { background: #333; color: #fff; border: 1px solid #555; }
         .badge-yellow { background: #ffd700; color: #000; }
         .badge-blue { background: #00bfff; color: #000; }
-
-        .section-title {
-            font-size: 18px;
-            color: #ff9d3d;
-            margin-bottom: 10px;
-            margin-top: 20px;
-            text-shadow: 0 0 10px rgba(255,123,0,0.35);
-            border-bottom: 1px solid #4a2c6e;
-            padding-bottom: 5px;
-        }
-        .section-title:first-of-type {
-            margin-top: 0;
-        }
+        .section-title { font-size: 18px; color: #ff9d3d; margin-bottom: 10px; margin-top: 20px; text-shadow: 0 0 10px rgba(255,123,0,0.35); border-bottom: 1px solid #4a2c6e; padding-bottom: 5px; }
+        .section-title:first-of-type { margin-top: 0; }
+        /* Background mode button */
+        .bg-mode-btn { background: linear-gradient(to bottom, #1f4d3a, #143325); border: 1px solid #39ff14; border-bottom: 3px solid #1e6b3a; color: #b3ffcf; font-size: 12px; font-weight: bold; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: all 0.2s; margin-left: 8px; }
+        .bg-mode-btn:hover { background: linear-gradient(to bottom, #2a664d, #1a4a32); transform: translateY(-1px); box-shadow: 0 0 10px rgba(57,255,20,0.4); }
+        .bg-mode-btn.active { background: linear-gradient(to bottom, #2e8b57, #1e6b3a); color: #fff; box-shadow: 0 0 12px rgba(57,255,20,0.6); animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0%, 100% { box-shadow: 0 0 8px rgba(57,255,20,0.4); } 50% { box-shadow: 0 0 16px rgba(57,255,20,0.8); } }
     </style>
 </head>
 <body>
@@ -334,20 +186,21 @@
     </div>
 
     <div id="ai-core" style="display:none;" data-status="scanning" data-sources="youtube,google,tiktok,wikipedia,reddit"></div>
-    
+
     <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999;"></canvas>
 
     <nav class="navbar">
         <div class="logo" onclick="closeModal()">🎃 ROBLOX</div>
         <div class="nav-links">
             <div class="date-display" id="navDate">Loading...</div>
+            <button class="bg-mode-btn" id="bgModeBtn" onclick="toggleBackgroundMode()" title="Keep sound working when phone is locked">🔇 Background OFF</button>
             <a href="#" onclick="openSettings(event)">⚙️ Settings</a>
             <a href="#" onclick="openFriends(event)">👻 Friends</a>
             <a href="#">Catalog</a>
             <a href="#">Create</a>
         </div>
     </nav>
-    
+
     <div class="container">
         <div class="box">
             <div class="title-box">
@@ -362,7 +215,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="overlay" id="agreementOverlay">
         <div class="agreement-modal">
             <div class="modal-header">
@@ -390,7 +243,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="overlay" id="settingsOverlay">
         <div class="agreement-modal" style="max-width: 700px;">
             <div class="modal-header">
@@ -402,9 +255,9 @@
                 <p style="font-size: 14px; color: #b9a8d0; margin-bottom: 15px;">
                     This search requires no API key. It automatically tries multiple free providers and, when successful, <strong>merges the found steps directly into every night's guide</strong> (Quest and Side Quest). You will see the new steps immediately.
                 </p>
-                
+
                 <button class="confirm-btn enabled" onclick="deepSearchDrops()" style="width: 100%; background: linear-gradient(to bottom, #6d33a0, #4a1f7a); border-color: #9333ea; margin-bottom: 15px;">🔍 Deep Search &amp; Update All Guides</button>
-                
+
                 <div id="deepSearchStatus" class="status-message" style="display: none;"></div>
                 <div id="deepSearchResults" class="deep-search-results"></div>
 
@@ -419,6 +272,17 @@
                 <p style="font-size: 11px; color: #ff8a80; margin-top: 5px; font-style: italic;">
                     Note: Due to browser security, if you are tabbed out (e.g., playing Roblox), the page cannot copy to your clipboard. The username will be instantly copied the second you click back onto this tab.
                 </p>
+
+                <h3 style="margin-top: 25px;">📱 Background Mode</h3>
+                <p style="font-size: 13px; color: #b9a8d0; line-height: 1.6;">
+                    When Background Mode is ON, the page plays a silent audio loop so the operating system keeps it alive. This lets the online sound alert you even if you lock your phone or switch to another app (like Roblox).
+                </p>
+                <p style="font-size: 12px; color: #ff8a80; margin-top: 8px; font-style: italic;">
+                    ⚠️ This uses some battery. Turn it off when you don't need it.
+                </p>
+                <p style="font-size: 12px; color: #b9a8d0; margin-top: 8px;">
+                    You can also toggle it from the navbar button at the top of the page.
+                </p>
             </div>
         </div>
     </div>
@@ -432,7 +296,7 @@
             <div class="modal-body" id="friendsBody" style="background: #0f0817;"></div>
         </div>
     </div>
-    
+
     <div class="overlay" id="overlay">
         <div class="modal">
             <div class="modal-header">
@@ -448,7 +312,6 @@
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         const year = now.getFullYear();
-        const todayCode = `${month}${day}${year}`;
         const todayFormatted = `${month}/${day}/${year}`;
         document.getElementById('navDate').textContent = `Today: ${todayFormatted}`;
 
@@ -463,7 +326,7 @@
             { name: "Night 8", time: "2026-10-29T21:00:00Z", years: [8], verified: false, hasTriggeredConfetti: false },
             { name: "Night 9", time: "2026-10-30T21:00:00Z", years: [9], verified: false, hasTriggeredConfetti: false }
         ];
-        
+
         function getDrop(y) { return drops.find(d => d.years.includes(y)); }
         function isSecretClaimable(y) {
             const d = getDrop(y);
@@ -473,12 +336,12 @@
             const d = new Date(utcStr);
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
-        
+
         function timeAgo(isoString) {
             if (!isoString) return null;
             const date = new Date(isoString);
-            const now = new Date();
-            const diffMs = now - date;
+            const n = new Date();
+            const diffMs = n - date;
             const diffMins = Math.floor(diffMs / 60000);
             if (diffMins < 1) return "Just now";
             if (diffMins < 60) return `${diffMins}m ago`;
@@ -659,7 +522,9 @@
                 { name: "sudonrblx", handle: "sudonrblx" },
                 { name: "includ1ve", handle: "includ1ve" },
                 { name: "robey100", handle: "robey100" },
-                { name: "soyyyBee", handle: "soyyyBee" }
+                { name: "soyyyBee", handle: "soyyyBee" },
+                { name: "LOUDNAYU", handle: "LOUDNAYU" },
+                { name: "stormyxvreal", handle: "stormyxvreal" }
             ],
             blue: [
                 { name: "Th3_avocad0", handle: "Th3_avocad0" },
@@ -671,15 +536,25 @@
                 { name: "Nauticalcaptain", handle: "Nauticalcaptain" },
                 { name: "Caf3zlnho", handle: "Caf3zlnho" },
                 { name: "someslugcat", handle: "someslugcat" },
-                { name: "PolarisDirector", handle: "PolarisDirector" }
+                { name: "PolarisDirector", handle: "PolarisDirector" },
+                { name: "Meowsiio", handle: "Meowsiio" }
             ],
             white: "You just need to join a Roblox Plus player."
         };
 
         const allPlayers = [];
+        const handleToEntry = new Map();
         ['black', 'yellow', 'blue'].forEach(group => {
             friendGroups[group].forEach(p => {
-                allPlayers.push({ ...p, group: group });
+                const key = p.handle.toLowerCase();
+                if (handleToEntry.has(key)) {
+                    const existing = handleToEntry.get(key);
+                    if (!existing.groups.includes(group)) existing.groups.push(group);
+                    return;
+                }
+                const entry = { ...p, group: group, groups: [group] };
+                handleToEntry.set(key, entry);
+                allPlayers.push(entry);
             });
         });
 
@@ -693,14 +568,13 @@
             btn.onclick = () => openChoice(y);
             grid.appendChild(btn);
         }
-        
+
         function refreshClaimable() {
             document.querySelectorAll('#yearGrid .year-btn').forEach((btn) => {
                 const y = parseInt(btn.getAttribute('data-year'));
                 const d = getDrop(y);
                 if (!d) return;
                 const localTime = getLocalTimeStr(d.time);
-                
                 if (isSecretClaimable(y)) {
                     btn.classList.add('claimable');
                     btn.classList.remove('unverified', 'flashing-year');
@@ -718,24 +592,22 @@
         const overlay = document.getElementById('overlay');
         const mTitle = document.getElementById('modalTitle');
         const mBody = document.getElementById('modalBody');
-        
+
         const agreementOverlay = document.getElementById('agreementOverlay');
         const agreementText = document.getElementById('agreementText');
         const statusMessage = document.getElementById('statusMessage');
         const checkboxContainer = document.getElementById('checkboxContainer');
         const agreementCheckbox = document.getElementById('agreementCheckbox');
         const confirmBtn = document.getElementById('confirmBtn');
-        
+
         let hasScrolledToBottom = false;
         let countdownStarted = false;
 
         function checkAgreement() {
             const hasAgreed = localStorage.getItem('hollow_agreed');
-            if (!hasAgreed) {
-                agreementOverlay.classList.add('active');
-            }
+            if (!hasAgreed) agreementOverlay.classList.add('active');
         }
-        
+
         agreementText.addEventListener('scroll', function() {
             if (!hasScrolledToBottom) {
                 if (this.scrollTop + this.clientHeight >= this.scrollHeight - 15) {
@@ -748,11 +620,9 @@
         function startCountdown() {
             if (countdownStarted) return;
             countdownStarted = true;
-            
             statusMessage.className = 'status-message status-timer';
             let seconds = 5;
             statusMessage.textContent = `⏳ Please wait: ${seconds} seconds`;
-            
             const timer = setInterval(() => {
                 seconds--;
                 if (seconds > 0) {
@@ -766,7 +636,7 @@
                 }
             }, 1000);
         }
-        
+
         agreementCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 confirmBtn.disabled = false;
@@ -778,14 +648,14 @@
                 confirmBtn.classList.add('disabled');
             }
         });
-        
+
         confirmBtn.addEventListener('click', function() {
             if (!this.disabled && agreementCheckbox.checked) {
                 localStorage.setItem('hollow_agreed', 'true');
                 agreementOverlay.classList.remove('active');
             }
         });
-        
+
         function openChoice(year) {
             if (!data[year]) return;
             currentYear = year;
@@ -799,11 +669,10 @@
             `;
             overlay.classList.add('active');
         }
-        
+
         function handleSecretClick(year) {
             const d = getDrop(year);
             const localTime = getLocalTimeStr(d.time);
-            
             if (!isSecretClaimable(year)) {
                 const gamesList = d.years.map(yy => `Night ${yy} - ${data[yy].game}`).join(' &bull; ');
                 const verifiedLabel = d.verified ? '✅ Guide Verified' : '⚠️ Guide Not Yet Verified';
@@ -827,31 +696,21 @@
                 showGuide('secret');
             }
         }
-        
+
         function showGuide(type) {
             const d = data[currentYear][type];
             const isSecret = type === 'secret';
-            
             const isAiUpdated = d.aiUpdated === true;
             const hasSteps = d.steps && d.steps.length > 0;
-            
             let verifiedBadge = '';
             if (isSecret) {
-                if (isAiUpdated) {
-                    verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
-                } else if (d.verified) {
-                    verifiedBadge = '<span class="verified-badge">VERIFIED</span>';
-                } else {
-                    verifiedBadge = '<span class="unverified-badge">NOT VERIFIED</span>';
-                }
+                if (isAiUpdated) verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
+                else if (d.verified) verifiedBadge = '<span class="verified-badge">VERIFIED</span>';
+                else verifiedBadge = '<span class="unverified-badge">NOT VERIFIED</span>';
             } else {
-                if (isAiUpdated) {
-                    verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
-                }
+                if (isAiUpdated) verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
             }
-            
             mTitle.innerHTML = `${isSecret ? 'Side Quest' : 'Quest'}: ${d.title} ${verifiedBadge}`;
-            
             let html = `
                 <div class="guide-section">
                     <div class="step-box ${isSecret ? 'secret' : ''} ${isSecret && !d.verified && !isAiUpdated ? 'unverified' : ''}">
@@ -875,7 +734,6 @@
                         `}
                     </div>
             `;
-            
             if (isAiUpdated) {
                 html += `
                     <div class="info-box" style="background: #0e2430; border-color: #00e5ff; color: #b3f0ff; margin-top: 15px;">
@@ -884,7 +742,6 @@
                     </div>
                 `;
             }
-            
             if (isSecret && !d.verified && !isAiUpdated) {
                 html += `
                     <div class="info-box info-unverified">
@@ -893,7 +750,6 @@
                     </div>
                 `;
             }
-            
             html += `
                     <div class="info-box info-loc"><strong>Location:</strong> ${d.loc || 'Unknown'}</div>
                     ${d.tip ? `<div class="info-box info-tip"><strong>Pro Tip:</strong> ${d.tip}</div>` : ''}
@@ -909,7 +765,7 @@
                     </div>
                     <a class="big-btn btn-video" href="https://www.youtube.com/results?search_query=The+Hollow+Roblox+Night+${currentYear}+${encodeURIComponent(data[currentYear].game)}+quest+guide" target="_blank" rel="noopener noreferrer">▶ Watch Video Guide for Night ${currentYear}</a>
                     <div class="info-box info-warn" style="margin-top:15px;">
-                        <strong>VERY IMPORTANT:</strong> 
+                        <strong>VERY IMPORTANT:</strong>
                         After finishing steps, you MUST go back to the main Hollow Hub and click the shimmering statue for Night ${currentYear}!
                     </div>
                     <button class="big-btn btn-back" onclick="openChoice(${currentYear})">Go Back</button>
@@ -918,12 +774,12 @@
             mBody.innerHTML = html;
             mBody.scrollTop = 0;
         }
-        
+
         function toggleVisual() {
             const guide = document.getElementById('visualGuide');
             if (guide) guide.classList.toggle('show');
         }
-        
+
         function closeModal() {
             overlay.classList.remove('active');
             currentYear = null;
@@ -973,9 +829,14 @@
             `;
         }
 
+        function followerLabel(cache) {
+            if (cache.followers === null || cache.followers === undefined) return 'Followers: …';
+            return `Followers: ${cache.followers.toLocaleString()}`;
+        }
+
         function renderFriendList(filter) {
             const isAll = filter === 'all';
-            
+
             if (filter === 'white') {
                 friendsTitle.textContent = `👻 White Ghost`;
                 friendsBody.innerHTML = `
@@ -1000,9 +861,8 @@
             `;
 
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
-            
-            const filteredPlayers = isAll 
-                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) 
+            const filteredPlayers = isAll
+                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline)
                 : playersToRender;
 
             if (filteredPlayers.length === 0 && !isAll) {
@@ -1027,27 +887,25 @@
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name, justCameOnline: false };
-                
-                const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: null, displayName: p.name, justCameOnline: false };
+
+                const ghostBadge = isAll
+                    ? `<div class="ghost-badges">${(p.groups || [p.group]).map(g => `<span class="ghost-badge badge-${g}">${g}</span>`).join('')}</div>`
+                    : '';
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
-                
-                // Guaranteed to never show "..." because we initialize to 0
-                const followerText = `Followers: ${(cache.followers || 0).toLocaleString()}`;
+                const followerText = followerLabel(cache);
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
-                if (cache.isPlayingHollow) { 
+                if (cache.isPlayingHollow) {
                     statusText = 'Playing The Hollow';
-                    statusColor = '#ff7b00'; 
-                } else if (cache.isOnline) { 
-                    statusText = 'Online'; 
-                    statusColor = '#39ff14'; 
+                    statusColor = '#ff7b00';
+                } else if (cache.isOnline) {
+                    statusText = 'Online';
+                    statusColor = '#39ff14';
                 } else {
                     const lastSeen = timeAgo(cache.lastOnline);
-                    if (lastSeen) {
-                        statusText = `Offline (Last online ${lastSeen})`;
-                    }
+                    if (lastSeen) statusText = `Offline (Last online ${lastSeen})`;
                 }
 
                 const cardHtml = `
@@ -1086,7 +944,7 @@
                     if (img) img.src = playerDataCache[p.handle].avatarUrl;
                 }
             });
-            
+
             if (isAll) {
                 const hollowGrid = document.getElementById('hollowGrid');
                 const onlineGrid = document.getElementById('onlineGrid');
@@ -1099,27 +957,162 @@
         }
 
         // ==================================================================
+        // BACKGROUND MODE - keeps the page alive when locked / tabbed out
+        // ==================================================================
+        let bgAudioCtx = null;
+        let bgSource = null;
+        let bgAudioEl = null;
+        let bgModeActive = localStorage.getItem('hollow_bg_mode') === 'true';
+        const BG_MODE_KEY = 'hollow_bg_mode';
+
+        function updateBgBtn() {
+            const btn = document.getElementById('bgModeBtn');
+            if (!btn) return;
+            if (bgModeActive) {
+                btn.textContent = '🟢 Background ON';
+                btn.classList.add('active');
+            } else {
+                btn.textContent = '🔇 Background OFF';
+                btn.classList.remove('active');
+            }
+        }
+
+        async function startBackgroundMode() {
+            if (bgModeActive && bgAudioEl && !bgAudioEl.paused) return;
+            try {
+                // 1) Create / resume an AudioContext
+                if (!bgAudioCtx) {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    bgAudioCtx = new AC();
+                }
+                if (bgAudioCtx.state === 'suspended') {
+                    await bgAudioCtx.resume();
+                }
+
+                // 2) Build a silent looping buffer
+                const bufferSize = 2 * bgAudioCtx.sampleRate;
+                const emptyBuffer = bgAudioCtx.createBuffer(1, bufferSize, bgAudioCtx.sampleRate);
+                const output = emptyBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) output[i] = 0;
+
+                // 3) Loop it
+                bgSource = bgAudioCtx.createBufferSource();
+                bgSource.buffer = emptyBuffer;
+                bgSource.loop = true;
+
+                // 4) Route through a MediaStreamDestination so an <audio> element can carry it
+                const dest = bgAudioCtx.createMediaStreamDestination();
+                bgSource.connect(dest);
+
+                if (!bgAudioEl) {
+                    bgAudioEl = document.createElement('audio');
+                    bgAudioEl.style.display = 'none';
+                    bgAudioEl.setAttribute('playsinline', '');
+                    document.body.appendChild(bgAudioEl);
+                }
+                bgAudioEl.srcObject = dest.stream;
+                bgAudioEl.loop = true;
+                bgAudioEl.volume = 0.001; // effectively silent
+
+                // 5) Register Media Session so OS treats us as a real player
+                if ('mediaSession' in navigator) {
+                    try {
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: 'The Hollow - Online Alerts',
+                            artist: 'Roblox Halloween Guide',
+                            album: 'Background Mode'
+                        });
+                        navigator.mediaSession.setActionHandler('play', () => {
+                            if (bgAudioEl) bgAudioEl.play().catch(() => {});
+                        });
+                        navigator.mediaSession.setActionHandler('pause', () => {
+                            /* we keep the session alive regardless */
+                        });
+                    } catch (e) { /* MediaMetadata may not exist on older browsers */ }
+                }
+
+                // 6) iOS Safari specific: declare audio session type
+                if (navigator.audioSession) {
+                    try { navigator.audioSession.type = 'playback'; } catch (e) {}
+                }
+
+                await bgAudioEl.play();
+                bgSource.start(0);
+
+                bgModeActive = true;
+                localStorage.setItem(BG_MODE_KEY, 'true');
+                updateBgBtn();
+                console.log('Background mode ON');
+            } catch (e) {
+                console.warn('Background mode failed:', e);
+                bgModeActive = false;
+                localStorage.setItem(BG_MODE_KEY, 'false');
+                updateBgBtn();
+            }
+        }
+
+        function stopBackgroundMode() {
+            bgModeActive = false;
+            localStorage.setItem(BG_MODE_KEY, 'false');
+            updateBgBtn();
+
+            try {
+                if (bgSource) { bgSource.stop(); bgSource.disconnect(); bgSource = null; }
+                if (bgAudioEl) { bgAudioEl.pause(); bgAudioEl.srcObject = null; }
+                if (bgAudioCtx && bgAudioCtx.state === 'running') {
+                    bgAudioCtx.suspend().catch(() => {});
+                }
+            } catch (e) { console.warn('Stop bg mode error:', e); }
+            console.log('Background mode OFF');
+        }
+
+        function toggleBackgroundMode() {
+            if (bgModeActive) stopBackgroundMode();
+            else startBackgroundMode();
+        }
+
+        // Resume background mode on focus/visibility if it was on before
+        window.addEventListener('focus', () => {
+            if (bgModeActive && bgAudioEl && bgAudioEl.paused) {
+                bgAudioEl.play().catch(() => {});
+                if (bgAudioCtx && bgAudioCtx.state === 'suspended') bgAudioCtx.resume().catch(() => {});
+            }
+            if (pendingCopyHandle) {
+                navigator.clipboard.writeText(pendingCopyHandle).catch(() => {});
+                pendingCopyHandle = null;
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                if (bgModeActive && bgAudioEl && bgAudioEl.paused) {
+                    bgAudioEl.play().catch(() => {});
+                }
+                if (bgAudioCtx && bgAudioCtx.state === 'suspended' && bgModeActive) {
+                    bgAudioCtx.resume().catch(() => {});
+                }
+            }
+        });
+
+        // ==================================================================
         // 24/7 HIGH-SPEED BULK POLLING SYSTEM
         // ==================================================================
-        const THE_HOLLOW_PLACE_ID = 116463962153167; 
-        const userIdCache = new Map(); 
-        const playerDataCache = {}; 
+        const THE_HOLLOW_PLACE_ID = 116463962153167;
+        const userIdCache = new Map();
+        const playerDataCache = {};
         let allUserIds = [];
         let isPolling = false;
-        let isFirstPresencePoll = true; 
+        let isFirstPresencePoll = true;
         let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
-        let pendingCopyHandle = null; // Stores username if copied while tab is inactive
+        let pendingCopyHandle = null;
 
-        // Audio Setup
         const onlineSound = new Audio('https://www.myinstants.com/media/sounds/divine-secret-catch-fisch.mp3');
         onlineSound.volume = 0.6;
-
         function playOnlineSound() {
             onlineSound.currentTime = 0;
             onlineSound.play().catch(() => {});
         }
 
-        // Unlock audio context on first interaction
         document.addEventListener('click', () => {
             if (onlineSound.paused) {
                 onlineSound.play().then(() => onlineSound.pause()).catch(() => {});
@@ -1129,21 +1122,12 @@
         window.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('autoCopyToggle');
             if (toggle) toggle.checked = autoCopyEnabled;
-            
-            // Request Desktop Notification permission
             if ("Notification" in window) {
                 if (Notification.permission !== "granted" && Notification.permission !== "denied") {
                     Notification.requestPermission();
                 }
             }
-        });
-
-        // When the user focuses back on the tab, copy any pending username
-        window.addEventListener('focus', () => {
-            if (pendingCopyHandle) {
-                navigator.clipboard.writeText(pendingCopyHandle).catch(() => {});
-                pendingCopyHandle = null;
-            }
+            updateBgBtn();
         });
 
         function toggleAutoCopy(el) {
@@ -1155,17 +1139,100 @@
             const { timeout = 5000 } = options;
             const controller = new AbortController();
             const id = setTimeout(() => controller.abort(), timeout);
-            const response = await fetch(resource, {
-                ...options,
-                signal: controller.signal
-            });
-            clearTimeout(id);
-            return response;
+            try {
+                const response = await fetch(resource, { ...options, signal: controller.signal });
+                return response;
+            } finally {
+                clearTimeout(id);
+            }
+        }
+
+        // ----- Followers: persistent cache + parallel refresh every 1s -----
+        const FOLLOWER_CACHE_KEY = 'hollow_followers_v4';
+        const FOLLOWER_REFRESH_MS = 1000;
+        const FOLLOWER_CONCURRENCY = 6;
+        const FOLLOWER_TIMEOUT_MS = 2500;
+        const FOLLOWER_PROXIES = [
+            id => `https://friends.roproxy.com/v1/users/${id}/followers/count`,
+            id => `https://friends.rotunnel.com/v1/users/${id}/followers/count`,
+            id => `https://friends.rprxy.xyz/v1/users/${id}/followers/count`
+        ];
+
+        let followerCache = loadFollowerCache();
+        let followerBulkInFlight = false;
+
+        function loadFollowerCache() {
+            try {
+                const raw = localStorage.getItem(FOLLOWER_CACHE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch { return {}; }
+        }
+
+        function saveFollowerCache() {
+            try { localStorage.setItem(FOLLOWER_CACHE_KEY, JSON.stringify(followerCache)); } catch {}
+        }
+
+        function hydrateFollowersFromCache() {
+            for (const [uName, info] of userIdCache.entries()) {
+                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                if (!actualHandle || !playerDataCache[actualHandle]) continue;
+                const hit = followerCache[info.id];
+                if (hit && typeof hit.count === 'number') {
+                    playerDataCache[actualHandle].followers = hit.count;
+                }
+            }
+            updateUILive();
+        }
+
+        async function fetchFollowerCount(userId) {
+            let lastErr;
+            for (const makeUrl of FOLLOWER_PROXIES) {
+                try {
+                    const res = await fetchWithTimeout(makeUrl(userId), { timeout: FOLLOWER_TIMEOUT_MS });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const data = await res.json();
+                    if (data && typeof data.count === 'number') return data.count;
+                    throw new Error('Bad shape');
+                } catch (e) { lastErr = e; }
+            }
+            throw lastErr || new Error('All follower proxies failed');
+        }
+
+        function applyFollowerCount(handle, userId, count) {
+            const cache = playerDataCache[handle];
+            if (!cache) return;
+            cache.followers = count;
+            followerCache[userId] = { count, at: Date.now() };
+            const el = document.querySelector(`[data-followers-for="${handle}"]`);
+            if (el) el.textContent = followerLabel(cache);
+        }
+
+        async function refreshAllFollowers() {
+            if (followerBulkInFlight || userIdCache.size === 0) return;
+            followerBulkInFlight = true;
+            try {
+                const entries = Array.from(userIdCache.entries());
+                let idx = 0;
+                async function worker() {
+                    while (idx < entries.length) {
+                        const [uName, info] = entries[idx++];
+                        const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                        if (!actualHandle) continue;
+                        try {
+                            const count = await fetchFollowerCount(info.id);
+                            applyFollowerCount(actualHandle, info.id, count);
+                        } catch (e) {}
+                    }
+                }
+                await Promise.all(Array.from({ length: FOLLOWER_CONCURRENCY }, worker));
+                saveFollowerCache();
+            } finally {
+                followerBulkInFlight = false;
+            }
         }
 
         async function initFriendSystem() {
             const allUsernames = allPlayers.map(p => p.handle);
-            
             try {
                 const res = await fetchWithTimeout(`https://users.rotunnel.com/v1/usernames/users`, {
                     method: 'POST',
@@ -1174,24 +1241,32 @@
                     timeout: 10000
                 });
                 const data = await res.json();
-                
+
                 data.data.forEach(user => {
                     userIdCache.set(user.name.toLowerCase(), { id: user.id, displayName: user.displayName || user.name });
                     allUserIds.push(user.id);
-                    
+
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
-                    
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
+                        playerDataCache[actualHandle] = {
+                            isOnline: null,
+                            isPlayingHollow: false,
+                            followers: null,
+                            displayName: user.displayName || user.name,
+                            avatarUrl: null,
+                            lastOnline: null,
+                            justCameOnline: false
+                        };
                     }
                 });
 
+                hydrateFollowersFromCache();
                 fetchAllAvatars();
-                fetchAllFollowers();
+                setInterval(pollPresence, 1000);
+                pollPresence();
+                refreshAllFollowers();
+                setInterval(refreshAllFollowers, FOLLOWER_REFRESH_MS);
 
-                setInterval(pollPresence, 1000); 
-                pollPresence(); 
-                
             } catch (e) { console.warn("Init failed", e); }
         }
 
@@ -1218,36 +1293,10 @@
             } catch (e) { console.warn("Avatar fetch failed", e); }
         }
 
-        async function fetchAllFollowers() {
-            const entries = Object.entries(userIdCache);
-            
-            // Sequential fetch with delay to prevent rate limits
-            for (const [uName, info] of entries) {
-                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                if (!actualHandle) continue;
-                
-                try {
-                    const res = await fetchWithTimeout(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`, { timeout: 5000 });
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && typeof data.count === 'number') {
-                            playerDataCache[actualHandle].followers = data.count;
-                            const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
-                            if (followersEl) followersEl.textContent = `Followers: ${data.count.toLocaleString()}`;
-                        }
-                    }
-                } catch(e) {}
-                
-                await new Promise(r => setTimeout(r, 200)); // 200ms delay per user
-            }
-            
-            updateUILive(); 
-        }
-
         async function pollPresence() {
             if (allUserIds.length === 0 || isPolling) return;
             isPolling = true;
-            
+
             try {
                 const res = await fetchWithTimeout(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, {
                     method: 'POST',
@@ -1256,11 +1305,11 @@
                     cache: 'no-store',
                     timeout: 3000
                 });
-                
+
                 if (!res.ok) { isPolling = false; return; }
-                
+
                 const data = await res.json();
-                
+
                 const presenceMap = {};
                 data.userPresences.forEach(p => {
                     presenceMap[p.userId] = {
@@ -1278,7 +1327,7 @@
                     if (actualHandle && playerDataCache[actualHandle]) {
                         const cache = playerDataCache[actualHandle];
                         const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false, lastOnline: null };
-                        
+
                         const wasOnline = cache.isOnline;
                         const isNowOnline = pData.isOnline;
 
@@ -1290,7 +1339,7 @@
                             cache.justCameOnline = true;
                             someoneCameOnline = true;
                             newOnlineHandle = actualHandle;
-                            
+
                             const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
                             if (card) card.classList.add('just-online');
 
@@ -1303,46 +1352,35 @@
                     }
                 }
 
-                isFirstPresencePoll = false; 
-                
+                isFirstPresencePoll = false;
                 updateUILive();
 
                 if (someoneCameOnline && newOnlineHandle) {
                     playOnlineSound();
-                    
-                    // Send background notification
                     if ("Notification" in window && Notification.permission === "granted" && !document.hasFocus()) {
                         new Notification("Player Online!", {
                             body: `${newOnlineHandle} just came online!`,
                             icon: "https://www.roblox.com/favicon.ico"
                         });
                     }
-                    
                     setTimeout(() => {
                         const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
-                        if (card) {
-                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                        
+                        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         if (autoCopyEnabled) {
-                            if (!document.hasFocus()) {
-                                // Queue it for when they focus back
-                                pendingCopyHandle = newOnlineHandle;
-                            } else {
-                                navigator.clipboard.writeText(newOnlineHandle).catch(() => {});
-                            }
+                            if (!document.hasFocus()) pendingCopyHandle = newOnlineHandle;
+                            else navigator.clipboard.writeText(newOnlineHandle).catch(() => {});
                         }
-                    }, 500); 
+                    }, 500);
                 }
 
             } catch (e) { console.warn("Presence poll failed", e); }
-            
+
             isPolling = false;
         }
 
         function updateUILive() {
             if (!friendsOverlay.classList.contains('active')) return;
-            
+
             const title = friendsTitle.textContent;
             if (title.includes('Select')) return;
 
@@ -1365,7 +1403,6 @@
             }
 
             const currentPlayers = isAll ? allPlayers : friendGroups[filterGroup].map(p => ({...p, group: filterGroup}));
-            
             let needsRerenderAll = false;
 
             currentPlayers.forEach(p => {
@@ -1389,10 +1426,8 @@
                         statusEl.style.color = '#888';
                     }
                 }
-                
-                if (followersEl) {
-                    followersEl.textContent = `Followers: ${(cache.followers || 0).toLocaleString()}`;
-                }
+
+                if (followersEl) followersEl.textContent = followerLabel(cache);
 
                 if (isAll) {
                     if (cache.isOnline && !card) {
@@ -1402,12 +1437,8 @@
                     } else if (cache.isOnline && card) {
                         const isInHollowGrid = hollowGrid && hollowGrid.contains(card);
                         const isInOnlineGrid = onlineGrid && onlineGrid.contains(card);
-                        
-                        if (cache.isPlayingHollow && isInOnlineGrid) {
-                            hollowGrid.appendChild(card);
-                        } else if (!cache.isPlayingHollow && isInHollowGrid) {
-                            onlineGrid.appendChild(card);
-                        }
+                        if (cache.isPlayingHollow && isInOnlineGrid) hollowGrid.appendChild(card);
+                        else if (!cache.isPlayingHollow && isInHollowGrid) onlineGrid.appendChild(card);
                     }
                 }
             });
@@ -1418,14 +1449,8 @@
             }
 
             if (isAll) {
-                if (hollowGrid) {
-                    const playersInHollow = currentPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow);
-                    sortGrid(hollowGrid, playersInHollow);
-                }
-                if (onlineGrid) {
-                    const playersOnline = currentPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow);
-                    sortGrid(onlineGrid, playersOnline);
-                }
+                if (hollowGrid) sortGrid(hollowGrid, currentPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow));
+                if (onlineGrid) sortGrid(onlineGrid, currentPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow));
             } else if (normalGrid) {
                 sortGrid(normalGrid, currentPlayers);
             }
@@ -1435,11 +1460,10 @@
             const sorted = [...players].sort((a, b) => {
                 const dataA = playerDataCache[a.handle] || { followers: 0 };
                 const dataB = playerDataCache[b.handle] || { followers: 0 };
-                const fA = dataA.followers || 0;
-                const fB = dataB.followers || 0;
+                const fA = dataA.followers ?? 0;
+                const fB = dataB.followers ?? 0;
                 return fB - fA;
             });
-            
             sorted.forEach(p => {
                 const card = grid.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 if (card) grid.appendChild(card);
@@ -1447,15 +1471,13 @@
         }
 
         function copyUsername(event, username) {
-            event.preventDefault(); 
+            event.preventDefault();
             event.stopPropagation();
-            
             navigator.clipboard.writeText(username).then(() => {
                 const handleEl = event.currentTarget;
                 const originalText = handleEl.textContent;
                 handleEl.textContent = 'Copied!';
                 handleEl.style.color = '#39ff14';
-                
                 setTimeout(() => {
                     handleEl.textContent = originalText;
                     handleEl.style.color = '#b0b0b0';
@@ -1464,7 +1486,21 @@
         }
 
         window.addEventListener('load', () => {
-            setTimeout(initFriendSystem, 1000); 
+            setTimeout(initFriendSystem, 1000);
+            // Auto-resume background mode if it was ON before page reload
+            if (bgModeActive) {
+                // AudioContext requires a user gesture after reload, so we attach
+                // a one-time gesture listener that resumes it.
+                const resumeOnGesture = () => {
+                    if (bgModeActive && (!bgAudioEl || bgAudioEl.paused)) {
+                        startBackgroundMode();
+                    }
+                    document.removeEventListener('click', resumeOnGesture);
+                    document.removeEventListener('touchstart', resumeOnGesture);
+                };
+                document.addEventListener('click', resumeOnGesture);
+                document.addEventListener('touchstart', resumeOnGesture);
+            }
         });
 
         function openSettings(e) {
@@ -1477,7 +1513,7 @@
         }
 
         // ==================================================================
-        // AI DEEP SEARCH – Fetches JSON and MERGES into data
+        // AI DEEP SEARCH
         // ==================================================================
         const AI_PROVIDERS = [
             {
@@ -1544,7 +1580,6 @@
                 const nightNum = parseInt(nightKey);
                 if (!data[nightNum]) continue;
                 const aiNight = aiJson[nightKey];
-
                 if (aiNight.normal && Array.isArray(aiNight.normal.steps) && aiNight.normal.steps.length > 0) {
                     data[nightNum].normal.steps = aiNight.normal.steps;
                     if (aiNight.normal.title) data[nightNum].normal.title = aiNight.normal.title;
@@ -1555,7 +1590,6 @@
                     data[nightNum].normal.aiUpdated = true;
                     updatedCount++;
                 }
-
                 if (aiNight.secret && Array.isArray(aiNight.secret.steps) && aiNight.secret.steps.length > 0) {
                     data[nightNum].secret.steps = aiNight.secret.steps;
                     if (aiNight.secret.title) data[nightNum].secret.title = aiNight.secret.title;
@@ -1568,18 +1602,15 @@
                     updatedCount++;
                 }
             }
-
             try {
                 localStorage.setItem('hollow_merged_data', JSON.stringify(data));
             } catch (e) { console.warn('Could not save merged data', e); }
-
             return updatedCount;
         }
 
         async function deepSearchDrops() {
             const statusEl = document.getElementById('deepSearchStatus');
             const resultsEl = document.getElementById('deepSearchResults');
-
             statusEl.style.display = 'block';
             statusEl.className = 'status-message status-timer';
             statusEl.textContent = '🔍 Deep searching and updating guides…';
@@ -1612,48 +1643,33 @@ Each value:
 Only include steps you are confident about from real community guides. If you don't know a night's steps, use an empty array for that night. Do not invent fake steps. Be concise.`;
 
             let lastError = null;
-
             for (const provider of AI_PROVIDERS) {
                 try {
                     statusEl.textContent = `🔍 Trying ${provider.name}…`;
                     const result = await tryProvider(provider, prompt);
-
                     let jsonText = result.text.trim();
                     const firstBrace = jsonText.indexOf('{');
                     const lastBrace = jsonText.lastIndexOf('}');
-                    if (firstBrace !== -1 && lastBrace !== -1) {
-                        jsonText = jsonText.slice(firstBrace, lastBrace + 1);
-                    }
-
+                    if (firstBrace !== -1 && lastBrace !== -1) jsonText = jsonText.slice(firstBrace, lastBrace + 1);
                     let aiJson;
-                    try {
-                        aiJson = JSON.parse(jsonText);
-                    } catch (parseErr) {
-                        throw new Error('AI returned invalid JSON. Try again.');
-                    }
-
+                    try { aiJson = JSON.parse(jsonText); }
+                    catch (parseErr) { throw new Error('AI returned invalid JSON. Try again.'); }
                     const updated = mergeAIData(aiJson);
-
                     statusEl.className = 'status-message status-ready';
                     statusEl.textContent = `✅ ${result.provider} answered! ${updated} guide section(s) updated.`;
-                    
                     resultsEl.style.display = 'block';
                     resultsEl.textContent = `Updated via ${result.provider}.\nGuides merged successfully. Open any night to see the new steps.`;
-
                     alert(`Deep search complete via ${result.provider}! ${updated} guide sections were updated. Check the nights now.`);
-
                     if (currentYear !== null && overlay.classList.contains('active')) {
                         if (mTitle.textContent.includes('Quest:')) showGuide('normal');
                         else if (mTitle.textContent.includes('Side Quest:')) showGuide('secret');
                     }
-
                     return;
                 } catch (err) {
                     console.warn(`Provider ${provider.name} failed:`, err);
                     lastError = err;
                 }
             }
-
             statusEl.className = 'status-message';
             statusEl.style.background = '#2b0f0f';
             statusEl.style.color = '#ff8a80';
@@ -1664,7 +1680,7 @@ Only include steps you are confident about from real community guides. If you do
         overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
         friendsOverlay.addEventListener('click', (e) => { if (e.target === friendsOverlay) closeFriends(); });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeSettings(); closeFriends(); } });
-        
+
         window.addEventListener('load', checkAgreement);
 
         const canvas = document.getElementById('confetti-canvas');
@@ -1682,10 +1698,8 @@ Only include steps you are confident about from real community guides. If you do
         function triggerConfetti(dropName) {
             if (localStorage.getItem(`confetti_triggered_${dropName}`)) return;
             localStorage.setItem(`confetti_triggered_${dropName}`, 'true');
-
             confettiParticles = [];
             const colors = ['#ff7b00', '#9c27b0', '#39ff14', '#ffd700', '#ff3131', '#00e5ff', '#ffffff', '#8b00ff'];
-            
             for (let i = 0; i < 250; i++) {
                 confettiParticles.push({
                     x: Math.random() * canvas.width,
@@ -1698,11 +1712,7 @@ Only include steps you are confident about from real community guides. If you do
                     rotationSpeed: Math.random() * 10 - 5
                 });
             }
-
-            if (!confettiAnimationId) {
-                animateConfetti();
-            }
-
+            if (!confettiAnimationId) animateConfetti();
             setTimeout(() => {
                 cancelAnimationFrame(confettiAnimationId);
                 confettiAnimationId = null;
@@ -1718,36 +1728,26 @@ Only include steps you are confident about from real community guides. If you do
                 p.y += p.speedY;
                 p.x += p.speedX;
                 p.rotation += p.rotationSpeed;
-
                 ctx.save();
                 ctx.translate(p.x, p.y);
                 ctx.rotate((p.rotation * Math.PI) / 180);
                 ctx.fillStyle = p.color;
                 ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
                 ctx.restore();
-
-                if (p.y > canvas.height) {
-                    confettiParticles.splice(i, 1);
-                }
+                if (p.y > canvas.height) confettiParticles.splice(i, 1);
             }
-
-            if (confettiParticles.length > 0) {
-                confettiAnimationId = requestAnimationFrame(animateConfetti);
-            }
+            if (confettiParticles.length > 0) confettiAnimationId = requestAnimationFrame(animateConfetti);
         }
 
         function checkDropCountdown() {
-            const now = Date.now();
+            const nowMs = Date.now();
             drops.forEach(d => {
                 const dropTime = new Date(d.time).getTime();
-                const diff = dropTime - now;
-                
+                const diff = dropTime - nowMs;
                 if (diff > 0 && diff <= 10000) {
                     d.years.forEach(y => {
                         const btn = document.querySelector(`.year-btn[data-year="${y}"]`);
-                        if (btn && !btn.classList.contains('claimable')) {
-                            btn.classList.add('flashing-year');
-                        }
+                        if (btn && !btn.classList.contains('claimable')) btn.classList.add('flashing-year');
                     });
                 } else if (diff <= 0 && !d.hasTriggeredConfetti) {
                     d.hasTriggeredConfetti = true;
@@ -1756,7 +1756,7 @@ Only include steps you are confident about from real community guides. If you do
                 }
             });
         }
-        
+
         setInterval(checkDropCountdown, 500);
     </script>
 </body>
