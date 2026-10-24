@@ -905,7 +905,7 @@
                         <span style="font-size: 20px;">👻</span> White Ghost
                     </button>
                     <button class="ghost-select-btn ghost-all" onclick="renderFriendList('all')">
-                        <span style="font-size: 20px;">🟢</span> All Online (Any Ghost)
+                        <span style="font-size: 20px;">🟢</span> All Online (Playing The Hollow)
                     </button>
                 </div>
             `;
@@ -939,13 +939,13 @@
 
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
             
-            // For all view, only include online players
+            // For all view, ONLY include players playing The Hollow
             const filteredPlayers = isAll 
-                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) 
+                ? playersToRender.filter(p => playerDataCache[p.handle]?.isPlayingHollow) 
                 : playersToRender;
 
             if (filteredPlayers.length === 0) {
-                html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No one is currently online in this group.</div>`;
+                html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No one is currently playing The Hollow.</div>`;
                 friendsBody.innerHTML = html;
                 return;
             }
@@ -954,9 +954,14 @@
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, followers: 0, displayName: p.name };
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name };
                 
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
+
+                let statusText = 'Offline';
+                let statusColor = '#888';
+                if (cache.isPlayingHollow) { statusText = 'Playing The Hollow'; statusColor = '#ff7b00'; }
+                else if (cache.isOnline) { statusText = 'Online'; statusColor = '#39ff14'; }
 
                 html += `
                     <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
@@ -970,7 +975,7 @@
                             <div class="friend-info">
                                 <div class="friend-name" data-displayname-for="${p.handle}">${cache.displayName || p.name}</div>
                                 <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
-                                <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${cache.isOnline ? '#39ff14' : '#888'}">${cache.isOnline ? 'Online' : 'Offline'}</div>
+                                <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${statusColor}">${statusText}</div>
                                 <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">Followers: ${cache.followers.toLocaleString()}</div>
                                 ${ghostBadge}
                             </div>
@@ -997,10 +1002,11 @@
         // ==================================================================
         // 24/7 HIGH-SPEED BULK POLLING SYSTEM
         // ==================================================================
+        const THE_HOLLOW_PLACE_ID = 116463962153167; // Official ID for The Hollow
         const userIdCache = new Map(); 
         const playerDataCache = {}; 
         let allUserIds = [];
-        let isBulkPolling = false;
+        let isPolling = false;
 
         // 1. FAST INITIALIZATION (Parallel Load)
         async function initFriendSystem() {
@@ -1023,7 +1029,7 @@
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null };
+                        playerDataCache[actualHandle] = { isOnline: false, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null };
                     }
                 });
 
@@ -1039,8 +1045,8 @@
 
         // 2. BULK PRESENCE POLLING (Every 1 Second)
         async function pollPresence() {
-            if (allUserIds.length === 0 || isBulkPolling) return;
-            isBulkPolling = true;
+            if (allUserIds.length === 0 || isPolling) return;
+            isPolling = true;
             
             try {
                 const res = await fetch(`https://presence.rotunnel.com/v1/presence/users`, {
@@ -1048,28 +1054,33 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userIds: allUserIds })
                 });
-                if (!res.ok) { isBulkPolling = false; return; }
+                if (!res.ok) { isPolling = false; return; }
                 
                 const data = await res.json();
                 
                 // Create a quick map of results
                 const presenceMap = {};
                 data.userPresences.forEach(p => {
-                    presenceMap[p.userId] = p.userPresenceType > 0;
+                    presenceMap[p.userId] = {
+                        isOnline: p.userPresenceType > 0,
+                        isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID
+                    };
                 });
 
                 // Apply to cache
                 for (const [uName, info] of userIdCache.entries()) {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (actualHandle && playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle].isOnline = presenceMap[info.id] || false;
+                        const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false };
+                        playerDataCache[actualHandle].isOnline = pData.isOnline;
+                        playerDataCache[actualHandle].isPlayingHollow = pData.isPlayingHollow;
                     }
                 }
                 
                 updateUILive();
             } catch (e) { console.warn("Presence poll failed", e); }
             
-            isBulkPolling = false;
+            isPolling = false;
         }
 
         // 3. BACKGROUND FETCHING (Avatars & Followers)
@@ -1134,28 +1145,37 @@
                 const followersEl = document.querySelector(`[data-followers-for="${p.handle}"]`);
 
                 if (statusEl) {
-                    statusEl.textContent = cache.isOnline ? 'Online' : 'Offline';
-                    statusEl.style.color = cache.isOnline ? '#39ff14' : '#888';
+                    if (cache.isPlayingHollow) {
+                        statusEl.textContent = 'Playing The Hollow';
+                        statusEl.style.color = '#ff7b00';
+                    } else if (cache.isOnline) {
+                        statusEl.textContent = 'Online';
+                        statusEl.style.color = '#39ff14';
+                    } else {
+                        statusEl.textContent = 'Offline';
+                        statusEl.style.color = '#888';
+                    }
                 }
                 if (followersEl) {
                     followersEl.textContent = `Followers: ${cache.followers.toLocaleString()}`;
                 }
 
-                // If in "All" view, dynamic add/remove based on online status
+                // If in "All" view, dynamic add/remove based on playing The Hollow
                 if (isAll) {
                     const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
-                    if (cache.isOnline && !card) {
-                        // Player came online, re-render to show them
+                    if (cache.isPlayingHollow && !card) {
+                        // Player started playing The Hollow, re-render to show them
                         renderFriendList('all');
-                    } else if (!cache.isOnline && card) {
-                        // Player went offline, remove them
+                        return; // Exit early to avoid multiple re-renders
+                    } else if (!cache.isPlayingHollow && card) {
+                        // Player stopped playing The Hollow, remove them
                         card.remove();
                     }
                 }
             });
 
             // Re-sort based on new data
-            const validPlayers = isAll ? currentPlayers.filter(p => playerDataCache[p.handle]?.isOnline) : currentPlayers;
+            const validPlayers = isAll ? currentPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow) : currentPlayers;
             sortAndReorderDOM(validPlayers);
         }
 
