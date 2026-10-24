@@ -407,6 +407,15 @@
                 
                 <div id="deepSearchStatus" class="status-message" style="display: none;"></div>
                 <div id="deepSearchResults" class="deep-search-results"></div>
+
+                <h3 style="margin-top: 30px;">👻 Friends Settings</h3>
+                <div class="checkbox-container" style="background: #120a1a; border-color: #33204d;">
+                    <input type="checkbox" id="autoCopyToggle" onchange="toggleAutoCopy(this)">
+                    <label for="autoCopyToggle">Auto-Copy Username when someone comes online</label>
+                </div>
+                <p style="font-size: 12px; color: #b9a8d0; margin-top: -5px;">
+                    When a player comes online, the page will scroll to them. If this is enabled, it will also automatically copy their username to your clipboard.
+                </p>
             </div>
         </div>
     </div>
@@ -1014,6 +1023,8 @@
                 const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name, justCameOnline: false };
                 
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
+                
+                // Only apply the glow class if they just came online AND we are past the initial load
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
 
                 let statusText = 'Offline';
@@ -1087,11 +1098,25 @@
         const playerDataCache = {}; 
         let allUserIds = [];
         let isPolling = false;
+        let isFirstPresencePoll = true; // Prevents glow on initial load
+        let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
+
+        // Set the checkbox state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.getElementById('autoCopyToggle');
+            if (toggle) toggle.checked = autoCopyEnabled;
+        });
+
+        function toggleAutoCopy(el) {
+            autoCopyEnabled = el.checked;
+            localStorage.setItem('hollow_auto_copy', autoCopyEnabled);
+        }
 
         async function initFriendSystem() {
             const allUsernames = allPlayers.map(p => p.handle);
             
             try {
+                // 1. Bulk Resolve IDs and Display Names
                 const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1106,18 +1131,65 @@
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: false, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
+                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
                 });
 
-                // Start the rapid 1-second polling
+                // 2. Fetch ALL avatars instantly
+                fetchAllAvatars();
+
+                // 3. Fetch ALL followers instantly (in parallel)
+                fetchAllFollowers();
+
+                // 4. Start the rapid 1-second polling
                 setInterval(pollPresence, 1000); 
                 pollPresence(); 
-
-                // Start fetching followers and avatars slowly in background
-                setInterval(fetchBackgroundData, 300);
                 
             } catch (e) { console.warn("Init failed", e); }
+        }
+
+        async function fetchAllAvatars() {
+            if (allUserIds.length === 0) return;
+            try {
+                // Batch up to 100 IDs per request
+                const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${allUserIds.join(',')}&size=150x150&format=Png&isCircular=false`);
+                const data = await res.json();
+                if (data.data) {
+                    data.data.forEach(item => {
+                        for (const [uName, info] of userIdCache.entries()) {
+                            if (info.id === item.targetId) {
+                                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                                if (actualHandle && playerDataCache[actualHandle]) {
+                                    playerDataCache[actualHandle].avatarUrl = item.imageUrl;
+                                    const img = document.querySelector(`[data-avatar-for="${actualHandle}"]`);
+                                    if (img) img.src = item.imageUrl;
+                                }
+                                break;
+                            }
+                        }
+                    });
+                }
+            } catch (e) { console.warn("Avatar fetch failed", e); }
+        }
+
+        async function fetchAllFollowers() {
+            // Fire them all at once for instant loading
+            const promises = Object.entries(userIdCache).map(async ([uName, info]) => {
+                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                if (!actualHandle) return;
+                
+                try {
+                    const res = await fetch(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`);
+                    const data = await res.json();
+                    if (playerDataCache[actualHandle]) {
+                        playerDataCache[actualHandle].followers = data.count || 0;
+                        const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
+                        if (followersEl) followersEl.textContent = `Followers: ${(data.count || 0).toLocaleString()}`;
+                    }
+                } catch(e) {}
+            });
+            await Promise.all(promises);
+            updateUILive(); // Refresh UI once all are done
         }
 
         async function pollPresence() {
@@ -1145,13 +1217,15 @@
                     };
                 });
 
+                let someoneCameOnline = false;
+                let newOnlineHandle = null;
+
                 for (const [uName, info] of userIdCache.entries()) {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (actualHandle && playerDataCache[actualHandle]) {
                         const cache = playerDataCache[actualHandle];
                         const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false, lastOnline: null };
                         
-                        // Check for transition offline -> online
                         const wasOnline = cache.isOnline;
                         const isNowOnline = pData.isOnline;
 
@@ -1159,10 +1233,13 @@
                         cache.isPlayingHollow = pData.isPlayingHollow;
                         cache.lastOnline = pData.lastOnline;
 
-                        if (!wasOnline && isNowOnline) {
+                        // If they transition from offline to online (and this isn't the first poll)
+                        if (!isFirstPresencePoll && !wasOnline && isNowOnline) {
                             cache.justCameOnline = true;
+                            someoneCameOnline = true;
+                            newOnlineHandle = actualHandle;
                             
-                            // Add class immediately if card exists
+                            // Add glow class immediately if card exists
                             const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
                             if (card) card.classList.add('just-online');
 
@@ -1175,43 +1252,27 @@
                         }
                     }
                 }
+
+                isFirstPresencePoll = false; // Mark first poll as done
                 
                 updateUILive();
+
+                // Handle scroll and copy if someone just came online
+                if (someoneCameOnline && newOnlineHandle && friendsOverlay.classList.contains('active')) {
+                    setTimeout(() => {
+                        const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
+                        if (card) {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            if (autoCopyEnabled) {
+                                navigator.clipboard.writeText(newOnlineHandle).catch(() => {});
+                            }
+                        }
+                    }, 500); // Small delay to let DOM update
+                }
+
             } catch (e) { console.warn("Presence poll failed", e); }
             
             isPolling = false;
-        }
-
-        let queueIndex = 0;
-        async function fetchBackgroundData() {
-            if (allPlayers.length === 0) return;
-            
-            const p = allPlayers[queueIndex % allPlayers.length];
-            queueIndex++;
-            
-            const info = userIdCache.get(p.handle.toLowerCase());
-            if (!info) return;
-
-            if (!playerDataCache[p.handle].avatarUrl) {
-                try {
-                    const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${info.id}&size=150x150&format=Png&isCircular=false`);
-                    const data = await res.json();
-                    if (data.data && data.data[0] && data.data[0].imageUrl) {
-                        playerDataCache[p.handle].avatarUrl = data.data[0].imageUrl;
-                        const img = document.querySelector(`[data-avatar-for="${p.handle}"]`);
-                        if (img) img.src = data.data[0].imageUrl;
-                    }
-                } catch(e) {}
-            }
-
-            if (playerDataCache[p.handle].followers === 0) {
-                try {
-                    const res = await fetch(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`);
-                    const data = await res.json();
-                    playerDataCache[p.handle].followers = data.count || 0;
-                    updateUILive();
-                } catch(e) {}
-            }
         }
 
         function updateUILive() {
