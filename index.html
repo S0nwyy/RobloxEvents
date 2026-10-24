@@ -1020,12 +1020,11 @@
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name, justCameOnline: false };
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: null, displayName: p.name, justCameOnline: false };
                 
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
-                
-                // Only apply the glow class if they just came online AND we are past the initial load
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
+                const followerText = (cache.followers !== null && cache.followers !== undefined) ? `Followers: ${cache.followers.toLocaleString()}` : 'Followers: ...';
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
@@ -1055,7 +1054,7 @@
                                 <div class="friend-name" data-displayname-for="${p.handle}">${cache.displayName || p.name}</div>
                                 <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
                                 <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${statusColor}">${statusText}</div>
-                                <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">Followers: ${cache.followers.toLocaleString()}</div>
+                                <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">${followerText}</div>
                                 ${ghostBadge}
                             </div>
                         </div>
@@ -1098,10 +1097,9 @@
         const playerDataCache = {}; 
         let allUserIds = [];
         let isPolling = false;
-        let isFirstPresencePoll = true; // Prevents glow on initial load
+        let isFirstPresencePoll = true; 
         let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
 
-        // Set the checkbox state on load
         window.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('autoCopyToggle');
             if (toggle) toggle.checked = autoCopyEnabled;
@@ -1116,7 +1114,6 @@
             const allUsernames = allPlayers.map(p => p.handle);
             
             try {
-                // 1. Bulk Resolve IDs and Display Names
                 const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1131,17 +1128,13 @@
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
+                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: null, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
                 });
 
-                // 2. Fetch ALL avatars instantly
                 fetchAllAvatars();
-
-                // 3. Fetch ALL followers instantly (in parallel)
                 fetchAllFollowers();
 
-                // 4. Start the rapid 1-second polling
                 setInterval(pollPresence, 1000); 
                 pollPresence(); 
                 
@@ -1151,7 +1144,6 @@
         async function fetchAllAvatars() {
             if (allUserIds.length === 0) return;
             try {
-                // Batch up to 100 IDs per request
                 const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${allUserIds.join(',')}&size=150x150&format=Png&isCircular=false`);
                 const data = await res.json();
                 if (data.data) {
@@ -1173,23 +1165,29 @@
         }
 
         async function fetchAllFollowers() {
-            // Fire them all at once for instant loading
-            const promises = Object.entries(userIdCache).map(async ([uName, info]) => {
-                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                if (!actualHandle) return;
-                
-                try {
-                    const res = await fetch(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`);
-                    const data = await res.json();
-                    if (playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle].followers = data.count || 0;
-                        const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
-                        if (followersEl) followersEl.textContent = `Followers: ${(data.count || 0).toLocaleString()}`;
-                    }
-                } catch(e) {}
-            });
-            await Promise.all(promises);
-            updateUILive(); // Refresh UI once all are done
+            const entries = Object.entries(userIdCache);
+            // Process in chunks of 5 to avoid rate limits
+            for (let i = 0; i < entries.length; i += 5) {
+                const chunk = entries.slice(i, i + 5);
+                await Promise.all(chunk.map(async ([uName, info]) => {
+                    const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                    if (!actualHandle) return;
+                    
+                    try {
+                        const res = await fetch(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`);
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data && typeof data.count === 'number') {
+                                playerDataCache[actualHandle].followers = data.count;
+                                const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
+                                if (followersEl) followersEl.textContent = `Followers: ${data.count.toLocaleString()}`;
+                            }
+                        }
+                    } catch(e) {}
+                }));
+                await new Promise(r => setTimeout(r, 200)); // Delay between chunks
+            }
+            updateUILive(); 
         }
 
         async function pollPresence() {
@@ -1233,17 +1231,14 @@
                         cache.isPlayingHollow = pData.isPlayingHollow;
                         cache.lastOnline = pData.lastOnline;
 
-                        // If they transition from offline to online (and this isn't the first poll)
                         if (!isFirstPresencePoll && !wasOnline && isNowOnline) {
                             cache.justCameOnline = true;
                             someoneCameOnline = true;
                             newOnlineHandle = actualHandle;
                             
-                            // Add glow class immediately if card exists
                             const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
                             if (card) card.classList.add('just-online');
 
-                            // Remove class after 1 minute
                             setTimeout(() => {
                                 cache.justCameOnline = false;
                                 const currentCard = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
@@ -1253,11 +1248,10 @@
                     }
                 }
 
-                isFirstPresencePoll = false; // Mark first poll as done
+                isFirstPresencePoll = false; 
                 
                 updateUILive();
 
-                // Handle scroll and copy if someone just came online
                 if (someoneCameOnline && newOnlineHandle && friendsOverlay.classList.contains('active')) {
                     setTimeout(() => {
                         const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
@@ -1267,7 +1261,7 @@
                                 navigator.clipboard.writeText(newOnlineHandle).catch(() => {});
                             }
                         }
-                    }, 500); // Small delay to let DOM update
+                    }, 500); 
                 }
 
             } catch (e) { console.warn("Presence poll failed", e); }
@@ -1309,6 +1303,7 @@
 
                 const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 const statusEl = card ? card.querySelector(`[data-status-for="${p.handle}"]`) : null;
+                const followersEl = card ? card.querySelector(`[data-followers-for="${p.handle}"]`) : null;
 
                 if (statusEl) {
                     if (cache.isPlayingHollow) {
@@ -1322,6 +1317,10 @@
                         statusEl.textContent = lastSeen ? `Offline (Last online ${lastSeen})` : 'Offline';
                         statusEl.style.color = '#888';
                     }
+                }
+                
+                if (followersEl && cache.followers !== null && cache.followers !== undefined) {
+                    followersEl.textContent = `Followers: ${cache.followers.toLocaleString()}`;
                 }
 
                 if (isAll) {
@@ -1365,7 +1364,9 @@
             const sorted = [...players].sort((a, b) => {
                 const dataA = playerDataCache[a.handle] || { followers: 0 };
                 const dataB = playerDataCache[b.handle] || { followers: 0 };
-                return dataB.followers - dataA.followers;
+                const fA = dataA.followers || 0;
+                const fB = dataB.followers || 0;
+                return fB - fA;
             });
             
             sorted.forEach(p => {
