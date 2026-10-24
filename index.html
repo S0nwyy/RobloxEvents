@@ -339,12 +339,12 @@
                 <button class="close-btn" onclick="closeSettings()">X</button>
             </div>
             <div class="agreement-content">
-                <h3>Keyless AI Deep Search (Multi-Provider Fallback)</h3>
+                <h3>Keyless AI Deep Search (Updates Guides Directly)</h3>
                 <p style="font-size: 14px; color: #b9a8d0; margin-bottom: 15px;">
-                    This search requires no API key. It automatically tries multiple free providers (KeylessAI, OVHcloud, Pollinations) and falls back if one is rate-limited.
+                    This search requires no API key. It automatically tries multiple free providers and, when successful, <strong>merges the found steps directly into every night's guide</strong> (Quest and Side Quest). You will see the new steps immediately.
                 </p>
                 
-                <button class="confirm-btn enabled" onclick="deepSearchDrops()" style="width: 100%; background: linear-gradient(to bottom, #6d33a0, #4a1f7a); border-color: #9333ea; margin-bottom: 15px;">🔍 Deep Search Upcoming Nights (Keyless)</button>
+                <button class="confirm-btn enabled" onclick="deepSearchDrops()" style="width: 100%; background: linear-gradient(to bottom, #6d33a0, #4a1f7a); border-color: #9333ea; margin-bottom: 15px;">🔍 Deep Search &amp; Update All Guides</button>
                 
                 <div id="deepSearchStatus" class="status-message" style="display: none;"></div>
                 <div id="deepSearchResults" class="deep-search-results"></div>
@@ -382,8 +382,6 @@
         document.getElementById('navDate').textContent = `Today: ${todayFormatted}`;
 
         // The Hollow schedule – keeping the requested order.
-        // Nights 3–9 are marked as unverified for exact steps because no reliable step-by-step community guides exist yet.
-        // The monster/game mapping and reward names for these nights ARE confirmed.
         const drops = [
             { name: "Night 1", time: "2026-10-22T21:00:00Z", years: [1], verified: true, hasTriggeredConfetti: true },
             { name: "Night 2", time: "2026-10-23T21:00:00Z", years: [2], verified: true, hasTriggeredConfetti: false },
@@ -406,11 +404,8 @@
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
         
-        // Confirmed info for every night:
-        // - Monster/game mapping is confirmed by Roblox and multiple guides.
-        // - Hub reward names are confirmed by togame.io.
-        // - General maze structure (5 pieces → Relic Room → relic → elevator) applies to every night.
-        // - Exact in-game quest steps for Nights 3–9 are NOT yet published and are marked unverified.
+        // Base data – verified for Nights 1–2, placeholder for 3–9.
+        // The AI Deep Search will merge real steps into these.
         const data = {
             1: {
                 game: "DOORS",
@@ -487,235 +482,61 @@
             3: {
                 game: "Demonology",
                 monster: "Biter",
-                normal: {
-                    title: "Quest - Demonology Event Quest",
-                    steps: [
-                        { t: "Enter Demonology", d: "From The Hollow hub, portal into Demonology." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published by guide sites. The monster is Biter, a paranormal-investigation horror game antagonist." },
-                        { t: "Check YouTube for a walkthrough", d: "Creator videos are usually the first place the exact steps appear. Use the video guide button below." }
-                    ],
-                    loc: "Demonology – event mode",
-                    tip: "Demonology is a paranormal investigation game. Expect to use EMF detectors and spirit boxes.",
-                    warn: "Exact steps not yet verified. The mapping (Biter → Demonology) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 3 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 3", d: "From the Hollow hub, select Floor 3." },
-                        { t: "Navigate the Maze", d: "Avoid Biter and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 3 Maze",
-                    tip: "The general maze structure is the same every night. The exact piece locations and puzzle layout change.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "Spotlight Specter (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 3 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - Demonology Event Quest", steps: [], loc: "Demonology – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 3 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 3 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
             4: {
                 game: "99 Nights in the Forest",
                 monster: "The Deer",
-                normal: {
-                    title: "Quest - 99 Nights Event Quest",
-                    steps: [
-                        { t: "Enter 99 Nights", d: "From The Hollow hub, portal into 99 Nights in the Forest." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published. The monster is The Deer." },
-                        { t: "Check YouTube for a walkthrough", d: "Use the video guide button below to find creator walkthroughs." }
-                    ],
-                    loc: "99 Nights in the Forest – event mode",
-                    tip: "Stick with other players; The Deer targets isolated survivors.",
-                    warn: "Exact steps not yet verified. The mapping (The Deer → 99 Nights) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 4 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 4", d: "From the Hollow hub, select Floor 4." },
-                        { t: "Navigate the Maze", d: "Avoid The Deer and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 4 Maze",
-                    tip: "The general maze structure is the same every night.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "Incorporeal Incorporated (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 4 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - 99 Nights Event Quest", steps: [], loc: "99 Nights in the Forest – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 4 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 4 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
             5: {
                 game: "The Mimic",
                 monster: "Hiachi",
-                normal: {
-                    title: "Quest - The Mimic Event Quest",
-                    steps: [
-                        { t: "Enter The Mimic", d: "From The Hollow hub, portal into The Mimic." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published. The monster is Hiachi." },
-                        { t: "Check YouTube for a walkthrough", d: "Use the video guide button below to find creator walkthroughs." }
-                    ],
-                    loc: "The Mimic – event mode",
-                    tip: "Listen for Hiachi's audio cues; they indicate which direction she's approaching from.",
-                    warn: "Exact steps not yet verified. The mapping (Hiachi → The Mimic) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 5 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 5", d: "From the Hollow hub, select Floor 5." },
-                        { t: "Navigate the Maze", d: "Avoid Hiachi and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 5 Maze",
-                    tip: "The general maze structure is the same every night.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "Phantom in the Code (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 5 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - The Mimic Event Quest", steps: [], loc: "The Mimic – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 5 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 5 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
             6: {
                 game: "Animal Hospital",
                 monster: "Mimic",
-                normal: {
-                    title: "Quest - Animal Hospital Event Quest",
-                    steps: [
-                        { t: "Enter Animal Hospital", d: "From The Hollow hub, portal into Animal Hospital." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published. The monster is Mimic." },
-                        { t: "Check YouTube for a walkthrough", d: "Use the video guide button below to find creator walkthroughs." }
-                    ],
-                    loc: "Animal Hospital – event mode",
-                    tip: "Watch for unusual symptoms; the Mimic disguises itself as a patient.",
-                    warn: "Exact steps not yet verified. The mapping (Mimic → Animal Hospital) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 6 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 6", d: "From the Hollow hub, select Floor 6." },
-                        { t: "Navigate the Maze", d: "Avoid Mimic and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 6 Maze",
-                    tip: "The general maze structure is the same every night.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "Little Plus-tergeist (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 6 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - Animal Hospital Event Quest", steps: [], loc: "Animal Hospital – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 6 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 6 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
             7: {
                 game: "Scary Shawarma Kiosk",
                 monster: "The Inspector",
-                normal: {
-                    title: "Quest - Scary Shawarma Event Quest",
-                    steps: [
-                        { t: "Enter Scary Shawarma Kiosk", d: "From The Hollow hub, portal into Scary Shawarma Kiosk." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published. The monster is The Inspector." },
-                        { t: "Check YouTube for a walkthrough", d: "Use the video guide button below to find creator walkthroughs." }
-                    ],
-                    loc: "Scary Shawarma Kiosk – event mode",
-                    tip: "The Inspector watches for mistakes – double-check each order before serving. The game has a 2 AM inspection mechanic.",
-                    warn: "Exact steps not yet verified. The mapping (The Inspector → Scary Shawarma Kiosk) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 7 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 7", d: "From the Hollow hub, select Floor 7." },
-                        { t: "Navigate the Maze", d: "Avoid The Inspector and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 7 Maze",
-                    tip: "The general maze structure is the same every night.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "All-Seeking Antlers (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 7 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - Scary Shawarma Event Quest", steps: [], loc: "Scary Shawarma Kiosk – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 7 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 7 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
             8: {
                 game: "WARDEN",
                 monster: "The Overseer",
-                normal: {
-                    title: "Quest - WARDEN Event Quest",
-                    steps: [
-                        { t: "Enter WARDEN", d: "From The Hollow hub, portal into WARDEN." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published. The monster is The Overseer." },
-                        { t: "Check YouTube for a walkthrough", d: "Use the video guide button below to find creator walkthroughs." }
-                    ],
-                    loc: "WARDEN – event mode",
-                    tip: "Use cover and stick with your team; The Overseer patrols open areas.",
-                    warn: "Exact steps not yet verified. The mapping (The Overseer → WARDEN) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 8 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 8", d: "From the Hollow hub, select Floor 8." },
-                        { t: "Navigate the Maze", d: "Avoid The Overseer and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 8 Maze",
-                    tip: "The general maze structure is the same every night.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "Quack-o'-lantern (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 8 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - WARDEN Event Quest", steps: [], loc: "WARDEN – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 8 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 8 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
             9: {
                 game: "Piggy",
                 monster: "Piggy",
-                normal: {
-                    title: "Quest - Piggy Event Quest",
-                    steps: [
-                        { t: "Enter Piggy", d: "From The Hollow hub, portal into Piggy." },
-                        { t: "Complete the Event Objective", d: "The exact in-game objective for this quest has not yet been published. The monster is Piggy." },
-                        { t: "Check YouTube for a walkthrough", d: "Use the video guide button below to find creator walkthroughs." }
-                    ],
-                    loc: "Piggy – event mode",
-                    tip: "Play with friends; Piggy is easier to avoid when objectives are split.",
-                    warn: "Exact steps not yet verified. The mapping (Piggy → Piggy) is confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 9 Maze",
-                    intro: "This is the Hub floor puzzle. General structure is confirmed: 5 pieces → Relic Room → relic → elevator.",
-                    verified: false,
-                    steps: [
-                        { t: "Take the Elevator to Floor 9", d: "From the Hollow hub, select Floor 9." },
-                        { t: "Navigate the Maze", d: "Avoid Piggy and find the five puzzle pieces." },
-                        { t: "Solve the Relic Puzzle", d: "Place the pieces in the Relic Room and connect the start to the endpoint." },
-                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 9 Maze",
-                    tip: "The general maze structure is the same every night.",
-                    warn: "Exact piece locations and puzzle solution not yet published.",
-                    reward: "The Beasthammer (confirmed hub reward)",
-                    visualDesc: "Elevator → Floor 9 → collect 5 pieces → Relic Room → puzzle → relic."
-                }
+                normal: { title: "Quest - Piggy Event Quest", steps: [], loc: "Piggy – event mode", tip: "", warn: "", reward: "" },
+                secret: { title: "Side Quest - Floor 9 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 9 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             }
         };
+
+        // Load merged AI data from localStorage (if any) so updates persist.
+        (function loadMergedData() {
+            try {
+                const saved = localStorage.getItem('hollow_merged_data');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    for (const key in parsed) {
+                        if (data[key]) {
+                            Object.assign(data[key], parsed[key]);
+                        }
+                    }
+                }
+            } catch (e) { console.warn('Could not load merged data', e); }
+        })();
 
         const friendGroups = {
             black: [
@@ -922,17 +743,21 @@
             const d = data[currentYear][type];
             const isSecret = type === 'secret';
             
-            const aiResults = localStorage.getItem('hollow_ai_deep_search_results');
-            const isAiVerified = aiResults && aiResults.includes(`Night ${currentYear}`);
+            const isAiUpdated = d.aiUpdated === true;
+            const hasSteps = d.steps && d.steps.length > 0;
             
             let verifiedBadge = '';
             if (isSecret) {
-                if (isAiVerified) {
-                    verifiedBadge = '<span class="ai-verified-badge">AI VERIFIED</span>';
+                if (isAiUpdated) {
+                    verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
                 } else if (d.verified) {
                     verifiedBadge = '<span class="verified-badge">VERIFIED</span>';
                 } else {
                     verifiedBadge = '<span class="unverified-badge">NOT VERIFIED</span>';
+                }
+            } else {
+                if (isAiUpdated) {
+                    verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
                 }
             }
             
@@ -940,9 +765,10 @@
             
             let html = `
                 <div class="guide-section">
-                    <div class="step-box ${isSecret ? 'secret' : ''} ${isSecret && !d.verified && !isAiVerified ? 'unverified' : ''}">
+                    <div class="step-box ${isSecret ? 'secret' : ''} ${isSecret && !d.verified && !isAiUpdated ? 'unverified' : ''}">
                         <h4>Step-by-Step Instructions:</h4>
                         ${d.intro ? `<p style="margin-bottom:12px; font-style:italic; color:#b9a8d0; font-size:14px;">${d.intro}</p>` : ''}
+                        ${hasSteps ? `
                         <ul class="step-list">
                             ${d.steps.map((s, i) => `
                                 <li>
@@ -952,32 +778,38 @@
                                 </li>
                             `).join('')}
                         </ul>
+                        ` : `
+                        <div class="info-box info-unverified" style="margin-top:10px;">
+                            <strong>⏳ No steps yet</strong>
+                            <p>Use the "⚙️ Settings" panel to run an AI Deep Search. It will try to fetch the latest verified steps and merge them into this guide automatically.</p>
+                        </div>
+                        `}
                     </div>
             `;
             
-            if (isSecret && aiResults && aiResults.includes(`Night ${currentYear}`)) {
+            if (isAiUpdated) {
                 html += `
                     <div class="info-box" style="background: #0e2430; border-color: #00e5ff; color: #b3f0ff; margin-top: 15px;">
                         <strong>🤖 AI Deep Search Insight:</strong>
-                        <p style="font-size: 13px; margin-top: 5px;">This guide has been enhanced with AI deep search data.</p>
+                        <p style="font-size: 13px; margin-top: 5px;">These steps were fetched by the AI Deep Search. They may be more up-to-date than the static guide. Always double-check in-game.</p>
                     </div>
                 `;
             }
             
-            if (isSecret && !d.verified && !isAiVerified) {
+            if (isSecret && !d.verified && !isAiUpdated) {
                 html += `
                     <div class="info-box info-unverified">
                         <strong>⚠️ Guide Not Yet Verified</strong>
-                        <p>The exact step-by-step for this side quest has not been published by guide sites yet. The general maze structure is confirmed, but piece locations and puzzle solutions change. Use the video guide below — creator videos are usually the first place the exact steps appear.</p>
+                        <p>The exact step-by-step for this side quest has not been published by guide sites yet. Use the video guide below, or run a Deep Search from Settings.</p>
                     </div>
                 `;
             }
             
             html += `
-                    <div class="info-box info-loc"><strong>Location:</strong> ${d.loc}</div>
+                    <div class="info-box info-loc"><strong>Location:</strong> ${d.loc || 'Unknown'}</div>
                     ${d.tip ? `<div class="info-box info-tip"><strong>Pro Tip:</strong> ${d.tip}</div>` : ''}
                     ${d.warn ? `<div class="info-box info-warn"><strong>WARNING:</strong> ${d.warn}</div>` : ''}
-                    <div class="info-box info-reward"><strong>Reward:</strong> ${d.reward}</div>
+                    ${d.reward ? `<div class="info-box info-reward"><strong>Reward:</strong> ${d.reward}</div>` : ''}
                     <button class="big-btn btn-visual" onclick="toggleVisual()">📷 Show Visual Guide (Where Exactly to Look)</button>
                     <div class="visual-guide" id="visualGuide">
                         <h5>👁️ Visual Guide - Where to Look:</h5>
@@ -1074,7 +906,7 @@
                     const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
 
                     html += `
-                        <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card">
+                        <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
                             <div class="friend-top">
                                 <div class="friend-avatar-wrap">
                                     <img src="${imageUrl}" onerror="this.onerror=null; this.src='${fallbackUrl}';" alt="${p.name}" class="friend-avatar">
@@ -1085,7 +917,7 @@
                                 <div class="friend-info">
                                     <div class="friend-name">${p.name}</div>
                                     <div class="friend-handle">@${p.handle}</div>
-                                    <div class="friend-status-text">Offline</div>
+                                    <div class="friend-status-text" data-status-for="${p.handle}">Checking…</div>
                                 </div>
                             </div>
                             <div class="friend-add-btn">View Profile</div>
@@ -1093,11 +925,76 @@
                     `;
                 });
                 html += `</div>`;
+                setTimeout(() => startPresencePolling(players), 0);
             } else {
                 html += `<div style="text-align: center; color: #888; padding: 20px;">No friends found in this group yet.</div>`;
             }
 
             friendsBody.innerHTML = html;
+        }
+
+        // ==================================================================
+        // PRESENCE POLLING
+        // ==================================================================
+        const THE_HOLLOW_PLACE_ID = 116463962153167;
+        const PRESENCE_PROXY = 'https://presence.roproxy.com';
+        const USERS_PROXY = 'https://users.roproxy.com';
+        const presencePollTimers = new Map();
+
+        async function resolveUserId(username) {
+            const res = await fetch(`${USERS_PROXY}/v1/usernames/users`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usernames: [username], excludeBannedUsers: true })
+            });
+            if (!res.ok) throw new Error(`User resolve failed: ${res.status}`);
+            const data = await res.json();
+            const userId = data?.data?.[0]?.id;
+            if (!userId) throw new Error('User not found');
+            return userId;
+        }
+
+        async function fetchPresence(userId) {
+            const res = await fetch(`${PRESENCE_PROXY}/v1/presence/users`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userIds: [userId] })
+            });
+            if (!res.ok) throw new Error(`Presence fetch failed: ${res.status}`);
+            const data = await res.json();
+            return data?.userPresences?.[0] || null;
+        }
+
+        async function updatePresenceForUser(username) {
+            const statusEl = document.querySelector(`[data-status-for="${username}"]`);
+            if (!statusEl) return;
+            try {
+                const userId = await resolveUserId(username);
+                const presence = await fetchPresence(userId);
+                const isInHollow = presence && presence.placeId === THE_HOLLOW_PLACE_ID;
+                if (isInHollow) {
+                    statusEl.textContent = 'Online';
+                    statusEl.style.color = '#39ff14';
+                } else {
+                    statusEl.textContent = 'Offline';
+                    statusEl.style.color = '#888';
+                }
+            } catch (err) {
+                console.warn(`Presence check failed for ${username}:`, err);
+                statusEl.textContent = 'Offline';
+                statusEl.style.color = '#888';
+            }
+        }
+
+        function startPresencePolling(players) {
+            players.forEach(p => {
+                if (presencePollTimers.has(p.handle)) clearInterval(presencePollTimers.get(p.handle));
+            });
+            players.forEach(p => updatePresenceForUser(p.handle));
+            const intervalId = setInterval(() => {
+                players.forEach(p => updatePresenceForUser(p.handle));
+            }, 60000);
+            players.forEach(p => presencePollTimers.set(p.handle, intervalId));
         }
 
         function openSettings(e) {
@@ -1110,38 +1007,34 @@
         }
 
         // ==================================================================
-        // KEYLESS AI DEEP SEARCH – Multi-Provider Fallback Chain
+        // AI DEEP SEARCH – Fetches JSON and MERGES into data
         // ==================================================================
-
         const AI_PROVIDERS = [
             {
                 name: 'KeylessAI',
                 url: 'https://keylessai.thryx.workers.dev/v1/chat/completions',
-                model: 'openai-fast',
                 body: (prompt) => JSON.stringify({
                     model: 'openai-fast',
                     messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.3
+                    temperature: 0.1
                 })
             },
             {
                 name: 'OVHcloud',
                 url: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions',
-                model: 'Meta-Llama-3_3-70B-Instruct',
                 body: (prompt) => JSON.stringify({
                     model: 'Meta-Llama-3_3-70B-Instruct',
                     messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.3
+                    temperature: 0.1
                 })
             },
             {
                 name: 'Pollinations',
                 url: 'https://text.pollinations.ai/openai/chat/completions',
-                model: 'openai',
                 body: (prompt) => JSON.stringify({
                     model: 'openai',
                     messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.3
+                    temperature: 0.1
                 })
             }
         ];
@@ -1154,29 +1047,63 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: provider.body(prompt)
                     });
-
                     if (response.ok) {
                         const data = await response.json();
                         const text = data.choices?.[0]?.message?.content;
                         if (text) return { provider: provider.name, text };
-                        throw new Error('Empty response from provider');
+                        throw new Error('Empty response');
                     }
-
-                    // Retry on rate-limit or service-unavailable
                     if (response.status === 429 || response.status === 503) {
                         if (attempt < retries) {
                             await new Promise(r => setTimeout(r, 1200 * attempt));
                             continue;
                         }
                     }
-
-                    throw new Error(`HTTP ${response.status} from ${provider.name}`);
+                    throw new Error(`HTTP ${response.status}`);
                 } catch (err) {
                     if (attempt === retries) throw err;
                     await new Promise(r => setTimeout(r, 1000 * attempt));
                 }
             }
-            throw new Error(`All retries failed for ${provider.name}`);
+            throw new Error(`All retries failed`);
+        }
+
+        function mergeAIData(aiJson) {
+            let updatedCount = 0;
+            for (const nightKey in aiJson) {
+                const nightNum = parseInt(nightKey);
+                if (!data[nightNum]) continue;
+                const aiNight = aiJson[nightKey];
+
+                if (aiNight.normal && Array.isArray(aiNight.normal.steps) && aiNight.normal.steps.length > 0) {
+                    data[nightNum].normal.steps = aiNight.normal.steps;
+                    if (aiNight.normal.title) data[nightNum].normal.title = aiNight.normal.title;
+                    if (aiNight.normal.loc) data[nightNum].normal.loc = aiNight.normal.loc;
+                    if (aiNight.normal.tip) data[nightNum].normal.tip = aiNight.normal.tip;
+                    if (aiNight.normal.warn) data[nightNum].normal.warn = aiNight.normal.warn;
+                    if (aiNight.normal.reward) data[nightNum].normal.reward = aiNight.normal.reward;
+                    data[nightNum].normal.aiUpdated = true;
+                    updatedCount++;
+                }
+
+                if (aiNight.secret && Array.isArray(aiNight.secret.steps) && aiNight.secret.steps.length > 0) {
+                    data[nightNum].secret.steps = aiNight.secret.steps;
+                    if (aiNight.secret.title) data[nightNum].secret.title = aiNight.secret.title;
+                    if (aiNight.secret.loc) data[nightNum].secret.loc = aiNight.secret.loc;
+                    if (aiNight.secret.tip) data[nightNum].secret.tip = aiNight.secret.tip;
+                    if (aiNight.secret.warn) data[nightNum].secret.warn = aiNight.secret.warn;
+                    if (aiNight.secret.reward) data[nightNum].secret.reward = aiNight.secret.reward;
+                    if (aiNight.secret.visualDesc) data[nightNum].secret.visualDesc = aiNight.secret.visualDesc;
+                    data[nightNum].secret.aiUpdated = true;
+                    updatedCount++;
+                }
+            }
+
+            try {
+                localStorage.setItem('hollow_merged_data', JSON.stringify(data));
+            } catch (e) { console.warn('Could not save merged data', e); }
+
+            return updatedCount;
         }
 
         async function deepSearchDrops() {
@@ -1185,16 +1112,34 @@
 
             statusEl.style.display = 'block';
             statusEl.className = 'status-message status-timer';
-            statusEl.textContent = '🔍 Trying keyless AI providers (KeylessAI → OVHcloud → Pollinations)…';
+            statusEl.textContent = '🔍 Deep searching and updating guides…';
             resultsEl.style.display = 'none';
 
-            const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions to get the SIDE QUEST badges for The Hollow (Roblox Halloween event) for upcoming nights. 
-Nights to cover: Night 1 (DOORS), Night 2 (Dandy's World), Night 3 (Demonology), Night 4 (99 Nights in the Forest), Night 5 (The Mimic), Night 6 (Animal Hospital), Night 7 (Scary Shawarma Kiosk), Night 8 (WARDEN), Night 9 (Piggy).
-For EACH game, provide:
-1. The exact step-by-step instructions (numbered).
-2. The exact location of the secret podium or final step.
-3. A short visual description of where to look.
-Format the output clearly with headings for each Night and Game. Be concise but highly accurate based on real Roblox community discoveries. Do not make up fake steps.`;
+            const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions for The Hollow (Roblox Halloween event) for Nights 3 through 9.
+
+Return ONLY a valid JSON object (no markdown, no code fences). Keys: "3", "4", "5", "6", "7", "8", "9".
+Each value:
+{
+  "normal": {
+    "title": "Quest title",
+    "steps": [{"t": "Step title", "d": "Description"}],
+    "loc": "Location",
+    "tip": "Pro tip",
+    "warn": "Warning",
+    "reward": "Reward"
+  },
+  "secret": {
+    "title": "Side quest title",
+    "steps": [{"t": "...", "d": "..."}],
+    "loc": "...",
+    "tip": "...",
+    "warn": "...",
+    "reward": "...",
+    "visualDesc": "..."
+  }
+}
+
+Only include steps you are confident about from real community guides. If you don't know a night's steps, use an empty array for that night. Do not invent fake steps. Be concise.`;
 
             let lastError = null;
 
@@ -1203,28 +1148,51 @@ Format the output clearly with headings for each Night and Game. Be concise but 
                     statusEl.textContent = `🔍 Trying ${provider.name}…`;
                     const result = await tryProvider(provider, prompt);
 
-                    localStorage.setItem('hollow_ai_deep_search_results', result.text);
+                    // Extract JSON from possible markdown
+                    let jsonText = result.text.trim();
+                    const firstBrace = jsonText.indexOf('{');
+                    const lastBrace = jsonText.lastIndexOf('}');
+                    if (firstBrace !== -1 && lastBrace !== -1) {
+                        jsonText = jsonText.slice(firstBrace, lastBrace + 1);
+                    }
+
+                    let aiJson;
+                    try {
+                        aiJson = JSON.parse(jsonText);
+                    } catch (parseErr) {
+                        throw new Error('AI returned invalid JSON. Try again.');
+                    }
+
+                    const updated = mergeAIData(aiJson);
 
                     statusEl.className = 'status-message status-ready';
-                    statusEl.textContent = `✅ ${result.provider} answered successfully! Guides updated locally.`;
+                    statusEl.textContent = `✅ ${result.provider} answered! ${updated} guide section(s) updated.`;
+                    
+                    // Show a short summary, not raw dump
                     resultsEl.style.display = 'block';
-                    resultsEl.textContent = result.text;
+                    resultsEl.textContent = `Updated via ${result.provider}.\nGuides merged successfully. Open any night to see the new steps.`;
 
-                    alert(`Deep search complete via ${result.provider}! The guides have been updated with AI information. Close settings and check the nights!`);
+                    alert(`Deep search complete via ${result.provider}! ${updated} guide sections were updated. Check the nights now.`);
+
+                    // If a guide is currently open, refresh it
+                    if (currentYear !== null && overlay.classList.contains('active')) {
+                        // Re-render the current guide
+                        if (mTitle.textContent.includes('Quest:')) showGuide('normal');
+                        else if (mTitle.textContent.includes('Side Quest:')) showGuide('secret');
+                    }
+
                     return;
                 } catch (err) {
                     console.warn(`Provider ${provider.name} failed:`, err);
                     lastError = err;
-                    // continue to next provider
                 }
             }
 
-            // All providers failed
             statusEl.className = 'status-message';
             statusEl.style.background = '#2b0f0f';
             statusEl.style.color = '#ff8a80';
             statusEl.style.borderColor = '#f44336';
-            statusEl.textContent = `❌ All free AI providers are busy right now (${lastError?.message || 'rate limited'}). Wait 30–60 seconds and try again.`;
+            statusEl.textContent = `❌ All free AI providers are busy (${lastError?.message || 'rate limited'}). Wait 30–60 seconds and try again.`;
         }
 
         overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
