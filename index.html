@@ -1025,7 +1025,6 @@
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
                 
-                // Use undefined for the loading state
                 const followerText = (cache.followers !== null && cache.followers !== undefined) ? `Followers: ${cache.followers.toLocaleString()}` : 'Followers: ...';
 
                 let statusText = 'Offline';
@@ -1112,14 +1111,27 @@
             localStorage.setItem('hollow_auto_copy', autoCopyEnabled);
         }
 
+        async function fetchWithTimeout(resource, options = {}) {
+            const { timeout = 5000 } = options;
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            const response = await fetch(resource, {
+                ...options,
+                signal: controller.signal
+            });
+            clearTimeout(id);
+            return response;
+        }
+
         async function initFriendSystem() {
             const allUsernames = allPlayers.map(p => p.handle);
             
             try {
-                const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
+                const res = await fetchWithTimeout(`https://users.rotunnel.com/v1/usernames/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ usernames: allUsernames, excludeBannedUsers: true })
+                    body: JSON.stringify({ usernames: allUsernames, excludeBannedUsers: true }),
+                    timeout: 10000
                 });
                 const data = await res.json();
                 
@@ -1146,7 +1158,7 @@
         async function fetchAllAvatars() {
             if (allUserIds.length === 0) return;
             try {
-                const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${allUserIds.join(',')}&size=150x150&format=Png&isCircular=false`);
+                const res = await fetchWithTimeout(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${allUserIds.join(',')}&size=150x150&format=Png&isCircular=false`, { timeout: 10000 });
                 const data = await res.json();
                 if (data.data) {
                     data.data.forEach(item => {
@@ -1166,40 +1178,48 @@
             } catch (e) { console.warn("Avatar fetch failed", e); }
         }
 
-        async function fetchFollowerCount(userId) {
-            const urls = [
-                `https://friends.rotunnel.com/v1/users/${userId}/followers/count`,
-                `https://friends.roproxy.com/v1/users/${userId}/followers/count`
-            ];
-            for (let url of urls) {
-                try {
-                    const res = await fetch(url);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && typeof data.count === 'number') return data.count;
-                    }
-                } catch(e) {}
-            }
-            return 0; 
-        }
-
         async function fetchAllFollowers() {
             const entries = Object.entries(userIdCache);
-            // Process in chunks of 2 to absolutely guarantee no rate limits
-            for (let i = 0; i < entries.length; i += 2) {
-                const chunk = entries.slice(i, i + 2);
-                await Promise.all(chunk.map(async ([uName, info]) => {
-                    const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                    if (!actualHandle) return;
-                    
-                    const count = await fetchFollowerCount(info.id);
-                    if (playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle].followers = count;
-                        const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
-                        if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+            for (let i = 0; i < entries.length; i++) {
+                const [uName, info] = entries[i];
+                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                if (!actualHandle) continue;
+
+                let count = 0;
+                let success = false;
+
+                // Try RoProxy first
+                try {
+                    const res = await fetchWithTimeout(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`, { timeout: 3000 });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data.count === 'number') {
+                            count = data.count;
+                            success = true;
+                        }
                     }
-                }));
-                await new Promise(r => setTimeout(r, 200)); // Delay between chunks
+                } catch(e) {}
+
+                // Fallback to Rotunnel if RoProxy fails
+                if (!success) {
+                    try {
+                        const res = await fetchWithTimeout(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`, { timeout: 3000 });
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data && typeof data.count === 'number') {
+                                count = data.count;
+                                success = true;
+                            }
+                        }
+                    } catch(e) {}
+                }
+
+                // Save the result (even if it defaults to 0) to remove the "..."
+                playerDataCache[actualHandle].followers = count;
+                const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
+                if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+                
+                await new Promise(r => setTimeout(r, 150)); // Delay to prevent rate limits
             }
             updateUILive(); 
         }
@@ -1209,11 +1229,12 @@
             isPolling = true;
             
             try {
-                const res = await fetch(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, {
+                const res = await fetchWithTimeout(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userIds: allUserIds }),
-                    cache: 'no-store'
+                    cache: 'no-store',
+                    timeout: 3000
                 });
                 
                 if (!res.ok) { isPolling = false; return; }
