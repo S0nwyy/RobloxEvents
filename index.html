@@ -1020,12 +1020,13 @@
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: undefined, displayName: p.name, justCameOnline: false };
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name, justCameOnline: false };
                 
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
                 
-                const followerText = (cache.followers !== null && cache.followers !== undefined) ? `Followers: ${cache.followers.toLocaleString()}` : 'Followers: ...';
+                // Guaranteed to never show "..." because we initialize to 0
+                const followerText = `Followers: ${(cache.followers || 0).toLocaleString()}`;
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
@@ -1141,8 +1142,9 @@
                     
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
+                    // Initialize followers to 0 so it NEVER shows "..."
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: undefined, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
+                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
                 });
 
@@ -1178,43 +1180,27 @@
             } catch (e) { console.warn("Avatar fetch failed", e); }
         }
 
-        async function fetchFollowerCount(userId) {
-            const proxies = [
-                `https://friends.roproxy.com/v1/users/${userId}/followers/count`,
-                `https://friends.rotunnel.com/v1/users/${userId}/followers/count`,
-                `https://api.allorigins.win/raw?url=${encodeURIComponent('https://friends.roblox.com/v1/users/' + userId + '/followers/count')}`
-            ];
-            for (let url of proxies) {
-                try {
-                    const res = await fetchWithTimeout(url, { timeout: 4000 });
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && typeof data.count === 'number') return data.count;
-                    }
-                } catch(e) {}
-            }
-            return 0; // Force 0 if all proxies fail so it doesn't stay on ...
-        }
-
         async function fetchAllFollowers() {
             const entries = Object.entries(userIdCache);
             
-            // Process in chunks of 4
-            for (let i = 0; i < entries.length; i += 4) {
-                const chunk = entries.slice(i, i + 4);
-                await Promise.all(chunk.map(async ([uName, info]) => {
-                    const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                    if (!actualHandle) return;
-                    
-                    const count = await fetchFollowerCount(info.id);
-                    if (playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle].followers = count;
-                        const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
-                        if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+            // Fire them all at once (RoProxy handles this perfectly)
+            await Promise.all(entries.map(async ([uName, info]) => {
+                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                if (!actualHandle) return;
+                
+                try {
+                    const res = await fetchWithTimeout(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`, { timeout: 4000 });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data.count === 'number') {
+                            playerDataCache[actualHandle].followers = data.count;
+                            const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
+                            if (followersEl) followersEl.textContent = `Followers: ${data.count.toLocaleString()}`;
+                        }
                     }
-                }));
-                await new Promise(r => setTimeout(r, 200));
-            }
+                } catch(e) {}
+            }));
+            
             updateUILive(); 
         }
 
@@ -1348,7 +1334,8 @@
                     }
                 }
                 
-                if (followersEl && cache.followers !== null && cache.followers !== undefined) {
+                // Since we initialized to 0, this will always render a number
+                if (followersEl) {
                     followersEl.textContent = `Followers: ${cache.followers.toLocaleString()}`;
                 }
 
@@ -1393,9 +1380,7 @@
             const sorted = [...players].sort((a, b) => {
                 const dataA = playerDataCache[a.handle] || { followers: 0 };
                 const dataB = playerDataCache[b.handle] || { followers: 0 };
-                const fA = dataA.followers || 0;
-                const fB = dataB.followers || 0;
-                return fB - fA;
+                return dataB.followers - dataA.followers;
             });
             
             sorted.forEach(p => {
