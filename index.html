@@ -156,6 +156,8 @@
             color: #fff;
             transition: transform 0.4s ease, background 0.2s;
             border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
         }
         .friend-card:hover {
             transform: translateY(-3px);
@@ -204,6 +206,7 @@
             flex-direction: column;
             gap: 2px;
             overflow: hidden;
+            width: 100%;
         }
         .friend-name {
             font-size: 16px;
@@ -221,6 +224,7 @@
             cursor: pointer;
             transition: color 0.2s;
             user-select: none;
+            width: fit-content;
         }
         .friend-handle:hover {
             color: #fff;
@@ -245,34 +249,54 @@
         .friend-card:hover .friend-add-btn {
             background: #40444b;
         }
-        .ghost-select-btn {
+
+        /* Filter Bar */
+        .filter-bar {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-            background: #1e1e1e;
-            border: 2px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 18px;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .filter-btn {
+            background: #232527;
+            color: #b0b0b0;
+            border: 1px solid #333;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .ghost-select-btn:hover {
-            background: #252525;
-            border-color: #ff7b00;
-            transform: scale(1.02);
+        .filter-btn:hover {
+            background: #2f3136;
+            color: #fff;
         }
-        .ghost-black { border-left: 4px solid #444; }
-        .ghost-yellow { border-left: 4px solid #ffd700; }
-        .ghost-blue { border-left: 4px solid #00bfff; }
-        .ghost-white { border-left: 4px solid #fff; }
-        
-        .back-btn-container {
-            margin-bottom: 20px;
+        .filter-btn.active {
+            background: #39ff14;
+            color: #0d0614;
+            border-color: #39ff14;
+            box-shadow: 0 0 10px rgba(57,255,20,0.3);
         }
+
+        /* Ghost Badge on Cards */
+        .ghost-badge {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: fit-content;
+        }
+        .badge-black { background: #333; color: #fff; border: 1px solid #555; }
+        .badge-yellow { background: #ffd700; color: #000; }
+        .badge-blue { background: #00bfff; color: #000; }
+        .badge-white { background: #fff; color: #000; }
     </style>
 </head>
 <body>
@@ -594,6 +618,14 @@
             white: "You just need to join a Roblox Plus player."
         };
 
+        // Flatten all players for the "All" view
+        const allPlayers = [];
+        ['black', 'yellow', 'blue'].forEach(group => {
+            friendGroups[group].forEach(p => {
+                allPlayers.push({ ...p, group: group });
+            });
+        });
+
         let currentYear = null;
         const grid = document.getElementById('yearGrid');
         for (let y = 1; y <= 9; y++) {
@@ -846,8 +878,7 @@
 
         function openFriends(e) {
             if(e) e.preventDefault();
-            friendsTitle.textContent = "👻 Friends";
-            renderGhostGroups();
+            renderFriendList('all');
             friendsOverlay.classList.add('active');
         }
 
@@ -855,88 +886,86 @@
             friendsOverlay.classList.remove('active');
         }
 
-        function renderGhostGroups() {
-            friendsTitle.textContent = "👻 Select a Ghost Group";
-            friendsBody.innerHTML = `
-                <div style="text-align: center; margin-bottom: 20px; color: #b9a8d0;">
-                    Select a ghost group below to view the players in it.
-                </div>
-                <div style="display: grid; gap: 15px; max-width: 400px; margin: 0 auto;">
-                    <button class="ghost-select-btn ghost-black" onclick="renderFriendList('black', 'Black Ghost')">
-                        <span style="font-size: 24px;">👻</span> Black Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-yellow" onclick="renderFriendList('yellow', 'Yellow Ghost')">
-                        <span style="font-size: 24px;">👻</span> Yellow Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-blue" onclick="renderFriendList('blue', 'Blue Ghost')">
-                        <span style="font-size: 24px;">👻</span> Blue Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-white" onclick="renderFriendList('white', 'White Ghost')">
-                        <span style="font-size: 24px;">👻</span> White Ghost
-                    </button>
-                </div>
-            `;
-        }
+        function renderFriendList(filter) {
+            const isAll = filter === 'all';
+            friendsTitle.textContent = isAll ? "👻 Online All Ghosts" : `👻 ${filter.charAt(0).toUpperCase() + filter.slice(1)} Ghost`;
 
-        function renderFriendList(groupKey, groupName) {
-            const players = friendGroups[groupKey];
-            friendsTitle.textContent = `👻 ${groupName}`;
-            
             let html = `
-                <div class="back-btn-container">
-                    <button class="btn-back" style="width: auto; padding: 8px 15px; margin-top: 0; font-size: 14px;" onclick="renderGhostGroups()">← Back to Ghosts</button>
+                <div class="filter-bar">
+                    <button class="filter-btn ${filter === 'all' ? 'active' : ''}" onclick="renderFriendList('all')">All Online</button>
+                    <button class="filter-btn ${filter === 'black' ? 'active' : ''}" onclick="renderFriendList('black')">Black Ghost</button>
+                    <button class="filter-btn ${filter === 'yellow' ? 'active' : ''}" onclick="renderFriendList('yellow')">Yellow Ghost</button>
+                    <button class="filter-btn ${filter === 'blue' ? 'active' : ''}" onclick="renderFriendList('blue')">Blue Ghost</button>
+                    <button class="filter-btn ${filter === 'white' ? 'active' : ''}" onclick="renderFriendList('white')">White Ghost</button>
                 </div>
             `;
 
-            if (typeof players === 'string') {
+            if (filter === 'white') {
                 html += `
                     <div style="text-align: center; padding: 40px 20px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333;">
                         <div style="font-size: 40px; margin-bottom: 20px;">👻</div>
                         <h3 style="color: #ffd9a8; margin-bottom: 15px;">White Ghost Group</h3>
-                        <p style="color: #b9a8d0; font-size: 16px; line-height: 1.6;">${players}</p>
+                        <p style="color: #b9a8d0; font-size: 16px; line-height: 1.6;">${friendGroups.white}</p>
                     </div>
                 `;
-            } else if (Array.isArray(players) && players.length > 0) {
-                html += `<div class="friends-grid" id="friendsGrid">`;
-                players.forEach(p => {
-                    const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
-                    const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-
-                    html += `
-                        <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
-                            <div class="friend-top">
-                                <div class="friend-avatar-wrap">
-                                    <img src="${fallbackUrl}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}">
-                                    <div class="friend-status-icon">
-                                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                                    </div>
-                                </div>
-                                <div class="friend-info">
-                                    <div class="friend-name" data-displayname-for="${p.handle}">${p.name}</div>
-                                    <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
-                                    <div class="friend-status-text" data-status-for="${p.handle}">Checking…</div>
-                                    <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">Followers: …</div>
-                                </div>
-                            </div>
-                            <div class="friend-add-btn">View Profile</div>
-                        </a>
-                    `;
-                });
-                html += `</div>`;
-                setTimeout(() => startPresencePolling(players), 0);
-            } else {
-                html += `<div style="text-align: center; color: #888; padding: 20px;">No friends found in this group yet.</div>`;
+                friendsBody.innerHTML = html;
+                return;
             }
 
+            const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
+            
+            // Pre-filter for 'all' (only show online)
+            const filteredPlayers = isAll 
+                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) 
+                : playersToRender;
+
+            if (filteredPlayers.length === 0) {
+                html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No one is currently online in this group.</div>`;
+                friendsBody.innerHTML = html;
+                return;
+            }
+
+            html += `<div class="friends-grid" id="friendsGrid">`;
+            filteredPlayers.forEach(p => {
+                const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
+                const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
+                const cache = playerDataCache[p.handle] || { isOnline: false, followers: 0 };
+                
+                // Show ghost badge only in "All" view
+                const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
+
+                html += `
+                    <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
+                        <div class="friend-top">
+                            <div class="friend-avatar-wrap">
+                                <img src="${fallbackUrl}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}">
+                                <div class="friend-status-icon">
+                                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                </div>
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name" data-displayname-for="${p.handle}">${p.name}</div>
+                                <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
+                                <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${cache.isOnline ? '#39ff14' : '#888'}">${cache.isOnline ? 'Online' : 'Offline'}</div>
+                                <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">Followers: ${cache.followers.toLocaleString()}</div>
+                                ${ghostBadge}
+                            </div>
+                        </div>
+                        <div class="friend-add-btn">View Profile</div>
+                    </a>
+                `;
+            });
+            html += `</div>`;
+
             friendsBody.innerHTML = html;
+            sortAndReorderDOM(filteredPlayers);
         }
 
         // ==================================================================
-        // PRESENCE, FOLLOWER & AVATAR POLLING
+        // 24/7 BACKGROUND POLLING SYSTEM
         // ==================================================================
-        const presencePollTimers = new Map();
-        const userIdCache = new Map(); // Now stores { id, displayName }
-        const playerDataCache = {}; // Stores { isOnline: boolean, followers: number }
+        const userIdCache = new Map(); 
+        const playerDataCache = {}; 
 
         async function resolveUserId(username) {
             if (userIdCache.has(username)) return userIdCache.get(username);
@@ -972,7 +1001,7 @@
 
         async function fetchFollowerCount(userId) {
             const res = await fetch(`https://friends.rotunnel.com/v1/users/${userId}/followers/count`);
-            if (!res.ok) throw new Error(`Follower count fetch failed: ${res.status}`);
+            if (!res.ok) throw new Error(`Follower fetch failed: ${res.status}`);
             const data = await res.json();
             return data.count || 0;
         }
@@ -984,58 +1013,53 @@
             return data?.data?.[0]?.imageUrl || null;
         }
 
-        async function updatePresenceAndFollowers(username, players) {
-            const statusEl = document.querySelector(`[data-status-for="${username}"]`);
-            const followersEl = document.querySelector(`[data-followers-for="${username}"]`);
-            const avatarImg = document.querySelector(`[data-avatar-for="${username}"]`);
-            const displayNameEl = document.querySelector(`[data-displayname-for="${username}"]`);
-            
+        async function updatePlayerBackground(username, group) {
             try {
                 const userData = await resolveUserId(username);
                 const userId = userData.id;
                 
-                // Update Display Name if different
-                if (displayNameEl && userData.displayName) {
-                    displayNameEl.textContent = userData.displayName;
-                }
-
                 const presence = await fetchPresence(userId);
                 const isOnline = !!presence && presence.userPresenceType > 0;
+                const count = await fetchFollowerCount(userId);
 
-                if (statusEl) {
-                    if (isOnline) {
-                        statusEl.textContent = 'Online';
-                        statusEl.style.color = '#39ff14';
+                // Update Cache
+                playerDataCache[username] = { isOnline, followers: count, group, displayName: userData.displayName };
+
+                // Update DOM if modal is open and user exists on screen
+                if (friendsOverlay.classList.contains('active')) {
+                    const statusEl = document.querySelector(`[data-status-for="${username}"]`);
+                    const followersEl = document.querySelector(`[data-followers-for="${username}"]`);
+                    const displayNameEl = document.querySelector(`[data-displayname-for="${username}"]`);
+                    const avatarImg = document.querySelector(`[data-avatar-for="${username}"]`);
+
+                    if (statusEl) {
+                        statusEl.textContent = isOnline ? 'Online' : 'Offline';
+                        statusEl.style.color = isOnline ? '#39ff14' : '#888';
+                    }
+                    if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+                    if (displayNameEl && userData.displayName) displayNameEl.textContent = userData.displayName;
+                    
+                    if (avatarImg) {
+                        const avatarUrl = await fetchAvatarUrl(userId);
+                        if (avatarUrl) avatarImg.src = avatarUrl;
+                    }
+                    
+                    // Re-sort based on current view
+                    const currentFilterBtn = document.querySelector('.filter-btn.active');
+                    const currentFilter = currentFilterBtn ? (currentFilterBtn.textContent.includes('All') ? 'all' : currentFilterBtn.textContent.split(' ')[0].toLowerCase()) : 'all';
+                    
+                    if (currentFilter === 'all' && !isOnline) {
+                        // If in All view and they go offline, remove them from view
+                        const card = document.querySelector(`.friend-card[data-username="${username}"]`);
+                        if (card) card.remove();
                     } else {
-                        statusEl.textContent = 'Offline';
-                        statusEl.style.color = '#888';
+                        // Otherwise just re-sort
+                        const currentPlayers = currentFilter === 'all' ? allPlayers : friendGroups[currentFilter].map(p => ({...p, group: currentFilter}));
+                        sortAndReorderDOM(currentFilter === 'all' ? currentPlayers.filter(p => playerDataCache[p.handle]?.isOnline) : currentPlayers);
                     }
                 }
-
-                const count = await fetchFollowerCount(userId);
-                if (followersEl) {
-                    followersEl.textContent = `Followers: ${count.toLocaleString()}`;
-                }
-
-                if (avatarImg) {
-                    const avatarUrl = await fetchAvatarUrl(userId);
-                    if (avatarUrl) avatarImg.src = avatarUrl;
-                }
-
-                // Save to cache for sorting
-                playerDataCache[username] = { isOnline, followers: count };
             } catch (err) {
-                console.warn(`Check failed for ${username}:`, err);
-                if (statusEl) {
-                    statusEl.textContent = 'Offline';
-                    statusEl.style.color = '#888';
-                }
-                if (followersEl) {
-                    followersEl.textContent = 'Followers: —';
-                }
-                playerDataCache[username] = { isOnline: false, followers: 0 };
-            } finally {
-                sortAndReorderDOM(players);
+                console.warn(`Background check failed for ${username}:`, err);
             }
         }
 
@@ -1055,7 +1079,7 @@
 
             sortedPlayers.forEach(p => {
                 const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
-                if (card) grid.appendChild(card);
+                if (card) grid.appendChild(card); // Appending moves it to the bottom in order
             });
         }
 
@@ -1073,27 +1097,22 @@
                     handleEl.textContent = originalText;
                     handleEl.style.color = '#b0b0b0';
                 }, 1500);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
+            }).catch(err => console.error('Failed to copy: ', err));
         }
 
-        function startPresencePolling(players) {
-            players.forEach(p => {
-                if (presencePollTimers.has(p.handle)) {
-                    clearInterval(presencePollTimers.get(p.handle));
-                    presencePollTimers.delete(p.handle);
-                }
-            });
+        // Global polling engine with staggering (24/7 while page is open)
+        let pollIndex = 0;
+        setInterval(() => {
+            // Poll 1 player every 1.5 seconds to avoid rate limits
+            const player = allPlayers[pollIndex];
+            updatePlayerBackground(player.handle, player.group);
+            pollIndex = (pollIndex + 1) % allPlayers.length;
+        }, 1500);
 
-            players.forEach(p => updatePresenceAndFollowers(p.handle, players));
-
-            const intervalId = setInterval(() => {
-                players.forEach(p => updatePresenceAndFollowers(p.handle, players));
-            }, 30000);
-
-            players.forEach(p => presencePollTimers.set(p.handle, intervalId));
-        }
+        // Initial load - stagger requests slightly
+        allPlayers.forEach((p, index) => {
+            setTimeout(() => updatePlayerBackground(p.handle, p.group), index * 50);
+        });
 
         function openSettings(e) {
             if (e) e.preventDefault();
