@@ -1178,48 +1178,42 @@
             } catch (e) { console.warn("Avatar fetch failed", e); }
         }
 
-        async function fetchAllFollowers() {
-            const entries = Object.entries(userIdCache);
-            for (let i = 0; i < entries.length; i++) {
-                const [uName, info] = entries[i];
-                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                if (!actualHandle) continue;
-
-                let count = 0;
-                let success = false;
-
-                // Try RoProxy first
+        async function fetchFollowerCount(userId) {
+            const proxies = [
+                `https://friends.roproxy.com/v1/users/${userId}/followers/count`,
+                `https://friends.rotunnel.com/v1/users/${userId}/followers/count`,
+                `https://api.allorigins.win/raw?url=${encodeURIComponent('https://friends.roblox.com/v1/users/' + userId + '/followers/count')}`
+            ];
+            for (let url of proxies) {
                 try {
-                    const res = await fetchWithTimeout(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`, { timeout: 3000 });
+                    const res = await fetchWithTimeout(url, { timeout: 4000 });
                     if (res.ok) {
                         const data = await res.json();
-                        if (data && typeof data.count === 'number') {
-                            count = data.count;
-                            success = true;
-                        }
+                        if (data && typeof data.count === 'number') return data.count;
                     }
                 } catch(e) {}
+            }
+            return 0; // Force 0 if all proxies fail so it doesn't stay on ...
+        }
 
-                // Fallback to Rotunnel if RoProxy fails
-                if (!success) {
-                    try {
-                        const res = await fetchWithTimeout(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`, { timeout: 3000 });
-                        if (res.ok) {
-                            const data = await res.json();
-                            if (data && typeof data.count === 'number') {
-                                count = data.count;
-                                success = true;
-                            }
-                        }
-                    } catch(e) {}
-                }
-
-                // Save the result (even if it defaults to 0) to remove the "..."
-                playerDataCache[actualHandle].followers = count;
-                const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
-                if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
-                
-                await new Promise(r => setTimeout(r, 150)); // Delay to prevent rate limits
+        async function fetchAllFollowers() {
+            const entries = Object.entries(userIdCache);
+            
+            // Process in chunks of 4
+            for (let i = 0; i < entries.length; i += 4) {
+                const chunk = entries.slice(i, i + 4);
+                await Promise.all(chunk.map(async ([uName, info]) => {
+                    const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                    if (!actualHandle) return;
+                    
+                    const count = await fetchFollowerCount(info.id);
+                    if (playerDataCache[actualHandle]) {
+                        playerDataCache[actualHandle].followers = count;
+                        const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
+                        if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+                    }
+                }));
+                await new Promise(r => setTimeout(r, 200));
             }
             updateUILive(); 
         }
