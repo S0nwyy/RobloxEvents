@@ -894,14 +894,13 @@
                 html += `<div class="friends-grid">`;
                 players.forEach(p => {
                     const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
-                    const imageUrl = `https://www.roblox.com/headshot-thumbnail/image?username=${encodeURIComponent(p.handle)}&width=150&height=150&format=png`;
                     const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
 
                     html += `
                         <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
                             <div class="friend-top">
                                 <div class="friend-avatar-wrap">
-                                    <img src="${imageUrl}" onerror="this.onerror=null; this.src='${fallbackUrl}';" alt="${p.name}" class="friend-avatar">
+                                    <img src="${fallbackUrl}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}">
                                     <div class="friend-status-icon">
                                         <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                                     </div>
@@ -927,16 +926,15 @@
         }
 
         // ==================================================================
-        // PRESENCE & FOLLOWER COUNT POLLING
+        // PRESENCE, FOLLOWER & AVATAR POLLING (RoTunnel + Modern Endpoints)
         // ==================================================================
-        const USERS_PROXY = 'https://users.roproxy.com';
         const presencePollTimers = new Map();
         const userIdCache = new Map();
 
         async function resolveUserId(username) {
             if (userIdCache.has(username)) return userIdCache.get(username);
 
-            const res = await fetch(`${USERS_PROXY}/v1/usernames/users`, {
+            const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ usernames: [username], excludeBannedUsers: true })
@@ -950,11 +948,7 @@
         }
 
         async function fetchPresence(userId) {
-            // Use corsproxy.io for reliable POST forwarding
-            const targetUrl = 'https://presence.roblox.com/v1/presence/users';
-            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-
-            const res = await fetch(proxyUrl, {
+            const res = await fetch(`https://presence.rotunnel.com/v1/presence/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userIds: [userId] })
@@ -965,19 +959,24 @@
         }
 
         async function fetchFollowerCount(userId) {
-            const targetUrl = `https://friends.roblox.com/v1/users/${userId}/followers/count`;
-            // Use roproxy for GET requests, which works well
-            const proxyUrl = `https://friends.roproxy.com/v1/users/${userId}/followers/count`;
-
-            const res = await fetch(proxyUrl);
+            const res = await fetch(`https://friends.rotunnel.com/v1/users/${userId}/followers/count`);
             if (!res.ok) throw new Error(`Follower count fetch failed: ${res.status}`);
             const data = await res.json();
             return data.count || 0;
         }
 
+        async function fetchAvatarUrl(userId) {
+            // Modern avatar API endpoint
+            const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${userId}&size=150x150&format=Png&isCircular=false`);
+            if (!res.ok) throw new Error(`Avatar fetch failed: ${res.status}`);
+            const data = await res.json();
+            return data?.data?.[0]?.imageUrl || null;
+        }
+
         async function updatePresenceAndFollowers(username) {
             const statusEl = document.querySelector(`[data-status-for="${username}"]`);
             const followersEl = document.querySelector(`[data-followers-for="${username}"]`);
+            const avatarImg = document.querySelector(`[data-avatar-for="${username}"]`);
             
             try {
                 const userId = await resolveUserId(username);
@@ -1000,6 +999,14 @@
                 if (followersEl) {
                     const count = await fetchFollowerCount(userId);
                     followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+                }
+
+                // Fetch and update avatar
+                if (avatarImg) {
+                    const avatarUrl = await fetchAvatarUrl(userId);
+                    if (avatarUrl) {
+                        avatarImg.src = avatarUrl;
+                    }
                 }
             } catch (err) {
                 console.warn(`Check failed for ${username}:`, err);
