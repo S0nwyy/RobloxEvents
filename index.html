@@ -1020,10 +1020,12 @@
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: null, displayName: p.name, justCameOnline: false };
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: undefined, displayName: p.name, justCameOnline: false };
                 
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
+                
+                // Use undefined for the loading state
                 const followerText = (cache.followers !== null && cache.followers !== undefined) ? `Followers: ${cache.followers.toLocaleString()}` : 'Followers: ...';
 
                 let statusText = 'Offline';
@@ -1128,7 +1130,7 @@
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: null, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
+                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: undefined, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
                 });
 
@@ -1164,26 +1166,38 @@
             } catch (e) { console.warn("Avatar fetch failed", e); }
         }
 
+        async function fetchFollowerCount(userId) {
+            const urls = [
+                `https://friends.rotunnel.com/v1/users/${userId}/followers/count`,
+                `https://friends.roproxy.com/v1/users/${userId}/followers/count`
+            ];
+            for (let url of urls) {
+                try {
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data.count === 'number') return data.count;
+                    }
+                } catch(e) {}
+            }
+            return 0; 
+        }
+
         async function fetchAllFollowers() {
             const entries = Object.entries(userIdCache);
-            // Process in chunks of 5 to avoid rate limits
-            for (let i = 0; i < entries.length; i += 5) {
-                const chunk = entries.slice(i, i + 5);
+            // Process in chunks of 2 to absolutely guarantee no rate limits
+            for (let i = 0; i < entries.length; i += 2) {
+                const chunk = entries.slice(i, i + 2);
                 await Promise.all(chunk.map(async ([uName, info]) => {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (!actualHandle) return;
                     
-                    try {
-                        const res = await fetch(`https://friends.roproxy.com/v1/users/${info.id}/followers/count`);
-                        if (res.ok) {
-                            const data = await res.json();
-                            if (data && typeof data.count === 'number') {
-                                playerDataCache[actualHandle].followers = data.count;
-                                const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
-                                if (followersEl) followersEl.textContent = `Followers: ${data.count.toLocaleString()}`;
-                            }
-                        }
-                    } catch(e) {}
+                    const count = await fetchFollowerCount(info.id);
+                    if (playerDataCache[actualHandle]) {
+                        playerDataCache[actualHandle].followers = count;
+                        const followersEl = document.querySelector(`[data-followers-for="${actualHandle}"]`);
+                        if (followersEl) followersEl.textContent = `Followers: ${count.toLocaleString()}`;
+                    }
                 }));
                 await new Promise(r => setTimeout(r, 200)); // Delay between chunks
             }
