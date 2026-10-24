@@ -1000,9 +1000,8 @@
         }
 
         // ==================================================================
-        // 24/7 HIGH-SPEED BULK POLLING SYSTEM
+        // 24/7 HIGH-SPEED BULK POLLING SYSTEM (Legacy API for Public Presence)
         // ==================================================================
-        const THE_HOLLOW_PLACE_ID = 116463962153167; // Official ID for The Hollow
         const userIdCache = new Map(); 
         const playerDataCache = {}; 
         let allUserIds = [];
@@ -1043,37 +1042,51 @@
             } catch (e) { console.warn("Init failed", e); }
         }
 
-        // 2. BULK PRESENCE POLLING (Every 1 Second)
+        // 2. BULK PRESENCE POLLING (Every 1 Second using Legacy API)
         async function pollPresence() {
             if (allUserIds.length === 0 || isPolling) return;
             isPolling = true;
             
             try {
-                const res = await fetch(`https://presence.rotunnel.com/v1/presence/users`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userIds: allUserIds })
-                });
+                // Legacy API returns public presence including game name
+                const res = await fetch(`https://api.rotunnel.com/Users/${allUserIds.join(',')}/OnlineStatus`);
                 if (!res.ok) { isPolling = false; return; }
                 
                 const data = await res.json();
                 
-                // Create a quick map of results
+                // The legacy API returns an array of objects like:
+                // [ { UserId: 123, IsOnline: true, PlaceId: 456, GameName: "The Hollow" } ]
+                // Note: The structure might vary slightly depending on the proxy.
+                // We need to handle both single user and multiple user responses.
+                
+                let presenceArray = [];
+                if (Array.isArray(data)) {
+                    presenceArray = data;
+                } else if (data && typeof data === 'object') {
+                    presenceArray = [data]; // Single user fallback
+                }
+
+                // Create a map of userId -> { isOnline, gameName }
                 const presenceMap = {};
-                data.userPresences.forEach(p => {
-                    presenceMap[p.userId] = {
-                        isOnline: p.userPresenceType > 0,
-                        isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID
-                    };
+                presenceArray.forEach(p => {
+                    // The legacy API might use different casing (UserId vs userId, etc.)
+                    const uid = p.UserId || p.userId;
+                    if (uid) {
+                        presenceMap[uid] = {
+                            isOnline: p.IsOnline || p.isOnline || false,
+                            gameName: p.GameName || p.gameName || null
+                        };
+                    }
                 });
 
                 // Apply to cache
                 for (const [uName, info] of userIdCache.entries()) {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (actualHandle && playerDataCache[actualHandle]) {
-                        const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false };
+                        const pData = presenceMap[info.id] || { isOnline: false, gameName: null };
                         playerDataCache[actualHandle].isOnline = pData.isOnline;
-                        playerDataCache[actualHandle].isPlayingHollow = pData.isPlayingHollow;
+                        // Check if the game name contains "The Hollow" (case-insensitive)
+                        playerDataCache[actualHandle].isPlayingHollow = pData.isOnline && pData.gameName && pData.gameName.toLowerCase().includes('hollow');
                     }
                 }
                 
