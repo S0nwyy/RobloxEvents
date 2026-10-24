@@ -250,17 +250,18 @@
             background: #40444b;
         }
 
+        /* Smaller Ghost Buttons */
         .ghost-select-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 20px;
+            padding: 12px 15px;
             background: #1e1e1e;
             border: 2px solid #333;
             border-radius: 8px;
             color: #fff;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s;
@@ -891,20 +892,20 @@
                     Select a group below to view the players.
                 </div>
                 <div style="display: grid; gap: 15px; max-width: 400px; margin: 0 auto;">
-                    <button class="ghost-select-btn ghost-all" onclick="renderFriendList('all')">
-                        <span style="font-size: 24px;">🟢</span> All Online (Any Ghost)
-                    </button>
                     <button class="ghost-select-btn ghost-black" onclick="renderFriendList('black')">
-                        <span style="font-size: 24px;">👻</span> Black Ghost
+                        <span style="font-size: 20px;">👻</span> Black Ghost
                     </button>
                     <button class="ghost-select-btn ghost-yellow" onclick="renderFriendList('yellow')">
-                        <span style="font-size: 24px;">👻</span> Yellow Ghost
+                        <span style="font-size: 20px;">👻</span> Yellow Ghost
                     </button>
                     <button class="ghost-select-btn ghost-blue" onclick="renderFriendList('blue')">
-                        <span style="font-size: 24px;">👻</span> Blue Ghost
+                        <span style="font-size: 20px;">👻</span> Blue Ghost
                     </button>
                     <button class="ghost-select-btn ghost-white" onclick="renderFriendList('white')">
-                        <span style="font-size: 24px;">👻</span> White Ghost
+                        <span style="font-size: 20px;">👻</span> White Ghost
+                    </button>
+                    <button class="ghost-select-btn ghost-all" onclick="renderFriendList('all')">
+                        <span style="font-size: 20px;">🟢</span> All Online (Any Ghost)
                     </button>
                 </div>
             `;
@@ -937,6 +938,8 @@
             `;
 
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
+            
+            // For all view, only include online players
             const filteredPlayers = isAll 
                 ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) 
                 : playersToRender;
@@ -979,6 +982,15 @@
             html += `</div>`;
 
             friendsBody.innerHTML = html;
+            
+            // Immediately try to load avatars from cache if they exist
+            filteredPlayers.forEach(p => {
+                if (playerDataCache[p.handle]?.avatarUrl) {
+                    const img = document.querySelector(`[data-avatar-for="${p.handle}"]`);
+                    if (img) img.src = playerDataCache[p.handle].avatarUrl;
+                }
+            });
+            
             sortAndReorderDOM(filteredPlayers);
         }
 
@@ -988,101 +1000,111 @@
         const userIdCache = new Map(); 
         const playerDataCache = {}; 
         let allUserIds = [];
-        let globalFetchCount = 0;
+        let isBulkPolling = false;
 
         // 1. FAST INITIALIZATION (Parallel Load)
         async function initFriendSystem() {
             const allUsernames = allPlayers.map(p => p.handle);
             
-            // Bulk Resolve IDs and Display Names
-            const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ usernames: allUsernames, excludeBannedUsers: true })
-            });
-            const data = await res.json();
-            
-            data.data.forEach(user => {
-                userIdCache.set(user.name.toLowerCase(), { id: user.id, displayName: user.displayName || user.name });
-                allUserIds.push(user.id);
-                // Init cache
-                const handle = user.name; 
-                playerDataCache[handle] = { isOnline: false, followers: 0, displayName: user.displayName || user.name };
-            });
-
-            // Batch Avatars
             try {
-                const avatarRes = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${allUserIds.join(',')}&size=150x150&format=Png&isCircular=false`);
-                const avatarData = await avatarRes.json();
-                if (avatarData.data) {
-                    avatarData.data.forEach(item => {
-                        // Find the username associated with this ID
-                        for (const [handle, info] of userIdCache.entries()) {
-                            if (info.id === item.targetId) {
-                                const img = document.querySelector(`[data-avatar-for="${handle}"]`);
-                                if (img) img.src = item.imageUrl;
-                                break;
-                            }
-                        }
-                    });
-                }
-            } catch (e) { console.warn("Avatar batch failed", e); }
+                // Bulk Resolve IDs and Display Names
+                const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usernames: allUsernames, excludeBannedUsers: true })
+                });
+                const data = await res.json();
+                
+                data.data.forEach(user => {
+                    userIdCache.set(user.name.toLowerCase(), { id: user.id, displayName: user.displayName || user.name });
+                    allUserIds.push(user.id);
+                    
+                    // Find original handle to ensure correct casing
+                    const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
+                    
+                    if (!playerDataCache[actualHandle]) {
+                        playerDataCache[actualHandle] = { isOnline: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null };
+                    }
+                });
 
-            // Start rapid polling
-            pollPresence(); // Initial
-            setInterval(pollPresence, 1000); // Every 1 Second!
-            
-            // Fetch followers slowly in background (every 30 seconds, 1 player at a time)
-            setInterval(fetchNextFollower, 500);
+                // Start the rapid 1-second polling
+                setInterval(pollPresence, 1000); 
+                pollPresence(); // Call immediately
+
+                // Start fetching followers and avatars slowly in background
+                setInterval(fetchBackgroundData, 300);
+                
+            } catch (e) { console.warn("Init failed", e); }
         }
 
         // 2. BULK PRESENCE POLLING (Every 1 Second)
         async function pollPresence() {
-            if (allUserIds.length === 0) return;
+            if (allUserIds.length === 0 || isBulkPolling) return;
+            isBulkPolling = true;
+            
             try {
                 const res = await fetch(`https://presence.rotunnel.com/v1/presence/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userIds: allUserIds })
                 });
-                if (!res.ok) return;
+                if (!res.ok) { isBulkPolling = false; return; }
+                
                 const data = await res.json();
                 
+                // Create a quick map of results
+                const presenceMap = {};
                 data.userPresences.forEach(p => {
-                    const handle = p.userId; // we need to map back
-                    for (const [uName, info] of userIdCache.entries()) {
-                        if (info.id === p.userId) {
-                            // Find the exact capitalisation used in friendGroups
-                            const actualHandle = allPlayers.find(player => player.handle.toLowerCase() === uName)?.handle || uName;
-                            if (playerDataCache[actualHandle]) {
-                                playerDataCache[actualHandle].isOnline = p.userPresenceType > 0;
-                            }
-                            break;
-                        }
-                    }
+                    presenceMap[p.userId] = p.userPresenceType > 0;
                 });
+
+                // Apply to cache
+                for (const [uName, info] of userIdCache.entries()) {
+                    const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                    if (actualHandle && playerDataCache[actualHandle]) {
+                        playerDataCache[actualHandle].isOnline = presenceMap[info.id] || false;
+                    }
+                }
                 
                 updateUILive();
             } catch (e) { console.warn("Presence poll failed", e); }
+            
+            isBulkPolling = false;
         }
 
-        // 3. SLOW FOLLOWER FETCHING (Background queue to avoid rate limit)
-        async function fetchNextFollower() {
+        // 3. BACKGROUND FETCHING (Avatars & Followers)
+        let queueIndex = 0;
+        async function fetchBackgroundData() {
             if (allPlayers.length === 0) return;
-            const p = allPlayers[globalFetchCount % allPlayers.length];
-            globalFetchCount++;
+            
+            const p = allPlayers[queueIndex % allPlayers.length];
+            queueIndex++;
             
             const info = userIdCache.get(p.handle.toLowerCase());
             if (!info) return;
 
-            try {
-                const res = await fetch(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`);
-                if (res.ok) {
+            // If we don't have avatar, fetch it
+            if (!playerDataCache[p.handle].avatarUrl) {
+                try {
+                    const res = await fetch(`https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${info.id}&size=150x150&format=Png&isCircular=false`);
+                    const data = await res.json();
+                    if (data.data && data.data[0] && data.data[0].imageUrl) {
+                        playerDataCache[p.handle].avatarUrl = data.data[0].imageUrl;
+                        const img = document.querySelector(`[data-avatar-for="${p.handle}"]`);
+                        if (img) img.src = data.data[0].imageUrl;
+                    }
+                } catch(e) {}
+            }
+
+            // If we don't have followers, fetch it
+            if (playerDataCache[p.handle].followers === 0) {
+                try {
+                    const res = await fetch(`https://friends.rotunnel.com/v1/users/${info.id}/followers/count`);
                     const data = await res.json();
                     playerDataCache[p.handle].followers = data.count || 0;
                     updateUILive();
-                }
-            } catch(e) {}
+                } catch(e) {}
+            }
         }
 
         // 4. LIVE UI UPDATER
@@ -1090,7 +1112,7 @@
             if (!friendsOverlay.classList.contains('active')) return;
             
             const grid = document.getElementById('friendsGrid');
-            if (!grid) return; // We are on the selection menu
+            if (!grid) return; 
 
             // Determine current view based on title
             const title = friendsTitle.textContent;
@@ -1119,14 +1141,16 @@
                     followersEl.textContent = `Followers: ${cache.followers.toLocaleString()}`;
                 }
 
-                // If in "All" view and user goes offline, remove them
-                if (isAll && !cache.isOnline) {
+                // If in "All" view, dynamic add/remove based on online status
+                if (isAll) {
                     const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
-                    if (card) card.remove();
-                }
-                // If in "All" view and user comes online but isn't in DOM, we need to re-render entirely
-                if (isAll && cache.isOnline && !document.querySelector(`.friend-card[data-username="${p.handle}"]`)) {
-                    renderFriendList('all');
+                    if (cache.isOnline && !card) {
+                        // Player came online, re-render to show them
+                        renderFriendList('all');
+                    } else if (!cache.isOnline && card) {
+                        // Player went offline, remove them
+                        card.remove();
+                    }
                 }
             });
 
@@ -1172,9 +1196,8 @@
             }).catch(err => console.error('Failed to copy: ', err));
         }
 
-        // Start the engine as soon as page loads
         window.addEventListener('load', () => {
-            setTimeout(initFriendSystem, 1000); // slight delay so main UI loads first
+            setTimeout(initFriendSystem, 1000); 
         });
 
         function openSettings(e) {
