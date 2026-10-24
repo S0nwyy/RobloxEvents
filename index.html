@@ -957,13 +957,12 @@
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
             
             // For all view, ONLY include players playing The Hollow (initial filter)
-            // But we will separate them via DOM manipulation later
             const filteredPlayers = isAll 
-                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) // Get all online players first
+                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) 
                 : playersToRender;
 
-            if (filteredPlayers.length === 0) {
-                html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No one is currently online.</div>`;
+            if (filteredPlayers.length === 0 && !isAll) {
+                html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No players found.</div>`;
                 friendsBody.innerHTML = html;
                 return;
             }
@@ -1033,7 +1032,16 @@
                 }
             });
             
-            sortAndReorderDOM(filteredPlayers, isAll);
+            // Initial sort
+            if (isAll) {
+                const hollowGrid = document.getElementById('hollowGrid');
+                const onlineGrid = document.getElementById('onlineGrid');
+                if (hollowGrid) sortGrid(hollowGrid, filteredPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow));
+                if (onlineGrid) sortGrid(onlineGrid, filteredPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow));
+            } else {
+                const normalGrid = document.getElementById('friendsGrid');
+                if (normalGrid) sortGrid(normalGrid, filteredPlayers);
+            }
         }
 
         // ==================================================================
@@ -1050,7 +1058,6 @@
             const allUsernames = allPlayers.map(p => p.handle);
             
             try {
-                // Bulk Resolve IDs and Display Names
                 const res = await fetch(`https://users.rotunnel.com/v1/usernames/users`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1071,7 +1078,7 @@
 
                 // Start the rapid 1-second polling
                 setInterval(pollPresence, 1000); 
-                pollPresence(); // Call immediately
+                pollPresence(); 
 
                 // Start fetching followers and avatars slowly in background
                 setInterval(fetchBackgroundData, 300);
@@ -1085,11 +1092,14 @@
             isPolling = true;
             
             try {
-                const res = await fetch(`https://presence.rotunnel.com/v1/presence/users`, {
+                // Added cache-busting timestamp to force fresh data
+                const res = await fetch(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userIds: allUserIds })
+                    body: JSON.stringify({ userIds: allUserIds }),
+                    cache: 'no-store'
                 });
+                
                 if (!res.ok) { isPolling = false; return; }
                 
                 const data = await res.json();
@@ -1154,21 +1164,26 @@
         function updateUILive() {
             if (!friendsOverlay.classList.contains('active')) return;
             
-            // If no grids exist, the menu is probably loading or empty
-            const hollowGrid = document.getElementById('hollowGrid');
-            const onlineGrid = document.getElementById('onlineGrid');
-            const normalGrid = document.getElementById('friendsGrid');
-            
-            // If we are on the selection screen, do nothing
-            if (!hollowGrid && !onlineGrid && !normalGrid) return;
-
             const title = friendsTitle.textContent;
+            if (title.includes('Select')) return; // On main menu
+
             const isAll = title.includes('All');
             let filterGroup = 'all';
             if (!isAll) {
                 if (title.includes('Black')) filterGroup = 'black';
                 else if (title.includes('Yellow')) filterGroup = 'yellow';
                 else if (title.includes('Blue')) filterGroup = 'blue';
+                else if (title.includes('White')) return; // No dynamic updates for white
+            }
+
+            const hollowGrid = document.getElementById('hollowGrid');
+            const onlineGrid = document.getElementById('onlineGrid');
+            const normalGrid = document.getElementById('friendsGrid');
+
+            // FIX: If grids are missing (e.g., initially showed "No one online"), we must re-render
+            if (!hollowGrid && !onlineGrid && !normalGrid) {
+                renderFriendList(isAll ? 'all' : filterGroup);
+                return;
             }
 
             const currentPlayers = isAll ? allPlayers : friendGroups[filterGroup].map(p => ({...p, group: filterGroup}));
@@ -1179,9 +1194,10 @@
                 const cache = playerDataCache[p.handle];
                 if (!cache) return;
 
-                const statusEl = document.querySelector(`[data-status-for="${p.handle}"]`);
-                const followersEl = document.querySelector(`[data-followers-for="${p.handle}"]`);
+                const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
+                const statusEl = card ? card.querySelector(`[data-status-for="${p.handle}"]`) : null;
 
+                // Update status text and color
                 if (statusEl) {
                     if (cache.isPlayingHollow) {
                         statusEl.textContent = 'Playing The Hollow';
@@ -1194,67 +1210,58 @@
                         statusEl.style.color = '#888';
                     }
                 }
-                if (followersEl) {
-                    followersEl.textContent = `Followers: ${cache.followers.toLocaleString()}`;
-                }
 
-                // Dynamic Grid Moving logic for "All Online"
                 if (isAll) {
-                    const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
-                    
                     if (cache.isOnline && !card) {
-                        // Player came online, we need to rebuild the lists to include them
+                        // Player came online, we need to re-render to include them
                         needsRerenderAll = true;
                     } else if (!cache.isOnline && card) {
                         // Player went offline, remove them
                         card.remove();
                     } else if (cache.isOnline && card) {
-                        // Player is online, but might need to move between grids
+                        // Move between grids if needed
                         const isInHollowGrid = hollowGrid && hollowGrid.contains(card);
                         const isInOnlineGrid = onlineGrid && onlineGrid.contains(card);
                         
                         if (cache.isPlayingHollow && isInOnlineGrid) {
-                            hollowGrid.appendChild(card); // Move to hollow grid
+                            hollowGrid.appendChild(card);
                         } else if (!cache.isPlayingHollow && isInHollowGrid) {
-                            onlineGrid.appendChild(card); // Move to online grid
+                            onlineGrid.appendChild(card);
                         }
                     }
                 }
             });
 
-            if (needsRerenderAll && isAll) {
+            if (needsRerenderAll) {
                 renderFriendList('all');
                 return;
             }
 
-            // Sort within grids
+            // Sorting
             if (isAll) {
                 if (hollowGrid) {
                     const playersInHollow = currentPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow);
-                    sortAndReorderDOM(playersInHollow, true, 'hollowGrid');
+                    sortGrid(hollowGrid, playersInHollow);
                 }
                 if (onlineGrid) {
                     const playersOnline = currentPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow);
-                    sortAndReorderDOM(playersOnline, true, 'onlineGrid');
+                    sortGrid(onlineGrid, playersOnline);
                 }
             } else if (normalGrid) {
-                sortAndReorderDOM(currentPlayers, false, 'friendsGrid');
+                sortGrid(normalGrid, currentPlayers);
             }
         }
 
-        function sortAndReorderDOM(players, isAll, gridId) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-
-            const sortedPlayers = [...players].sort((a, b) => {
-                const dataA = playerDataCache[a.handle] || { isOnline: false, followers: 0 };
-                const dataB = playerDataCache[b.handle] || { isOnline: false, followers: 0 };
+        function sortGrid(grid, players) {
+            const sorted = [...players].sort((a, b) => {
+                const dataA = playerDataCache[a.handle] || { followers: 0 };
+                const dataB = playerDataCache[b.handle] || { followers: 0 };
                 return dataB.followers - dataA.followers;
             });
-
-            sortedPlayers.forEach(p => {
-                const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
-                if (card) grid.appendChild(card); 
+            
+            sorted.forEach(p => {
+                const card = grid.querySelector(`.friend-card[data-username="${p.handle}"]`);
+                if (card) grid.appendChild(card);
             });
         }
 
