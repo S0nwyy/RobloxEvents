@@ -416,6 +416,9 @@
                 <p style="font-size: 12px; color: #b9a8d0; margin-top: -5px;">
                     When a player comes online, the page will scroll to them. If this is enabled, it will also automatically copy their username to your clipboard.
                 </p>
+                <p style="font-size: 11px; color: #ff8a80; margin-top: 5px; font-style: italic;">
+                    Note: Due to browser security, if you are tabbed out (e.g., playing Roblox), the page cannot copy to your clipboard. The username will be instantly copied the second you click back onto this tab.
+                </p>
             </div>
         </div>
     </div>
@@ -934,6 +937,10 @@
             if(e) e.preventDefault();
             renderGhostGroups();
             friendsOverlay.classList.add('active');
+            if (pendingCopyHandle) {
+                navigator.clipboard.writeText(pendingCopyHandle).catch(() => {});
+                pendingCopyHandle = null;
+            }
         }
 
         function closeFriends() {
@@ -1101,6 +1108,7 @@
         let isPolling = false;
         let isFirstPresencePoll = true; 
         let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
+        let pendingCopyHandle = null; // Stores username if copied while tab is inactive
 
         // Audio Setup
         const onlineSound = new Audio('https://www.myinstants.com/media/sounds/divine-secret-catch-fisch.mp3');
@@ -1121,6 +1129,21 @@
         window.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('autoCopyToggle');
             if (toggle) toggle.checked = autoCopyEnabled;
+            
+            // Request Desktop Notification permission
+            if ("Notification" in window) {
+                if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+                    Notification.requestPermission();
+                }
+            }
+        });
+
+        // When the user focuses back on the tab, copy any pending username
+        window.addEventListener('focus', () => {
+            if (pendingCopyHandle) {
+                navigator.clipboard.writeText(pendingCopyHandle).catch(() => {});
+                pendingCopyHandle = null;
+            }
         });
 
         function toggleAutoCopy(el) {
@@ -1284,14 +1307,28 @@
                 
                 updateUILive();
 
-                if (someoneCameOnline && newOnlineHandle && friendsOverlay.classList.contains('active')) {
+                if (someoneCameOnline && newOnlineHandle) {
                     playOnlineSound();
+                    
+                    // Send background notification
+                    if ("Notification" in window && Notification.permission === "granted" && !document.hasFocus()) {
+                        new Notification("Player Online!", {
+                            body: `${newOnlineHandle} just came online!`,
+                            icon: "https://www.roblox.com/favicon.ico"
+                        });
+                    }
                     
                     setTimeout(() => {
                         const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
                         if (card) {
                             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            if (autoCopyEnabled) {
+                        }
+                        
+                        if (autoCopyEnabled) {
+                            if (!document.hasFocus()) {
+                                // Queue it for when they focus back
+                                pendingCopyHandle = newOnlineHandle;
+                            } else {
                                 navigator.clipboard.writeText(newOnlineHandle).catch(() => {});
                             }
                         }
