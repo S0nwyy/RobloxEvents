@@ -16,6 +16,15 @@
             0%, 100% { opacity: 1; box-shadow: 0 0 18px 4px #ff7b00; transform: scale(1); border-color: #ff7b00; }
             50% { opacity: 0.6; box-shadow: 0 0 6px 1px #ff3d00; transform: scale(0.97); border-color: #ff3d00; }
         }
+        
+        /* Halloween Glow Animation */
+        @keyframes halloweenGlow {
+            0% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
+            33% { box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 15px rgba(156, 39, 176, 0.4); border-color: #9c27b0; }
+            66% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.8), inset 0 0 10px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
+            100% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
+        }
+
         .spooky-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .spooky-bg span { position: absolute; font-size: 38px; opacity: 0.13; animation: floatGhost 11s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,123,0,0.6)); }
         .spooky-bg span:nth-child(1) { left: 5%; top: 12%; animation-delay: 0s; }
@@ -155,7 +164,7 @@
             gap: 12px;
             text-decoration: none;
             color: #fff;
-            transition: transform 0.4s ease, background 0.2s;
+            transition: transform 0.4s ease, background 0.2s, box-shadow 1s ease-out, border-color 1s ease-out;
             border: 1px solid #333;
             position: relative;
             overflow: hidden;
@@ -165,6 +174,13 @@
             background: #252525;
             border-color: #555;
         }
+        
+        /* Class that gets added when a player transitions to online */
+        .friend-card.just-online {
+            animation: halloweenGlow 3s infinite;
+            border-color: #ff7b00;
+        }
+
         .friend-top {
             display: flex;
             align-items: center;
@@ -995,9 +1011,10 @@
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name };
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: 0, displayName: p.name, justCameOnline: false };
                 
                 const ghostBadge = isAll ? `<div class="ghost-badge badge-${p.group}">${p.group}</div>` : '';
+                const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
@@ -1015,7 +1032,7 @@
                 }
 
                 const cardHtml = `
-                    <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
+                    <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card ${justOnlineClass}" data-username="${p.handle}">
                         <div class="friend-top">
                             <div class="friend-avatar-wrap">
                                 <img src="${fallbackUrl}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}">
@@ -1089,7 +1106,7 @@
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: false, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null };
+                        playerDataCache[actualHandle] = { isOnline: false, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
                 });
 
@@ -1131,10 +1148,31 @@
                 for (const [uName, info] of userIdCache.entries()) {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (actualHandle && playerDataCache[actualHandle]) {
+                        const cache = playerDataCache[actualHandle];
                         const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false, lastOnline: null };
-                        playerDataCache[actualHandle].isOnline = pData.isOnline;
-                        playerDataCache[actualHandle].isPlayingHollow = pData.isPlayingHollow;
-                        playerDataCache[actualHandle].lastOnline = pData.lastOnline;
+                        
+                        // Check for transition offline -> online
+                        const wasOnline = cache.isOnline;
+                        const isNowOnline = pData.isOnline;
+
+                        cache.isOnline = isNowOnline;
+                        cache.isPlayingHollow = pData.isPlayingHollow;
+                        cache.lastOnline = pData.lastOnline;
+
+                        if (!wasOnline && isNowOnline) {
+                            cache.justCameOnline = true;
+                            
+                            // Add class immediately if card exists
+                            const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
+                            if (card) card.classList.add('just-online');
+
+                            // Remove class after 1 minute
+                            setTimeout(() => {
+                                cache.justCameOnline = false;
+                                const currentCard = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
+                                if (currentCard) currentCard.classList.remove('just-online');
+                            }, 60000);
+                        }
                     }
                 }
                 
