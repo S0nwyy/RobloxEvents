@@ -154,7 +154,7 @@
             gap: 12px;
             text-decoration: none;
             color: #fff;
-            transition: transform 0.4s ease, background 0.2s; /* Smooth transition for sorting */
+            transition: transform 0.4s ease, background 0.2s;
             border: 1px solid #333;
         }
         .friend-card:hover {
@@ -218,6 +218,12 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: pointer;
+            transition: color 0.2s;
+            user-select: none;
+        }
+        .friend-handle:hover {
+            color: #fff;
         }
         .friend-status-text {
             font-size: 12px;
@@ -906,8 +912,8 @@
                                     </div>
                                 </div>
                                 <div class="friend-info">
-                                    <div class="friend-name">${p.name}</div>
-                                    <div class="friend-handle">@${p.handle}</div>
+                                    <div class="friend-name" data-displayname-for="${p.handle}">${p.name}</div>
+                                    <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
                                     <div class="friend-status-text" data-status-for="${p.handle}">Checking…</div>
                                     <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">Followers: …</div>
                                 </div>
@@ -926,10 +932,10 @@
         }
 
         // ==================================================================
-        // PRESENCE, FOLLOWER & AVATAR POLLING (RoTunnel + Modern Endpoints)
+        // PRESENCE, FOLLOWER & AVATAR POLLING
         // ==================================================================
         const presencePollTimers = new Map();
-        const userIdCache = new Map();
+        const userIdCache = new Map(); // Now stores { id, displayName }
         const playerDataCache = {}; // Stores { isOnline: boolean, followers: number }
 
         async function resolveUserId(username) {
@@ -942,10 +948,15 @@
             });
             if (!res.ok) throw new Error(`User resolve failed: ${res.status}`);
             const data = await res.json();
-            const userId = data?.data?.[0]?.id;
-            if (!userId) throw new Error('User not found');
-            userIdCache.set(username, userId);
-            return userId;
+            const user = data?.data?.[0];
+            if (!user) throw new Error('User not found');
+            
+            const userData = { 
+                id: user.id, 
+                displayName: user.displayName || user.name 
+            };
+            userIdCache.set(username, userData);
+            return userData;
         }
 
         async function fetchPresence(userId) {
@@ -977,10 +988,17 @@
             const statusEl = document.querySelector(`[data-status-for="${username}"]`);
             const followersEl = document.querySelector(`[data-followers-for="${username}"]`);
             const avatarImg = document.querySelector(`[data-avatar-for="${username}"]`);
+            const displayNameEl = document.querySelector(`[data-displayname-for="${username}"]`);
             
             try {
-                const userId = await resolveUserId(username);
+                const userData = await resolveUserId(username);
+                const userId = userData.id;
                 
+                // Update Display Name if different
+                if (displayNameEl && userData.displayName) {
+                    displayNameEl.textContent = userData.displayName;
+                }
+
                 const presence = await fetchPresence(userId);
                 const isOnline = !!presence && presence.userPresenceType > 0;
 
@@ -1015,10 +1033,8 @@
                 if (followersEl) {
                     followersEl.textContent = 'Followers: —';
                 }
-                // Default failed data to offline and 0 followers for sorting
                 playerDataCache[username] = { isOnline: false, followers: 0 };
             } finally {
-                // Re-sort the DOM after this specific user's data is updated
                 sortAndReorderDOM(players);
             }
         }
@@ -1027,23 +1043,38 @@
             const grid = document.getElementById('friendsGrid');
             if (!grid) return;
 
-            // Sort logic: Online first, then by followers descending
             const sortedPlayers = [...players].sort((a, b) => {
                 const dataA = playerDataCache[a.handle] || { isOnline: false, followers: 0 };
                 const dataB = playerDataCache[b.handle] || { isOnline: false, followers: 0 };
 
-                // 1. Online status
                 if (dataA.isOnline && !dataB.isOnline) return -1;
                 if (!dataA.isOnline && dataB.isOnline) return 1;
 
-                // 2. Followers count
                 return dataB.followers - dataA.followers;
             });
 
-            // Re-append elements in the new order
             sortedPlayers.forEach(p => {
                 const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 if (card) grid.appendChild(card);
+            });
+        }
+
+        function copyUsername(event, username) {
+            event.preventDefault(); 
+            event.stopPropagation();
+            
+            navigator.clipboard.writeText(username).then(() => {
+                const handleEl = event.currentTarget;
+                const originalText = handleEl.textContent;
+                handleEl.textContent = 'Copied!';
+                handleEl.style.color = '#39ff14';
+                
+                setTimeout(() => {
+                    handleEl.textContent = originalText;
+                    handleEl.style.color = '#b0b0b0';
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
             });
         }
 
