@@ -310,6 +310,19 @@
         .section-title:first-of-type {
             margin-top: 0;
         }
+        
+        /* Queue Badge */
+        .queue-badge {
+            display: inline-block;
+            background: #0055ff;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -446,6 +459,20 @@
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
         
+        function timeAgo(isoString) {
+            if (!isoString) return null;
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins < 1) return "Just now";
+            if (diffMins < 60) return `${diffMins}m ago`;
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours}h ago`;
+            const diffDays = Math.floor(diffHours / 24);
+            return `${diffDays}d ago`;
+        }
+
         const data = {
             1: {
                 game: "DOORS",
@@ -634,7 +661,6 @@
             white: "You just need to join a Roblox Plus player."
         };
 
-        // Flatten all players for the "All" view
         const allPlayers = [];
         ['black', 'yellow', 'blue'].forEach(group => {
             friendGroups[group].forEach(p => {
@@ -956,7 +982,6 @@
 
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
             
-            // For all view, ONLY include players playing The Hollow (initial filter)
             const filteredPlayers = isAll 
                 ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) 
                 : playersToRender;
@@ -968,7 +993,6 @@
             }
 
             if (isAll) {
-                // Build the two separate grid containers
                 html += `
                     <h3 class="section-title">🎮 Playing The Hollow</h3>
                     <div class="friends-grid" id="hollowGrid"></div>
@@ -981,7 +1005,6 @@
 
             friendsBody.innerHTML = html;
 
-            // Now populate the cards
             filteredPlayers.forEach(p => {
                 const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
@@ -991,8 +1014,18 @@
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
-                if (cache.isPlayingHollow) { statusText = 'Playing The Hollow'; statusColor = '#ff7b00'; }
-                else if (cache.isOnline) { statusText = 'Online'; statusColor = '#39ff14'; }
+                if (cache.isPlayingHollow) { 
+                    statusText = `Playing The Hollow ${hollowPlayerCount !== null ? `<span class="queue-badge">${hollowPlayerCount.toLocaleString()} in game</span>` : ''}`;
+                    statusColor = '#ff7b00'; 
+                } else if (cache.isOnline) { 
+                    statusText = 'Online'; 
+                    statusColor = '#39ff14'; 
+                } else {
+                    const lastSeen = timeAgo(cache.lastOnline);
+                    if (lastSeen) {
+                        statusText = `Offline (Last online ${lastSeen})`;
+                    }
+                }
 
                 const cardHtml = `
                     <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card" data-username="${p.handle}">
@@ -1024,7 +1057,6 @@
                 }
             });
 
-            // Load avatars from cache
             filteredPlayers.forEach(p => {
                 if (playerDataCache[p.handle]?.avatarUrl) {
                     const img = document.querySelector(`[data-avatar-for="${p.handle}"]`);
@@ -1032,7 +1064,6 @@
                 }
             });
             
-            // Initial sort
             if (isAll) {
                 const hollowGrid = document.getElementById('hollowGrid');
                 const onlineGrid = document.getElementById('onlineGrid');
@@ -1052,8 +1083,8 @@
         const playerDataCache = {}; 
         let allUserIds = [];
         let isPolling = false;
+        let hollowPlayerCount = null;
 
-        // 1. FAST INITIALIZATION (Parallel Load)
         async function initFriendSystem() {
             const allUsernames = allPlayers.map(p => p.handle);
             
@@ -1072,7 +1103,7 @@
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = { isOnline: false, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null };
+                        playerDataCache[actualHandle] = { isOnline: false, isPlayingHollow: false, followers: 0, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null };
                     }
                 });
 
@@ -1083,16 +1114,34 @@
                 // Start fetching followers and avatars slowly in background
                 setInterval(fetchBackgroundData, 300);
                 
+                // Fetch Hollow stats every 10 seconds
+                fetchHollowPlayerCount();
+                setInterval(fetchHollowPlayerCount, 10000);
+                
             } catch (e) { console.warn("Init failed", e); }
         }
 
-        // 2. BULK PRESENCE POLLING (Every 1 Second)
+        async function fetchHollowPlayerCount() {
+            try {
+                const detailsRes = await fetch(`https://games.rotunnel.com/v1/games/multiget-place-details?placeIds=${THE_HOLLOW_PLACE_ID}`);
+                const detailsData = await detailsRes.json();
+                if (detailsData && detailsData[0] && detailsData[0].universeId) {
+                    const universeId = detailsData[0].universeId;
+                    const statsRes = await fetch(`https://games.rotunnel.com/v1/games?universeIds=${universeId}`);
+                    const statsData = await statsRes.json();
+                    if (statsData && statsData.data && statsData.data[0]) {
+                        hollowPlayerCount = statsData.data[0].playing;
+                        updateUILive(); // Update UI immediately with new count
+                    }
+                }
+            } catch (e) { console.warn("Failed to fetch Hollow stats", e); }
+        }
+
         async function pollPresence() {
             if (allUserIds.length === 0 || isPolling) return;
             isPolling = true;
             
             try {
-                // Added cache-busting timestamp to force fresh data
                 const res = await fetch(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1108,16 +1157,18 @@
                 data.userPresences.forEach(p => {
                     presenceMap[p.userId] = {
                         isOnline: p.userPresenceType > 0,
-                        isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID || p.rootPlaceId === THE_HOLLOW_PLACE_ID
+                        isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID || p.rootPlaceId === THE_HOLLOW_PLACE_ID,
+                        lastOnline: p.lastOnline
                     };
                 });
 
                 for (const [uName, info] of userIdCache.entries()) {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (actualHandle && playerDataCache[actualHandle]) {
-                        const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false };
+                        const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false, lastOnline: null };
                         playerDataCache[actualHandle].isOnline = pData.isOnline;
                         playerDataCache[actualHandle].isPlayingHollow = pData.isPlayingHollow;
+                        playerDataCache[actualHandle].lastOnline = pData.lastOnline;
                     }
                 }
                 
@@ -1127,7 +1178,6 @@
             isPolling = false;
         }
 
-        // 3. BACKGROUND FETCHING (Avatars & Followers)
         let queueIndex = 0;
         async function fetchBackgroundData() {
             if (allPlayers.length === 0) return;
@@ -1160,12 +1210,11 @@
             }
         }
 
-        // 4. LIVE UI UPDATER
         function updateUILive() {
             if (!friendsOverlay.classList.contains('active')) return;
             
             const title = friendsTitle.textContent;
-            if (title.includes('Select')) return; // On main menu
+            if (title.includes('Select')) return;
 
             const isAll = title.includes('All');
             let filterGroup = 'all';
@@ -1173,14 +1222,13 @@
                 if (title.includes('Black')) filterGroup = 'black';
                 else if (title.includes('Yellow')) filterGroup = 'yellow';
                 else if (title.includes('Blue')) filterGroup = 'blue';
-                else if (title.includes('White')) return; // No dynamic updates for white
+                else if (title.includes('White')) return;
             }
 
             const hollowGrid = document.getElementById('hollowGrid');
             const onlineGrid = document.getElementById('onlineGrid');
             const normalGrid = document.getElementById('friendsGrid');
 
-            // FIX: If grids are missing (e.g., initially showed "No one online"), we must re-render
             if (!hollowGrid && !onlineGrid && !normalGrid) {
                 renderFriendList(isAll ? 'all' : filterGroup);
                 return;
@@ -1197,29 +1245,26 @@
                 const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 const statusEl = card ? card.querySelector(`[data-status-for="${p.handle}"]`) : null;
 
-                // Update status text and color
                 if (statusEl) {
                     if (cache.isPlayingHollow) {
-                        statusEl.textContent = 'Playing The Hollow';
+                        statusEl.innerHTML = `Playing The Hollow ${hollowPlayerCount !== null ? `<span class="queue-badge">${hollowPlayerCount.toLocaleString()} in game</span>` : ''}`;
                         statusEl.style.color = '#ff7b00';
                     } else if (cache.isOnline) {
                         statusEl.textContent = 'Online';
                         statusEl.style.color = '#39ff14';
                     } else {
-                        statusEl.textContent = 'Offline';
+                        const lastSeen = timeAgo(cache.lastOnline);
+                        statusEl.textContent = lastSeen ? `Offline (Last online ${lastSeen})` : 'Offline';
                         statusEl.style.color = '#888';
                     }
                 }
 
                 if (isAll) {
                     if (cache.isOnline && !card) {
-                        // Player came online, we need to re-render to include them
                         needsRerenderAll = true;
                     } else if (!cache.isOnline && card) {
-                        // Player went offline, remove them
                         card.remove();
                     } else if (cache.isOnline && card) {
-                        // Move between grids if needed
                         const isInHollowGrid = hollowGrid && hollowGrid.contains(card);
                         const isInOnlineGrid = onlineGrid && onlineGrid.contains(card);
                         
@@ -1237,7 +1282,6 @@
                 return;
             }
 
-            // Sorting
             if (isAll) {
                 if (hollowGrid) {
                     const playersInHollow = currentPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow);
