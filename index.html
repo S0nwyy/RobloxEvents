@@ -926,10 +926,9 @@
         }
 
         // ==================================================================
-        // PRESENCE POLLING – Online if the user is online in ANY game
+        // PRESENCE POLLING – Fixed to use corsproxy.io (RoProxy lacks Presence)
         // ==================================================================
         const USERS_PROXY = 'https://users.roproxy.com';
-        const PRESENCE_PROXY = 'https://presence.roproxy.com';
         const presencePollTimers = new Map();
         const userIdCache = new Map();
 
@@ -950,7 +949,11 @@
         }
 
         async function fetchPresence(userId) {
-            const res = await fetch(`${PRESENCE_PROXY}/v1/presence/users`, {
+            // RoProxy does not support the Presence API branch, so we use corsproxy.io.
+            const targetUrl = 'https://presence.roblox.com/v1/presence/users';
+            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+
+            const res = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userIds: [userId] })
