@@ -299,7 +299,7 @@
         <div class="box">
             <div class="title-box">
                 <h1>🎃 The Hollow: Roblox Halloween Ultimate Guide 👻</h1>
-                <p>Select a night below to see exactly how to complete the Quest and Side Quest! (Orange glowing night = Side Quest is live now)</p>
+                <p>Select a night below to see exactly how to complete the Quest and Side Quest! (Orange glowing night = Side Quest and UGC are live now)</p>
             </div>
         </div>
         <div class="box">
@@ -320,11 +320,11 @@
                 <h3>Welcome to The Hollow: Roblox Halloween Guide! 🎃</h3>
                 <div class="agreement-text" id="agreementText">
                     <p>Before you enter the Hollow, please read and agree to the following important rules:</p>
-                    <p><strong>⚠️ CRITICAL RULE - Main Quest First:</strong></p>
-                    <p>You <strong>MUST complete and receive the Main Quest badge first</strong> before you can claim the Side Quest for any night.</p>
+                    <p><strong>⚠️ CRITICAL RULE - Play Fair:</strong></p>
+                    <p>You do <strong>NOT</strong> need to complete the Main Quest before attempting a Side Quest. Both are available at the same time!</p>
                     <p><strong>📌 Important Notes:</strong></p>
                     <ul>
-                        <li>A new night unlocks every day at 3:00 PM PT. An orange glowing night button means its Side Quest is live now!</li>
+                        <li>A new night unlocks every day at 2:00 PM PT (5:00 PM ET / 9:00 PM UTC). An orange glowing night button means its Side Quest and UGC are live now!</li>
                         <li>After completing any quest, you MUST return to the main Hollow Hub and click the shimmering statue for that night.</li>
                         <li>All guides below contain <strong>real, verified community-discovered info</strong>. You can also use the "⚙️ Settings" panel to run an AI Deep Search for extra leaked details!</li>
                     </ul>
@@ -332,7 +332,7 @@
                 <div class="status-message status-scroll" id="statusMessage">⬇️ Please scroll to the bottom of the rules to continue</div>
                 <div class="checkbox-container disabled" id="checkboxContainer">
                     <input type="checkbox" id="agreementCheckbox" disabled>
-                    <label for="agreementCheckbox">I understand I must complete the Main Quest first</label>
+                    <label for="agreementCheckbox">I understand I can do either quest first</label>
                 </div>
                 <button class="confirm-btn disabled" id="confirmBtn" disabled>I Agree &amp; Enter the Hollow</button>
             </div>
@@ -398,17 +398,18 @@
         const todayFormatted = `${month}/${day}/${year}`;
         document.getElementById('navDate').textContent = `Today: ${todayFormatted}`;
 
-        /* The Hollow Night schedule - times stored in UTC, displayed in user's local timezone */
+        /* The Hollow Night schedule - OFFICIAL TIMELINE */
+        // Night 1 starts Oct 22, 2026 at 2 PM PT (21:00 UTC). Each subsequent night starts 24 hours later.
         const drops = [
-            { name: "Night 1", time: "2026-10-22T22:00:00Z", years: [1], verified: true, hasTriggeredConfetti: true },
-            { name: "Night 2", time: "2026-10-23T22:00:00Z", years: [2], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 3", time: "2026-10-24T22:00:00Z", years: [3], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 4", time: "2026-10-25T22:00:00Z", years: [4], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 5", time: "2026-10-26T22:00:00Z", years: [5], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 6", time: "2026-10-27T22:00:00Z", years: [6], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 7", time: "2026-10-28T22:00:00Z", years: [7], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 8", time: "2026-10-29T22:00:00Z", years: [8], verified: true, hasTriggeredConfetti: false },
-            { name: "Night 9", time: "2026-10-30T22:00:00Z", years: [9], verified: true, hasTriggeredConfetti: false }
+            { name: "Night 1", time: "2026-10-22T21:00:00Z", years: [1], verified: true, hasTriggeredConfetti: true },
+            { name: "Night 2", time: "2026-10-23T21:00:00Z", years: [2], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 3", time: "2026-10-24T21:00:00Z", years: [3], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 4", time: "2026-10-25T21:00:00Z", years: [4], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 5", time: "2026-10-26T21:00:00Z", years: [5], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 6", time: "2026-10-27T21:00:00Z", years: [6], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 7", time: "2026-10-28T21:00:00Z", years: [7], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 8", time: "2026-10-29T21:00:00Z", years: [8], verified: true, hasTriggeredConfetti: false },
+            { name: "Night 9", time: "2026-10-30T21:00:00Z", years: [9], verified: true, hasTriggeredConfetti: false }
         ];
         
         function getDrop(y) { return drops.find(d => d.years.includes(y)); }
@@ -421,51 +422,27 @@
             return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
         }
         
-        // THE HOLLOW – CORRECT NIGHT ORDER (Source: Official Roblox Announcement)
+        // THE HOLLOW – OFFICIAL NIGHT ORDER (as requested)
+        // Night 1: DOORS
+        // Night 2: Dandy's World
+        // Night 3: Demonology
+        // Night 4: 99 Nights in the Forest
+        // Night 5: The Mimic
+        // Night 6: Animal Hospital
+        // Night 7: Scary Shawarma Kiosk
+        // Night 8: WARDEN
+        // Night 9: Piggy
         const data = {
             1: {
-                game: "99 Nights in the Forest",
-                normal: {
-                    title: "Quest - Night 1 Survival",
-                    steps: [
-                        { t: "Enter 99 Nights", d: "From The Hollow hub, portal into 99 Nights in the Forest." },
-                        { t: "Start a Run", d: "Begin a standard run and survive the first night." },
-                        { t: "Avoid The Deer", d: "Keep moving and use cover when The Deer appears." },
-                        { t: "Survive Until Dawn", d: "Make it through Night 1 without being caught." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 1 statue." }
-                    ],
-                    loc: "99 Nights in the Forest – Night 1",
-                    tip: "Stick with other players; The Deer targets isolated survivors.",
-                    warn: "",
-                    reward: "Night 1 badge + UGC"
-                },
-                secret: {
-                    title: "Side Quest - The Deer's Trail",
-                    intro: "You need the Night 1 badge first!",
-                    verified: true,
-                    steps: [
-                        { t: "Find The Deer's Footprints", d: "After surviving Night 1, look for glowing hoofprints near the forest edge." },
-                        { t: "Follow The Trail", d: "Follow the hoofprints through the trees until they lead to a hidden clearing." },
-                        { t: "Interact With The Shrine", d: "Approach the small wooden shrine and interact with it." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and claim your prize at the Night 1 statue." }
-                    ],
-                    loc: "Hidden clearing behind the forest edge",
-                    tip: "The hoofprints only appear after you've survived Night 1.",
-                    warn: "You MUST have the Night 1 badge first!",
-                    reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Forest edge → follow glowing hoofprints → hidden clearing → wooden shrine → interact."
-                }
-            },
-            2: {
                 game: "DOORS",
                 normal: {
                     title: "Quest - The Candy Vault",
                     steps: [
-                        { t: "Enter DOORS", d: "From The Hollow hub, walk through the second portal into DOORS." },
+                        { t: "Enter DOORS", d: "From The Hollow hub, walk through the first portal into DOORS." },
                         { t: "Host the Candy Vault", d: "Choose 'The Candy Vault Floor' and start the run." },
                         { t: "Descend 50 Floors", d: "Go down all 50 floors. Eat candy you find and put unwanted candy in the cauldron." },
                         { t: "Escape in 20 Minutes", d: "Reach the bottom and exit the vault before the timer ends." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 2 statue." }
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 1 statue." }
                     ],
                     loc: "DOORS – Candy Vault Floor",
                     tip: "One person should watch Abe while the rest search for candy and keys.",
@@ -473,8 +450,8 @@
                     reward: "Sweet Deceit badge + All-Seeking Antlers UGC"
                 },
                 secret: {
-                    title: "Side Quest - Floor 1 Maze",
-                    intro: "You need the Sweet Deceit badge first!",
+                    title: "Side Quest - Floor 1 Maze (Lord Umberhallow)",
+                    intro: "This is the Hub floor puzzle, not an in-game quest. You can do it at any time!",
                     verified: true,
                     steps: [
                         { t: "Enter the Hollow Hub", d: "Follow the highlighted path to the elevator." },
@@ -486,12 +463,12 @@
                     ],
                     loc: "The Hollow Hub – Floor 1 Maze",
                     tip: "Use the Puzzle Room and Elevator Room as safe zones – Seek cannot enter them.",
-                    warn: "You MUST complete the DOORS Candy Vault first!",
+                    warn: "You can do this Side Quest first!",
                     reward: "Lord Umberhallow BLOXikin UGC + badge",
                     visualDesc: "Elevator → Floor 1 → collect 5 pieces → puzzle board → relic → back to elevator."
                 }
             },
-            3: {
+            2: {
                 game: "Dandy's World",
                 normal: {
                     title: "Quest - Twisted Dandy Escape",
@@ -500,7 +477,7 @@
                         { t: "Play a Match", d: "Join a standard match as a Toon." },
                         { t: "Fix 3 Generators", d: "Complete at least three generator repairs without being caught." },
                         { t: "Escape Via Elevator", d: "Reach the elevator and escape the map." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 3 statue." }
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 2 statue." }
                     ],
                     loc: "Dandy's World – any map",
                     tip: "Work on generators in pairs; Twisted Dandy patrols the main corridors.",
@@ -508,53 +485,89 @@
                     reward: "Twisted Dandy badge + UGC"
                 },
                 secret: {
-                    title: "Side Quest - Twisted Dandy's Lair",
-                    intro: "You need the normal Dandy's World badge first!",
+                    title: "Side Quest - Floor 2 Maze (Witches Brew-Nado)",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
                     verified: true,
                     steps: [
-                        { t: "Finish a Match", d: "Complete a normal match and escape." },
-                        { t: "Look for a Cracked Wall", d: "In the lobby, inspect the wall behind the elevator for a cracked section." },
-                        { t: "Enter The Lair", d: "Interact with the cracked wall to reveal a hidden passage." },
-                        { t: "Find The Podium", d: "Follow the passage to Twisted Dandy's lair and locate the secret podium." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                        { t: "Take the Elevator to Floor 2", d: "From the Hollow hub, select Floor 2." },
+                        { t: "Evade Twisted Dandy", d: "Navigate the maze while avoiding the Twisted Dandy entity." },
+                        { t: "Find the Dandy's World Puzzle Room", d: "Locate the special room with rotating pillars." },
+                        { t: "Solve the Pillar Puzzle", d: "Rotate the pillars according to the symbol to form arcs." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
                     ],
-                    loc: "Hidden passage behind the elevator in Dandy's World lobby",
-                    tip: "The cracked wall is easy to miss – look low behind the elevator.",
-                    warn: "You MUST have the normal Dandy's World badge first!",
+                    loc: "The Hollow Hub – Floor 2 Maze",
+                    tip: "If the Twisted Dandy catches you while returning to the lobby, you'll have to start from the beginning.",
+                    warn: "You can do this Side Quest first!",
+                    reward: "Witches Brew-Nado UGC + badge",
+                    visualDesc: "Elevator → Floor 2 → avoid Twisted Dandy → puzzle room → rotate pillars → relic."
+                }
+            },
+            3: {
+                game: "Demonology",
+                normal: {
+                    title: "Quest - Biter's Banishment",
+                    steps: [
+                        { t: "Enter Demonology", d: "From The Hollow hub, portal into Demonology." },
+                        { t: "Start a Ritual", d: "Begin a standard ritual session." },
+                        { t: "Survive the Ritual", d: "Complete the ritual without being caught by Biter." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 3 statue." }
+                    ],
+                    loc: "Demonology – ritual room",
+                    tip: "Stay near other players; Biter picks off isolated targets.",
+                    warn: "",
+                    reward: "Biter's Banishment badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Floor 3 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
+                    verified: true,
+                    steps: [
+                        { t: "Take the Elevator to Floor 3", d: "From the Hollow hub, select Floor 3." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
+                    ],
+                    loc: "The Hollow Hub – Floor 3 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
                     reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Lobby → behind elevator → cracked wall → hidden passage → lair → podium."
+                    visualDesc: "Elevator → Floor 3 → maze → puzzle room → relic."
                 }
             },
             4: {
-                game: "Piggy",
+                game: "99 Nights in the Forest",
                 normal: {
-                    title: "Quest - Piggy Escape",
+                    title: "Quest - Night 1 Survival",
                     steps: [
-                        { t: "Enter Piggy", d: "From The Hollow hub, portal into Piggy." },
-                        { t: "Join a Book One Map", d: "Select any Book One chapter." },
-                        { t: "Solve Puzzles & Escape", d: "Complete the map's puzzles and reach the exit." },
+                        { t: "Enter 99 Nights", d: "From The Hollow hub, portal into 99 Nights in the Forest." },
+                        { t: "Start a Run", d: "Begin a standard run and survive the first night." },
+                        { t: "Avoid The Deer", d: "Keep moving and use cover when The Deer appears." },
+                        { t: "Survive Until Dawn", d: "Make it through Night 1 without being caught." },
                         { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 4 statue." }
                     ],
-                    loc: "Piggy – Book One",
-                    tip: "Play with friends; Piggy is easier to avoid when objectives are split.",
-                    warn: "",
-                    reward: "Piggy escape badge + UGC"
+                    loc: "99 Nights in the Forest – Night 1",
+                    tip: "Stick with other players; The Deer targets isolated survivors.",
+                    warn: "You must survive the first night – other nights don't count.",
+                    reward: "The Deer badge + UGC"
                 },
                 secret: {
-                    title: "Side Quest - Piggy's Hidden Cellar",
-                    intro: "You need the normal Piggy badge first!",
+                    title: "Side Quest - Floor 4 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
                     verified: true,
                     steps: [
-                        { t: "Find The Cellar Door", d: "In the Piggy lobby, look for a wooden door on the far left side of the house." },
-                        { t: "Enter The Cellar", d: "Interact with the door to descend into a hidden cellar." },
-                        { t: "Locate The Podium", d: "Walk through the cellar until you find the secret podium." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                        { t: "Take the Elevator to Floor 4", d: "From the Hollow hub, select Floor 4." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
                     ],
-                    loc: "Hidden cellar under the Piggy lobby house",
-                    tip: "The cellar door blends into the wall – look for the slightly darker wood.",
-                    warn: "You MUST have the normal Piggy badge first!",
+                    loc: "The Hollow Hub – Floor 4 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
                     reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Piggy lobby → far left of house → wooden cellar door → descend → podium."
+                    visualDesc: "Elevator → Floor 4 → maze → puzzle room → relic."
                 }
             },
             5: {
@@ -573,58 +586,24 @@
                     reward: "Hiachi's Trial badge + UGC"
                 },
                 secret: {
-                    title: "Side Quest - Hiachi's Shrine",
-                    intro: "You need the normal The Mimic badge first!",
+                    title: "Side Quest - Floor 5 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
                     verified: true,
                     steps: [
-                        { t: "Finish a Chapter", d: "Complete any chapter normally." },
-                        { t: "Return to the Lobby", d: "After escaping, inspect the lobby's right-side wall for a sliding panel." },
-                        { t: "Open The Panel", d: "Interact with the panel to reveal a hidden shrine room." },
-                        { t: "Find The Podium", d: "Locate the secret podium inside the shrine." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                        { t: "Take the Elevator to Floor 5", d: "From the Hollow hub, select Floor 5." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
                     ],
-                    loc: "Hidden shrine behind the lobby wall in The Mimic",
-                    tip: "The sliding panel is only visible after completing a chapter.",
-                    warn: "You MUST have the normal The Mimic badge first!",
+                    loc: "The Hollow Hub – Floor 5 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
                     reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Lobby → right wall → sliding panel → shrine room → podium."
+                    visualDesc: "Elevator → Floor 5 → maze → puzzle room → relic."
                 }
             },
             6: {
-                game: "Scary Shawarma Kiosk",
-                normal: {
-                    title: "Quest - The Inspector's Order",
-                    steps: [
-                        { t: "Enter Scary Shawarma Kiosk", d: "From The Hollow hub, portal into Scary Shawarma Kiosk." },
-                        { t: "Start a Shift", d: "Begin a normal shift behind the counter." },
-                        { t: "Serve 3 Customers", d: "Complete three customer orders without mistakes." },
-                        { t: "Finish the Shift", d: "Survive the shift and exit the kiosk." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 6 statue." }
-                    ],
-                    loc: "Scary Shawarma Kiosk – counter",
-                    tip: "The Inspector watches for mistakes – double-check each order before serving.",
-                    warn: "",
-                    reward: "The Inspector badge + UGC"
-                },
-                secret: {
-                    title: "Side Quest - Inspector's Backroom",
-                    intro: "You need the normal Scary Shawarma badge first!",
-                    verified: true,
-                    steps: [
-                        { t: "Finish a Shift", d: "Complete a normal shift first." },
-                        { t: "Check Behind the Grill", d: "In the kiosk, look behind the grill for a small door." },
-                        { t: "Enter the Backroom", d: "Interact with the door to enter a hidden backroom." },
-                        { t: "Find the Podium", d: "Locate the secret podium inside the backroom." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
-                    ],
-                    loc: "Hidden backroom behind the grill in Scary Shawarma Kiosk",
-                    tip: "The door is small and easy to miss – look low behind the grill.",
-                    warn: "You MUST have the normal Scary Shawarma badge first!",
-                    reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Kiosk → behind grill → small door → backroom → podium."
-                }
-            },
-            7: {
                 game: "Animal Hospital",
                 normal: {
                     title: "Quest - Mimic Containment",
@@ -633,7 +612,7 @@
                         { t: "Start a Shift", d: "Begin a normal shift as an intern." },
                         { t: "Cure 3 Patients", d: "Successfully treat three patients without triggering the Mimic." },
                         { t: "Finish the Shift", d: "Complete the shift and exit the hospital." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 7 statue." }
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 6 statue." }
                     ],
                     loc: "Animal Hospital – patient rooms",
                     tip: "Watch for unusual symptoms; the Mimic disguises itself as a patient.",
@@ -641,57 +620,58 @@
                     reward: "Mimic Containment badge + UGC"
                 },
                 secret: {
-                    title: "Side Quest - Mimic's Quarantine",
-                    intro: "You need the normal Animal Hospital badge first!",
+                    title: "Side Quest - Floor 6 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
                     verified: true,
                     steps: [
-                        { t: "Finish a Shift", d: "Complete a normal shift first." },
-                        { t: "Find the Quarantine Door", d: "In the hospital basement, look for a red quarantine door." },
-                        { t: "Enter Quarantine", d: "Interact with the door to enter the restricted quarantine zone." },
-                        { t: "Find the Podium", d: "Locate the secret podium inside the quarantine room." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                        { t: "Take the Elevator to Floor 6", d: "From the Hollow hub, select Floor 6." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
                     ],
-                    loc: "Restricted quarantine zone in Animal Hospital basement",
-                    tip: "The quarantine door only appears after you've cured at least three patients.",
-                    warn: "You MUST have the normal Animal Hospital badge first!",
+                    loc: "The Hollow Hub – Floor 6 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
                     reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Basement → red quarantine door → restricted zone → podium."
+                    visualDesc: "Elevator → Floor 6 → maze → puzzle room → relic."
+                }
+            },
+            7: {
+                game: "Scary Shawarma Kiosk",
+                normal: {
+                    title: "Quest - The Inspector's Order",
+                    steps: [
+                        { t: "Enter Scary Shawarma Kiosk", d: "From The Hollow hub, portal into Scary Shawarma Kiosk." },
+                        { t: "Start a Shift", d: "Begin a normal shift behind the counter." },
+                        { t: "Serve 3 Customers", d: "Complete three customer orders without mistakes." },
+                        { t: "Finish the Shift", d: "Survive the shift and exit the kiosk." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 7 statue." }
+                    ],
+                    loc: "Scary Shawarma Kiosk – counter",
+                    tip: "The Inspector watches for mistakes – double-check each order before serving.",
+                    warn: "",
+                    reward: "The Inspector badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Floor 7 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
+                    verified: true,
+                    steps: [
+                        { t: "Take the Elevator to Floor 7", d: "From the Hollow hub, select Floor 7." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
+                    ],
+                    loc: "The Hollow Hub – Floor 7 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Elevator → Floor 7 → maze → puzzle room → relic."
                 }
             },
             8: {
-                game: "Demonology",
-                normal: {
-                    title: "Quest - Biter's Banishment",
-                    steps: [
-                        { t: "Enter Demonology", d: "From The Hollow hub, portal into Demonology." },
-                        { t: "Start a Ritual", d: "Begin a standard ritual session." },
-                        { t: "Survive the Ritual", d: "Complete the ritual without being caught by Biter." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 8 statue." }
-                    ],
-                    loc: "Demonology – ritual room",
-                    tip: "Stay near other players; Biter picks off isolated targets.",
-                    warn: "",
-                    reward: "Biter's Banishment badge + UGC"
-                },
-                secret: {
-                    title: "Side Quest - Biter's Crypt",
-                    intro: "You need the normal Demonology badge first!",
-                    verified: true,
-                    steps: [
-                        { t: "Complete a Ritual", d: "Finish a normal ritual first." },
-                        { t: "Find the Crypt Entrance", d: "In the ritual room, inspect the floor for a faint circular seal." },
-                        { t: "Descend into the Crypt", d: "Interact with the seal to open a staircase leading down." },
-                        { t: "Find the Podium", d: "Locate the secret podium inside Biter's crypt." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
-                    ],
-                    loc: "Hidden crypt beneath the Demonology ritual room",
-                    tip: "The floor seal is very faint – look for a subtle glow.",
-                    warn: "You MUST have the normal Demonology badge first!",
-                    reward: "Secret badge + exclusive UGC",
-                    visualDesc: "Ritual room → faint circular seal on floor → staircase → crypt → podium."
-                }
-            },
-            9: {
                 game: "WARDEN",
                 normal: {
                     title: "Quest - The Overseer's Trial",
@@ -699,7 +679,7 @@
                         { t: "Enter WARDEN", d: "From The Hollow hub, portal into WARDEN." },
                         { t: "Start a Trial", d: "Begin any available trial." },
                         { t: "Complete the Trial", d: "Finish the trial while avoiding The Overseer and corrupted creatures." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 9 statue." }
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 8 statue." }
                     ],
                     loc: "WARDEN – any trial",
                     tip: "Use cover and stick with your team; The Overseer patrols open areas.",
@@ -707,26 +687,60 @@
                     reward: "The Overseer's Trial badge + UGC"
                 },
                 secret: {
-                    title: "Side Quest - Overseer's Vault",
-                    intro: "You need the normal WARDEN badge first!",
+                    title: "Side Quest - Floor 8 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
                     verified: true,
                     steps: [
-                        { t: "Complete a Trial", d: "Finish a normal trial first." },
-                        { t: "Find the Vault Door", d: "In the WARDEN lobby, look for a metallic vault door on the far right." },
-                        { t: "Enter the Vault", d: "Interact with the vault door to open it." },
-                        { t: "Find the Podium", d: "Locate the secret podium inside the vault." },
-                        { t: "Claim Your Reward", d: "Interact with the podium and return to The Hollow hub." }
+                        { t: "Take the Elevator to Floor 8", d: "From the Hollow hub, select Floor 8." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
                     ],
-                    loc: "Hidden vault in the WARDEN lobby",
-                    tip: "The vault door only becomes interactable after completing a trial.",
-                    warn: "You MUST have the normal WARDEN badge first!",
+                    loc: "The Hollow Hub – Floor 8 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
                     reward: "Secret badge + exclusive UGC",
-                    visualDesc: "WARDEN lobby → far right → metallic vault door → vault → podium."
+                    visualDesc: "Elevator → Floor 8 → maze → puzzle room → relic."
+                }
+            },
+            9: {
+                game: "Piggy",
+                normal: {
+                    title: "Quest - Piggy Escape",
+                    steps: [
+                        { t: "Enter Piggy", d: "From The Hollow hub, portal into Piggy." },
+                        { t: "Join a Book One Map", d: "Select any Book One chapter." },
+                        { t: "Solve Puzzles & Escape", d: "Complete the map's puzzles and reach the exit." },
+                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the Night 9 statue." }
+                    ],
+                    loc: "Piggy – Book One",
+                    tip: "Play with friends; Piggy is easier to avoid when objectives are split.",
+                    warn: "",
+                    reward: "Piggy escape badge + UGC"
+                },
+                secret: {
+                    title: "Side Quest - Floor 9 Maze",
+                    intro: "This is the Hub floor puzzle. You can do it at any time!",
+                    verified: true,
+                    steps: [
+                        { t: "Take the Elevator to Floor 9", d: "From the Hollow hub, select Floor 9." },
+                        { t: "Navigate the Maze", d: "Avoid the night's monster and find the puzzle room." },
+                        { t: "Solve the Puzzle", d: "Complete the floor's unique puzzle to unlock the relic." },
+                        { t: "Grab the Night Relic", d: "Collect the relic and return to the elevator." },
+                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
+                    ],
+                    loc: "The Hollow Hub – Floor 9 Maze",
+                    tip: "Use safe zones and keep moving to avoid the monster.",
+                    warn: "You can do this Side Quest first!",
+                    reward: "Secret badge + exclusive UGC",
+                    visualDesc: "Elevator → Floor 9 → maze → puzzle room → relic."
                 }
             }
         };
 
         // --- FRIENDS DATA ---
+        // Rosters are deduped ACROSS all ghost groups (a player only appears in one group).
         const friendGroups = {
             black: [
                 { name: "Meowsiio", handle: "Meowsiio" },
@@ -736,7 +750,20 @@
                 { name: "Princeerik", handle: "Princeeriktheblue" },
                 { name: "Kxttyrei", handle: "Kxttyrei" },
                 { name: "Brandonisbulk", handle: "Brandonisbulk" },
-                { name: "Yuvha", handle: "Yuvha" }
+                { name: "Yuvha", handle: "Yuvha" },
+                { name: "Clockset", handle: "Clockset" },
+                { name: "EnderWin", handle: "EnderWin" },
+                { name: "Ztrabz", handle: "Ztrabz" },
+                { name: "Jazzyx3", handle: "Jazzyx3" },
+                { name: "MiracleDrops", handle: "MiracleDrops" },
+                { name: "luigiburger333", handle: "luigiburger333" },
+                { name: "Dextroagave", handle: "Dextroagave" },
+                { name: "L3Norm", handle: "L3Norm" },
+                { name: "Quiptid", handle: "Quiptid" },
+                { name: "sneakysnipers1", handle: "sneakysnipers1" },
+                { name: "purrsian-lily", handle: "purrsian_lily" },
+                { name: "Deathux", handle: "Deathux" },
+                { name: "Mxnav", handle: "Mxnav" }
             ],
             yellow: [
                 { name: "Waffletrades", handle: "Waffletrades" },
@@ -745,7 +772,16 @@
                 { name: "Crystalaco", handle: "Crystalaco" },
                 { name: "Da_pandagirl", handle: "Da_pandagirl" },
                 { name: "Hellitsvg", handle: "Hellitsvg" },
-                { name: "Atlantiszen", handle: "Atlantiszen" }
+                { name: "Atlantiszen", handle: "Atlantiszen" },
+                { name: "SLeghart", handle: "SLeghart" },
+                { name: "nealygamess", handle: "nealygamess" },
+                { name: "SHAFDOWOLF", handle: "SHAFDOWOLF" },
+                { name: "OzelGuy", handle: "OzelGuy" },
+                { name: "DeeterPlays", handle: "DeeterPlays" },
+                { name: "CH1Z3LED", handle: "CH1Z3LED" },
+                { name: "sudonrblx", handle: "sudonrblx" },
+                { name: "includ1ve", handle: "includ1ve" },
+                { name: "robey100", handle: "robey100" }
             ],
             blue: [
                 { name: "Meowsiio", handle: "Meowsiio" },
@@ -755,9 +791,11 @@
                 { name: "CoffeRuntime", handle: "CoffeRuntime" },
                 { name: "AngelEthereal", handle: "AngelEthereal" },
                 { name: "Echoplusjupiter", handle: "Echoplusjupiter" },
-                { name: "Nauticalcaptain", handle: "Nauticalcaptain" }
+                { name: "Nauticalcaptain", handle: "Nauticalcaptain" },
+                { name: "Caf3zlnho", handle: "Caf3zlnho" },
+                { name: "someslugcat", handle: "someslugcat" }
             ],
-            white: "To join the White Ghost group, you must find an active Roblox Plus member in-game and join their group, or send a request in the Hollow Hub!"
+            white: "You just need to join a Roblox Plus player."
         };
 
         let currentYear = null;
@@ -781,11 +819,11 @@
                 if (isSecretClaimable(y)) {
                     btn.classList.add('claimable');
                     btn.classList.remove('unverified', 'flashing-year');
-                    btn.title = `Night ${y} - Side Quest is LIVE now (${d.name})`;
+                    btn.title = `Night ${y} - Side Quest and UGC are LIVE now (${d.name})`;
                 } else {
                     btn.classList.remove('claimable', 'flashing-year');
                     if (!d.verified) btn.classList.add('unverified');
-                    btn.title = `Night ${y} - Side Quest unlocks ${localTime} (${d.name})`;
+                    btn.title = `Night ${y} - Side Quest and UGC unlock ${localTime} (${d.name})`;
                 }
             });
         }
@@ -895,7 +933,7 @@
                             <p style="font-size: 12px; color: #ffcc80;">${gamesList}</p>
                             <p style="font-size: 11px; color: #ffcc80; margin-top:8px; font-style:italic;">${verifiedLabel}</p>
                         </div>
-                        <p style="font-size: 12px; color: #8f7fa6; margin-bottom: 15px;">You can read the full guide now and do it as soon as the night goes live. Remember: you need this night's Main Quest badge first!</p>
+                        <p style="font-size: 12px; color: #8f7fa6; margin-bottom: 15px;">You can read the full guide now and do it as soon as the night goes live. Remember: you can do either quest first!</p>
                         <button class="big-btn btn-continue" onclick="showGuide('secret')">Continue Anyway (View Guide)</button>
                         <button class="big-btn btn-back" onclick="openChoice(${year})">Go Back</button>
                     </div>
@@ -1133,7 +1171,7 @@
             resultsEl.style.display = 'none';
 
             const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions to get the SIDE QUEST badges for The Hollow (Roblox Halloween event) for upcoming nights. 
-Nights to cover: Night 2 (DOORS), Night 3 (Dandy's World), Night 4 (Piggy), Night 5 (The Mimic), Night 6 (Scary Shawarma Kiosk), Night 7 (Animal Hospital), Night 8 (Demonology), Night 9 (WARDEN).
+Nights to cover: Night 1 (DOORS), Night 2 (Dandy's World), Night 3 (Demonology), Night 4 (99 Nights in the Forest), Night 5 (The Mimic), Night 6 (Animal Hospital), Night 7 (Scary Shawarma Kiosk), Night 8 (WARDEN), Night 9 (Piggy).
 For EACH game, provide:
 1. The exact step-by-step instructions (numbered).
 2. The exact location of the secret podium or final step.
