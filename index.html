@@ -310,20 +310,6 @@
         .section-title:first-of-type {
             margin-top: 0;
         }
-        
-        /* Blue Queue Badge */
-        .queue-badge {
-            display: inline-block;
-            background: #335FFF;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 8px;
-            margin-left: 6px;
-            vertical-align: middle;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
     </style>
 </head>
 <body>
@@ -1016,7 +1002,7 @@
                 let statusText = 'Offline';
                 let statusColor = '#888';
                 if (cache.isPlayingHollow) { 
-                    statusText = `Playing The Hollow ${hollowPlayerCount !== null ? `<span class="queue-badge">${hollowPlayerCount.toLocaleString()} in game</span>` : ''}`;
+                    statusText = 'Playing The Hollow';
                     statusColor = '#ff7b00'; 
                 } else if (cache.isOnline) { 
                     statusText = 'Online'; 
@@ -1080,12 +1066,10 @@
         // 24/7 HIGH-SPEED BULK POLLING SYSTEM
         // ==================================================================
         const THE_HOLLOW_PLACE_ID = 116463962153167; 
-        const THE_HOLLOW_UNIVERSE_ID = 5223134111;
         const userIdCache = new Map(); 
         const playerDataCache = {}; 
         let allUserIds = [];
         let isPolling = false;
-        let hollowPlayerCount = null;
 
         async function initFriendSystem() {
             const allUsernames = allPlayers.map(p => p.handle);
@@ -1116,22 +1100,7 @@
                 // Start fetching followers and avatars slowly in background
                 setInterval(fetchBackgroundData, 300);
                 
-                // Fetch Hollow stats every 10 seconds
-                fetchHollowPlayerCount();
-                setInterval(fetchHollowPlayerCount, 10000);
-                
             } catch (e) { console.warn("Init failed", e); }
-        }
-
-        async function fetchHollowPlayerCount() {
-            try {
-                const statsRes = await fetch(`https://games.roproxy.com/v1/games?universeIds=${THE_HOLLOW_UNIVERSE_ID}`);
-                const statsData = await statsRes.json();
-                if (statsData && statsData.data && statsData.data[0]) {
-                    hollowPlayerCount = statsData.data[0].playing;
-                    updateUILive(); // Update UI immediately with new count
-                }
-            } catch (e) { console.warn("Failed to fetch Hollow stats", e); }
         }
 
         async function pollPresence() {
@@ -1244,7 +1213,7 @@
 
                 if (statusEl) {
                     if (cache.isPlayingHollow) {
-                        statusEl.innerHTML = `Playing The Hollow ${hollowPlayerCount !== null ? `<span class="queue-badge">${hollowPlayerCount.toLocaleString()} in game</span>` : ''}`;
+                        statusEl.textContent = 'Playing The Hollow';
                         statusEl.style.color = '#ff7b00';
                     } else if (cache.isOnline) {
                         statusEl.textContent = 'Online';
