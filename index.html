@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1a0b2e">
     <title>ROBLOX - The Hollow: Roblox Halloween Ultimate Guide</title>
+    <link rel="preconnect" href="https://thumbnails.roproxy.com" crossorigin>
+    <link rel="preconnect" href="https://thumbnails.rotunnel.com" crossorigin>
+    <link rel="preconnect" href="https://friends.roproxy.com" crossorigin>
+    <link rel="preconnect" href="https://presence.rotunnel.com" crossorigin>
+    <link rel="preconnect" href="https://users.rotunnel.com" crossorigin>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Trebuchet MS', Verdana, Arial, sans-serif; }
         html, body { width: 100%; max-width: 100%; overflow-x: hidden; background: #0d0614; background-image: radial-gradient(ellipse at top, #2a1445 0%, #0d0614 65%); color: #e6ddf2; min-height: 100vh; }
@@ -155,6 +160,7 @@
         .friend-handle { font-size: 11px; color: #b0b0b0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; transition: color 0.2s; user-select: none; width: fit-content; }
         .friend-handle:hover { color: #fff; }
         .friend-status-text { font-size: 11px; color: #888; overflow-wrap: break-word; }
+        .friend-lastseen { font-size: 11px; color: #a99cb8; font-style: italic; overflow-wrap: break-word; margin-top: 1px; }
         .friend-add-btn { background: #2f3136; color: #fff; border: none; border-radius: 6px; padding: 8px; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s; margin-top: auto; }
         .friend-card:hover .friend-add-btn { background: #40444b; }
         .ghost-select-btn { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 15px; background: #1e1e1e; border: 2px solid #333; border-radius: 8px; color: #fff; font-size: clamp(14px, 3.5vw, 16px); font-weight: bold; cursor: pointer; transition: all 0.2s; width: 100%; }
@@ -173,11 +179,9 @@
         .badge-blue { background: #00bfff; color: #000; }
         .section-title { font-size: clamp(16px, 4vw, 18px); color: #ff9d3d; margin-bottom: 10px; margin-top: 20px; text-shadow: 0 0 10px rgba(255,123,0,0.35); border-bottom: 1px solid #4a2c6e; padding-bottom: 5px; }
         .section-title:first-of-type { margin-top: 0; }
-
-        /* Settings UI */
         .settings-card { background: #120a1a; border: 1px solid #33204d; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-        .settings-card h4 { color: #ffb84d; font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .settings-card p { font-size: 13px; color: #b9a8d0; line-height: 1.6; margin-bottom: 12px; }
+        .settings-card h4 { color: #ffb84d; font-size: 15px; margin-bottom: 10px; }
+        .settings-card p { font-size: 13px; color: #b9a8d0; line-height: 1.5; margin-bottom: 10px; }
         .bg-toggle-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 16px; border-radius: 6px; border: 2px solid; cursor: pointer; font-size: 15px; font-weight: bold; transition: all 0.25s ease; }
         .bg-toggle-btn.off { background: #1a0f26; border-color: #4a2c6e; color: #a99cb8; }
         .bg-toggle-btn.off:hover { border-color: #6a3d9c; background: #201430; }
@@ -187,7 +191,8 @@
         .bg-toggle-btn.on .toggle-indicator { background: #39ff14; }
         .bg-toggle-btn .toggle-indicator::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: all 0.25s ease; }
         .bg-toggle-btn.on .toggle-indicator::after { transform: translateX(18px); }
-        .bg-status-text { font-size: 12px; margin-top: 8px; font-weight: normal; opacity: 0.85; }
+        .bg-status-text { font-size: 12px; margin-top: 8px; font-weight: normal; opacity: 0.85; color: #b9a8d0; }
+        .bg-tip { font-size: 12px; color: #ff8a80; margin-top: 10px; font-style: italic; line-height: 1.5; }
         @keyframes pulse-green { 0%, 100% { box-shadow: 0 0 8px rgba(57,255,20,0.3); } 50% { box-shadow: 0 0 18px rgba(57,255,20,0.7); } }
     </style>
 </head>
@@ -229,27 +234,36 @@
     <div class="overlay" id="agreementOverlay">
         <div class="agreement-modal">
             <div class="modal-header">
-                <h2>🕸️ Important Agreement</h2>
+                <h2>🕸️ Quick Hello Before You Start</h2>
             </div>
             <div class="agreement-content">
-                <h3>Welcome to The Hollow: Roblox Halloween Guide! 🎃</h3>
+                <h3>Welcome to the Hollow! 🎃</h3>
                 <div class="agreement-text" id="agreementText">
-                    <p>Before you enter the Hollow, please read and agree to the following important rules:</p>
-                    <p><strong>⚠️ CRITICAL RULE - Play Fair:</strong></p>
-                    <p>You do <strong>NOT</strong> need to complete the Main Quest before attempting a Side Quest. Both are available at the same time!</p>
-                    <p><strong>📌 Important Notes:</strong></p>
-                    <ul>
-                        <li>A new night unlocks every day at 2:00 PM PT (5:00 PM ET / 9:00 PM UTC). An orange glowing night button means its Side Quest and UGC are live now!</li>
-                        <li>After completing any quest, you MUST return to the main Hollow Hub and click the shimmering statue for that night.</li>
-                        <li>All guides below contain <strong>real, verified community-discovered info</strong>. You can also use the "⚙️ Settings" panel to run an AI Deep Search for extra leaked details!</li>
-                    </ul>
+                    <p>Hey! 👋 Glad you found this page. Before you start scrolling through the guides, here's a quick rundown of what you should know. It's short, I promise.</p>
+
+                    <p><strong>The big rule — read this first ⚠️</strong></p>
+                    <p>You do <strong>NOT</strong> have to finish the Main Quest before doing a Side Quest. Both are open from the start. So if you want to chase the hidden badge first, go for it. Nobody's stopping you, and no rule is being broken.</p>
+
+                    <p><strong>How the night unlocks work 🕯️</strong></p>
+                    <p>A new night goes live every day at 2:00 PM PT. That's 5:00 PM ET, or 9:00 PM UTC. If a night button is glowing orange, its Side Quest and UGC are live <em>right now</em>. If it's not glowing, it's still locked — but you can always peek at the guide ahead of time so you're ready the second it drops.</p>
+
+                    <p><strong>Don't forget this part 👻</strong></p>
+                    <p>After you finish any quest, don't just close the game and move on. Head back to the main Hollow Hub and click the shimmering statue for that night. That's how you actually claim the reward. Skip it and you get nothing — so please don't skip it.</p>
+
+                    <p><strong>Where these guides come from 📖</strong></p>
+                    <p>Everything here is real info from the community — players who actually ran the quests and shared what worked. If a guide says "not verified" or looks incomplete, that just means the steps haven't been confirmed yet. You can open ⚙️ Settings and hit "Deep Search" to have the page try to find the latest leaked details and add them for you.</p>
+
+                    <p><strong>One small favor 🤝</strong></p>
+                    <p>Please be cool. Don't spam the page, don't try to break anything, and don't stress if a step doesn't work on the first try. Games get updated, steps change, and we do our best to keep it fresh. If something feels off, it's probably just the game being updated.</p>
+
+                    <p>That's everything. Scroll down, tick the box, and let's go grab those badges. 🎃</p>
                 </div>
-                <div class="status-message status-scroll" id="statusMessage">⬇️ Please scroll to the bottom of the rules to continue</div>
+                <div class="status-message status-scroll" id="statusMessage">⬇️ Scroll all the way down to unlock the checkbox</div>
                 <div class="checkbox-container disabled" id="checkboxContainer">
                     <input type="checkbox" id="agreementCheckbox" disabled>
-                    <label for="agreementCheckbox">I understand I can do either quest first</label>
+                    <label for="agreementCheckbox">Got it — I can do either quest first, and I'll click the statue after</label>
                 </div>
-                <button class="confirm-btn disabled" id="confirmBtn" disabled>I Agree &amp; Enter the Hollow</button>
+                <button class="confirm-btn disabled" id="confirmBtn" disabled>I'm Ready — Enter the Hollow</button>
             </div>
         </div>
     </div>
@@ -285,17 +299,20 @@
 
                 <h3 style="margin-top: 25px;">📱 Background Mode</h3>
                 <div class="settings-card">
-                    <h4>🔊 Keep Alerts Alive</h4>
+                    <h4>🔊 Keep Alerts On When Phone is Locked</h4>
                     <p>
-                        When Background Mode is ON, the page plays a silent audio loop and requests a screen wake lock. This tricks your phone's operating system into treating the page like an active music player, so it keeps the tab alive and can play the online sound <strong>even when your phone is locked or you switch apps (like Roblox).</strong>
+                        Turn this ON so the online sound still plays when your phone is locked or you're in another app.
+                    </p>
+                    <p>
+                        Uses a little extra battery.
                     </p>
                     <button class="bg-toggle-btn off" id="bgToggleBtn" onclick="toggleBackgroundMode()">
                         <span id="bgToggleLabel">🔇 Background Mode is OFF</span>
                         <span class="toggle-indicator"></span>
                     </button>
-                    <p class="bg-status-text" id="bgStatusText">Tap to enable. This uses a little extra battery.</p>
-                    <p style="font-size: 12px; color: #ff8a80; margin-top: 10px; font-style: italic; line-height: 1.5;">
-                        ⚠️ <strong>Important:</strong> No web page can force a phone to run background code forever. This mode uses the best available tricks, but iOS and aggressive Android battery savers may still suspend the page after a long time. The sound will always fire the moment you unlock your phone.
+                    <p class="bg-status-text" id="bgStatusText">Tap to turn on.</p>
+                    <p class="bg-tip">
+                        Tip: If it stops after a while, that's your phone saving power. The sound will still play the moment you unlock.
                     </p>
                 </div>
             </div>
@@ -355,15 +372,29 @@
         function timeAgo(isoString) {
             if (!isoString) return null;
             const date = new Date(isoString);
-            const n = new Date();
-            const diffMs = n - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            if (diffMins < 1) return "Just now";
-            if (diffMins < 60) return `${diffMins}m ago`;
+            const nowMs = Date.now();
+            const diffMs = nowMs - date.getTime();
+            if (diffMs < 0) return 'just now';
+            const diffSecs = Math.floor(diffMs / 1000);
+            if (diffSecs < 60) return 'just now';
+            const diffMins = Math.floor(diffSecs / 60);
+            if (diffMins < 60) return diffMins === 1 ? '1 minute ago' : `${diffMins} minutes ago`;
             const diffHours = Math.floor(diffMins / 60);
-            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
             const diffDays = Math.floor(diffHours / 24);
-            return `${diffDays}d ago`;
+            if (diffDays < 7) return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
+            const diffWeeks = Math.floor(diffDays / 7);
+            if (diffWeeks < 5) return diffWeeks === 1 ? '1 week ago' : `${diffWeeks} weeks ago`;
+            const diffMonths = Math.floor(diffDays / 30);
+            if (diffMonths < 12) return diffMonths === 1 ? '1 month ago' : `${diffMonths} months ago`;
+            const diffYears = Math.floor(diffDays / 365);
+            return diffYears === 1 ? '1 year ago' : `${diffYears} years ago`;
+        }
+
+        function fallbackAvatarUrl(name) {
+            const initial = (name || '?').charAt(0).toUpperCase();
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" fill="#2a2a2a"/><text x="64" y="86" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="bold" fill="#666" text-anchor="middle">${initial}</text></svg>`;
+            return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
         }
 
         const data = {
@@ -849,6 +880,12 @@
             return `Followers: ${cache.followers.toLocaleString()}`;
         }
 
+        function lastSeenText(cache) {
+            if (cache.isOnline !== false) return '';
+            const ago = timeAgo(cache.lastOnline);
+            return ago ? `⏱ Last seen ${ago}` : '';
+        }
+
         function renderFriendList(filter) {
             const isAll = filter === 'all';
 
@@ -900,15 +937,17 @@
             friendsBody.innerHTML = html;
 
             filteredPlayers.forEach(p => {
-                const fallbackUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name)}&background=333&color=fff&size=128&font-size=0.4`;
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
-                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: null, displayName: p.name, justCameOnline: false };
+                const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: null, displayName: p.name, justCameOnline: false, lastOnline: null, avatarUrl: null };
+
+                const displayAvatar = cache.avatarUrl || fallbackAvatarUrl(p.name);
 
                 const ghostBadge = isAll
                     ? `<div class="ghost-badges">${(p.groups || [p.group]).map(g => `<span class="ghost-badge badge-${g}">${g}</span>`).join('')}</div>`
                     : '';
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
                 const followerText = followerLabel(cache);
+                const lastSeen = lastSeenText(cache);
 
                 let statusText = 'Offline';
                 let statusColor = '#888';
@@ -918,16 +957,17 @@
                 } else if (cache.isOnline) {
                     statusText = 'Online';
                     statusColor = '#39ff14';
-                } else {
-                    const lastSeen = timeAgo(cache.lastOnline);
-                    if (lastSeen) statusText = `Offline (Last online ${lastSeen})`;
+                } else if (cache.isOnline === null) {
+                    statusText = 'Loading...';
                 }
+
+                const lastSeenDisplay = lastSeen ? '' : 'display: none;';
 
                 const cardHtml = `
                     <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card ${justOnlineClass}" data-username="${p.handle}">
                         <div class="friend-top">
                             <div class="friend-avatar-wrap">
-                                <img src="${fallbackUrl}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}">
+                                <img src="${displayAvatar}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}" loading="lazy">
                                 <div class="friend-status-icon">
                                     <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                                 </div>
@@ -936,6 +976,7 @@
                                 <div class="friend-name" data-displayname-for="${p.handle}">${cache.displayName || p.name}</div>
                                 <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
                                 <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${statusColor}">${statusText}</div>
+                                <div class="friend-lastseen" data-lastseen-for="${p.handle}" style="${lastSeenDisplay}">${lastSeen}</div>
                                 <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">${followerText}</div>
                                 ${ghostBadge}
                             </div>
@@ -953,13 +994,6 @@
                 }
             });
 
-            filteredPlayers.forEach(p => {
-                if (playerDataCache[p.handle]?.avatarUrl) {
-                    const img = document.querySelector(`[data-avatar-for="${p.handle}"]`);
-                    if (img) img.src = playerDataCache[p.handle].avatarUrl;
-                }
-            });
-
             if (isAll) {
                 const hollowGrid = document.getElementById('hollowGrid');
                 const onlineGrid = document.getElementById('onlineGrid');
@@ -972,7 +1006,7 @@
         }
 
         // ==================================================================
-        // BACKGROUND MODE (Multi-layer keep-alive)
+        // BACKGROUND MODE
         // ==================================================================
         const BG_MODE_KEY = 'hollow_bg_mode_v2';
         let bgModeActive = localStorage.getItem(BG_MODE_KEY) === 'true';
@@ -993,18 +1027,18 @@
             if (bgModeActive) {
                 btn.className = 'bg-toggle-btn on';
                 label.textContent = '🟢 Background Mode is ON';
-                status.textContent = 'The page is running a silent media session. You can lock your phone or switch apps.';
+                status.textContent = 'Running. You can lock your phone now.';
             } else {
                 btn.className = 'bg-toggle-btn off';
                 label.textContent = '🔇 Background Mode is OFF';
-                status.textContent = 'Tap to enable. This uses a little extra battery.';
+                status.textContent = 'Tap to turn on.';
             }
         }
 
         async function tryAcquireWakeLock() {
             if (!('wakeLock' in navigator)) return;
             try {
-                if (wakeLockSentinel) return; // already held
+                if (wakeLockSentinel) return;
                 wakeLockSentinel = await navigator.wakeLock.request('screen');
                 console.log('Wake lock acquired');
                 wakeLockSentinel.addEventListener('release', () => {
@@ -1031,23 +1065,19 @@
             isStartingBg = true;
 
             try {
-                // 1) Create / resume AudioContext INSIDE the user gesture
                 const AC = window.AudioContext || window.webkitAudioContext;
                 if (!bgAudioCtx) bgAudioCtx = new AC();
 
-                // Unlock immediately if suspended (critical for iOS)
                 if (bgAudioCtx.state === 'suspended') {
                     try { await bgAudioCtx.resume(); } catch (e) { console.warn('Initial resume failed:', e); }
                 }
 
-                // 2) Build silent looping buffer
                 const sampleRate = bgAudioCtx.sampleRate;
                 const bufferSize = 2 * sampleRate;
                 const emptyBuffer = bgAudioCtx.createBuffer(1, bufferSize, sampleRate);
                 const output = emptyBuffer.getChannelData(0);
                 for (let i = 0; i < bufferSize; i++) output[i] = 0;
 
-                // 3) Source node -> MediaStreamDestination
                 if (bgSourceNode) { try { bgSourceNode.stop(); bgSourceNode.disconnect(); } catch {} }
                 bgSourceNode = bgAudioCtx.createBufferSource();
                 bgSourceNode.buffer = emptyBuffer;
@@ -1056,7 +1086,6 @@
                 const dest = bgAudioCtx.createMediaStreamDestination();
                 bgSourceNode.connect(dest);
 
-                // 4) Play through an <audio> element
                 if (!bgAudioEl) {
                     bgAudioEl = document.createElement('audio');
                     bgAudioEl.style.display = 'none';
@@ -1067,7 +1096,6 @@
                 }
                 bgAudioEl.srcObject = dest.stream;
 
-                // 5) Media Session metadata (makes OS treat us as real player)
                 if ('mediaSession' in navigator) {
                     try {
                         navigator.mediaSession.metadata = new MediaMetadata({
@@ -1082,19 +1110,15 @@
                     } catch (e) {}
                 }
 
-                // 6) iOS audio session type (prevents mute switch from killing it)
                 if (navigator.audioSession) {
                     try { navigator.audioSession.type = 'playback'; } catch (e) {}
                 }
 
-                // 7) Start everything synchronously
                 await bgAudioEl.play();
                 bgSourceNode.start(0);
 
-                // 8) Request screen wake lock (visible tab only)
                 await tryAcquireWakeLock();
 
-                // 9) Heartbeat: check for zombie AudioContext and rebuild if needed
                 startBgHeartbeat();
 
                 bgModeActive = true;
@@ -1134,7 +1158,6 @@
             heartbeatTimer = setInterval(async () => {
                 if (!bgModeActive) return;
 
-                // Zombie check: AudioContext says "running" but audio paused
                 if (bgAudioCtx && bgAudioEl) {
                     const ctxZombie = bgAudioCtx.state === 'running' && bgAudioEl.paused;
                     const ctxSuspended = bgAudioCtx.state === 'suspended';
@@ -1148,7 +1171,6 @@
                     }
                 }
 
-                // Re-acquire wake lock if visible and lost
                 if (document.visibilityState === 'visible' && !wakeLockSentinel) {
                     tryAcquireWakeLock();
                 }
@@ -1164,7 +1186,6 @@
             else startBackgroundMode();
         }
 
-        // Recover on every visibility/focus change
         async function recoverBackgroundMode() {
             if (!bgModeActive) return;
             try {
@@ -1186,7 +1207,7 @@
         });
 
         // ==================================================================
-        // 24/7 HIGH-SPEED BULK POLLING SYSTEM
+        // 24/7 POLLING SYSTEM
         // ==================================================================
         const THE_HOLLOW_PLACE_ID = 116463962153167;
         const userIdCache = new Map();
@@ -1238,7 +1259,132 @@
             }
         }
 
-        // ----- Followers: persistent cache + parallel refresh every 1s -----
+        // ==================================================================
+        // AVATARS — cached + parallel batched fetch
+        // ==================================================================
+        const AVATAR_CACHE_KEY = 'hollow_avatars_v2';
+        const AVATAR_CACHE_TTL = 12 * 60 * 60 * 1000;
+        const AVATAR_BATCH_SIZE = 10;
+        const AVATAR_CONCURRENCY = 4;
+        const AVATAR_TIMEOUT_MS = 4000;
+        const AVATAR_PROXIES = [
+            ids => `https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=false`,
+            ids => `https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=false`,
+            ids => `https://thumbnails.rprxy.xyz/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=false`
+        ];
+
+        let avatarCache = loadAvatarCache();
+        let avatarBulkInFlight = false;
+
+        function loadAvatarCache() {
+            try {
+                const raw = localStorage.getItem(AVATAR_CACHE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch { return {}; }
+        }
+
+        function saveAvatarCache() {
+            try { localStorage.setItem(AVATAR_CACHE_KEY, JSON.stringify(avatarCache)); } catch {}
+        }
+
+        function hydrateAvatarsFromCache() {
+            let hydrated = 0;
+            for (const [uName, info] of userIdCache.entries()) {
+                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                if (!actualHandle || !playerDataCache[actualHandle]) continue;
+                const hit = avatarCache[info.id];
+                if (hit && hit.url) {
+                    playerDataCache[actualHandle].avatarUrl = hit.url;
+                    hydrated++;
+                    const img = document.querySelector(`[data-avatar-for="${actualHandle}"]`);
+                    if (img) img.src = hit.url;
+                }
+            }
+            if (hydrated > 0) console.log(`Hydrated ${hydrated} avatars from cache`);
+            return hydrated;
+        }
+
+        async function fetchAvatarBatch(userIds) {
+            let lastErr;
+            for (const makeUrl of AVATAR_PROXIES) {
+                try {
+                    const res = await fetchWithTimeout(makeUrl(userIds.join(',')), { timeout: AVATAR_TIMEOUT_MS });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const data = await res.json();
+                    if (data && Array.isArray(data.data)) return data.data;
+                    throw new Error('Bad shape');
+                } catch (e) { lastErr = e; }
+            }
+            throw lastErr || new Error('All avatar proxies failed');
+        }
+
+        function applyAvatarBatch(batchData) {
+            batchData.forEach(item => {
+                if (!item || !item.targetId || !item.imageUrl) return;
+                for (const [uName, info] of userIdCache.entries()) {
+                    if (info.id === item.targetId) {
+                        const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
+                        if (actualHandle && playerDataCache[actualHandle]) {
+                            playerDataCache[actualHandle].avatarUrl = item.imageUrl;
+                            avatarCache[item.targetId] = { url: item.imageUrl, at: Date.now() };
+                            const img = document.querySelector(`[data-avatar-for="${actualHandle}"]`);
+                            if (img) img.src = item.imageUrl;
+                        }
+                        break;
+                    }
+                }
+            });
+        }
+
+        async function fetchAllAvatars() {
+            if (avatarBulkInFlight || userIdCache.size === 0) return;
+            avatarBulkInFlight = true;
+
+            try {
+                hydrateAvatarsFromCache();
+
+                const now = Date.now();
+                const idsNeedingFetch = [];
+                for (const [uName, info] of userIdCache.entries()) {
+                    const hit = avatarCache[info.id];
+                    if (!hit || !hit.url || (now - hit.at > AVATAR_CACHE_TTL)) {
+                        idsNeedingFetch.push(info.id);
+                    }
+                }
+
+                if (idsNeedingFetch.length === 0) {
+                    console.log('All avatars served from cache');
+                    return;
+                }
+
+                const batches = [];
+                for (let i = 0; i < idsNeedingFetch.length; i += AVATAR_BATCH_SIZE) {
+                    batches.push(idsNeedingFetch.slice(i, i + AVATAR_BATCH_SIZE));
+                }
+
+                let batchIdx = 0;
+                async function worker() {
+                    while (batchIdx < batches.length) {
+                        const batch = batches[batchIdx++];
+                        try {
+                            const data = await fetchAvatarBatch(batch);
+                            applyAvatarBatch(data);
+                        } catch (e) {
+                            console.warn('Avatar batch failed:', e);
+                        }
+                    }
+                }
+                await Promise.all(Array.from({ length: AVATAR_CONCURRENCY }, worker));
+
+                saveAvatarCache();
+            } finally {
+                avatarBulkInFlight = false;
+            }
+        }
+
+        // ==================================================================
+        // FOLLOWERS — cached + parallel refresh every 1s
+        // ==================================================================
         const FOLLOWER_CACHE_KEY = 'hollow_followers_v4';
         const FOLLOWER_REFRESH_MS = 1000;
         const FOLLOWER_CONCURRENCY = 6;
@@ -1352,36 +1498,16 @@
                 });
 
                 hydrateFollowersFromCache();
+                hydrateAvatarsFromCache();
+
                 fetchAllAvatars();
                 setInterval(pollPresence, 1000);
                 pollPresence();
                 refreshAllFollowers();
                 setInterval(refreshAllFollowers, FOLLOWER_REFRESH_MS);
+                setInterval(fetchAllAvatars, 5 * 60 * 1000);
 
             } catch (e) { console.warn("Init failed", e); }
-        }
-
-        async function fetchAllAvatars() {
-            if (allUserIds.length === 0) return;
-            try {
-                const res = await fetchWithTimeout(`https://thumbnails.roproxy.com/v1/users/avatar-headshot?userIds=${allUserIds.join(',')}&size=150x150&format=Png&isCircular=false`, { timeout: 10000 });
-                const data = await res.json();
-                if (data.data) {
-                    data.data.forEach(item => {
-                        for (const [uName, info] of userIdCache.entries()) {
-                            if (info.id === item.targetId) {
-                                const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-                                if (actualHandle && playerDataCache[actualHandle]) {
-                                    playerDataCache[actualHandle].avatarUrl = item.imageUrl;
-                                    const img = document.querySelector(`[data-avatar-for="${actualHandle}"]`);
-                                    if (img) img.src = item.imageUrl;
-                                }
-                                break;
-                            }
-                        }
-                    });
-                }
-            } catch (e) { console.warn("Avatar fetch failed", e); }
         }
 
         async function pollPresence() {
@@ -1503,6 +1629,7 @@
                 const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 const statusEl = card ? card.querySelector(`[data-status-for="${p.handle}"]`) : null;
                 const followersEl = card ? card.querySelector(`[data-followers-for="${p.handle}"]`) : null;
+                const lastSeenEl = card ? card.querySelector(`[data-lastseen-for="${p.handle}"]`) : null;
 
                 if (statusEl) {
                     if (cache.isPlayingHollow) {
@@ -1511,14 +1638,26 @@
                     } else if (cache.isOnline) {
                         statusEl.textContent = 'Online';
                         statusEl.style.color = '#39ff14';
+                    } else if (cache.isOnline === null) {
+                        statusEl.textContent = 'Loading...';
+                        statusEl.style.color = '#888';
                     } else {
-                        const lastSeen = timeAgo(cache.lastOnline);
-                        statusEl.textContent = lastSeen ? `Offline (Last online ${lastSeen})` : 'Offline';
+                        statusEl.textContent = 'Offline';
                         statusEl.style.color = '#888';
                     }
                 }
 
                 if (followersEl) followersEl.textContent = followerLabel(cache);
+
+                if (lastSeenEl) {
+                    const ls = lastSeenText(cache);
+                    if (ls) {
+                        lastSeenEl.textContent = ls;
+                        lastSeenEl.style.display = 'block';
+                    } else {
+                        lastSeenEl.style.display = 'none';
+                    }
+                }
 
                 if (isAll) {
                     if (cache.isOnline && !card) {
@@ -1578,7 +1717,6 @@
 
         window.addEventListener('load', () => {
             setTimeout(initFriendSystem, 1000);
-            // If background mode was ON before reload, re-arm on first tap
             if (bgModeActive) {
                 const resumeOnGesture = () => {
                     if (bgModeActive && (!bgAudioEl || bgAudioEl.paused)) {
