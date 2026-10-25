@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://friends.roproxy.com" crossorigin>
     <link rel="preconnect" href="https://presence.rotunnel.com" crossorigin>
     <link rel="preconnect" href="https://users.rotunnel.com" crossorigin>
+    <link rel="preconnect" href="https://www.myinstants.com" crossorigin>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Trebuchet MS', Verdana, Arial, sans-serif; }
         html, body { width: 100%; max-width: 100%; overflow-x: hidden; background: #0d0614; background-image: radial-gradient(ellipse at top, #2a1445 0%, #0d0614 65%); color: #e6ddf2; min-height: 100vh; }
@@ -17,16 +18,8 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes floatGhost { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-28px) rotate(6deg); } }
-        @keyframes flashWarning {
-            0%, 100% { opacity: 1; box-shadow: 0 0 18px 4px #ff7b00; transform: scale(1); border-color: #ff7b00; }
-            50% { opacity: 0.6; box-shadow: 0 0 6px 1px #ff3d00; transform: scale(0.97); border-color: #ff3d00; }
-        }
-        @keyframes halloweenGlow {
-            0% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
-            33% { box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 15px rgba(156, 39, 176, 0.4); border-color: #9c27b0; }
-            66% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.8), inset 0 0 10px rgba(57, 255, 20, 0.4); border-color: #39ff14; }
-            100% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; }
-        }
+        @keyframes flashWarning { 0%, 100% { opacity: 1; box-shadow: 0 0 18px 4px #ff7b00; transform: scale(1); border-color: #ff7b00; } 50% { opacity: 0.6; box-shadow: 0 0 6px 1px #ff3d00; transform: scale(0.97); border-color: #ff3d00; } }
+        @keyframes halloweenGlow { 0% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; } 33% { box-shadow: 0 0 15px rgba(156, 39, 176, 0.8), inset 0 0 15px rgba(156, 39, 176, 0.4); border-color: #9c27b0; } 66% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.8), inset 0 0 10px rgba(57, 255, 20, 0.4); border-color: #39ff14; } 100% { box-shadow: 0 0 10px rgba(255, 123, 0, 0.8), inset 0 0 10px rgba(255, 123, 0, 0.4); border-color: #ff7b00; } }
         .spooky-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .spooky-bg span { position: absolute; font-size: 38px; opacity: 0.13; animation: floatGhost 11s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,123,0,0.6)); }
         .spooky-bg span:nth-child(1) { left: 5%; top: 12%; animation-delay: 0s; }
@@ -106,17 +99,10 @@
         .visual-guide h5 { color: #ffb84d; margin-bottom: 10px; font-size: 16px; }
         .visual-guide p { margin-bottom: 8px; font-size: 13px; line-height: 1.5; color: #ffcc80; }
         .visual-box { background: #170d24; border: 1px dashed #ff9800; border-radius: 4px; padding: 10px; margin: 10px 0; text-align: center; color: #ffcc80; overflow-wrap: break-word; }
-        .gift-box, .button-loc { background: #170d24; border: 1px solid #c084fc; border-radius: 4px; padding: 12px; margin-bottom: 10px; transition: 0.2s; color: #dcd2ea; }
-        .button-loc { border-color: #ff7b00; }
-        .gift-box:hover, .button-loc:hover { transform: translateY(-2px); box-shadow: 0 3px 12px rgba(255,123,0,0.22); }
-        .gift-box h5, .button-loc h5 { font-size: 15px; margin-bottom: 6px; color: #ffb84d; border-bottom: 1px solid #33204d; padding-bottom: 4px; }
-        .gift-box p, .button-loc p { margin-bottom: 4px; font-size: 13px; line-height: 1.5; }
-        .tool { font-weight: bold; color: #ff8a80; background: #2b0f0f; padding: 2px 5px; border-radius: 2px; }
-        .code-display { background: #0a0612; color: #39ff14; padding: 12px 15px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; text-align: center; margin: 15px 0; border: 1px solid #2e7d32; letter-spacing: 3px; box-shadow: inset 0 0 18px rgba(57,255,20,0.15), 0 0 14px rgba(57,255,20,0.25); }
+        .code-display { background: #0a0612; color: #39ff14; padding: 12px 15px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 24px; font-weight: bold; text-align: center; margin: 15px 0; border: 1px solid #2e7d32; letter-spacing: 3px; }
         .modal-body::-webkit-scrollbar { width: 8px; }
         .modal-body::-webkit-scrollbar-track { background: #120a1a; }
         .modal-body::-webkit-scrollbar-thumb { background: #4a2c6e; border-radius: 5px; }
-        .modal-body::-webkit-scrollbar-thumb:hover { background: #6a3d9c; }
         .verified-badge { display: inline-block; background: #39ff14; color: #0d0614; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
         .unverified-badge { display: inline-block; background: #ff9800; color: #1a0b2e; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
         .ai-verified-badge { display: inline-block; background: #00e5ff; color: #0d0614; font-size: 10px; padding: 2px 6px; border-radius: 3px; margin-left: 5px; vertical-align: middle; font-weight: bold; }
@@ -127,8 +113,6 @@
         .agreement-text { background: #120a1a; border: 1px solid #33204d; border-radius: 4px; padding: 15px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; max-height: 250px; overflow-y: auto; color: #dcd2ea; overflow-wrap: break-word; }
         .agreement-text p { margin-bottom: 12px; }
         .agreement-text strong { color: #ff6b6b; }
-        .agreement-text ul { margin-left: 20px; margin-bottom: 12px; }
-        .agreement-text li { margin-bottom: 8px; }
         .checkbox-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 12px; background: #2b1c07; border: 1px solid #ff9800; border-radius: 4px; color: #ffcc80; }
         .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #ff7b00; flex-shrink: 0; }
         .checkbox-container label { font-size: 14px; cursor: pointer; user-select: none; overflow-wrap: break-word; }
@@ -143,9 +127,7 @@
         .confirm-btn.enabled { background: linear-gradient(to bottom, #ff7b00, #cc5500); border-color: #993300; border-bottom-color: #662200; color: white; }
         .confirm-btn.enabled:hover { background: linear-gradient(to bottom, #ff8c1a, #b34a00); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(255,123,0,0.45); }
         .confirm-btn.disabled { background: linear-gradient(to bottom, #2b1247, #1e0d33); border-color: #4a2c6e; border-bottom-color: #33204d; color: #7a6b8c; cursor: not-allowed; }
-        .settings-input { width: 100%; padding: 10px; background: #120a1a; border: 1px solid #33204d; border-radius: 4px; font-size: 14px; margin-bottom: 15px; color: #e6ddf2; }
-        .settings-input:focus { outline: none; border-color: #ff7b00; box-shadow: 0 0 8px rgba(255,123,0,0.35); }
-        .deep-search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; background: #120a1a; border: 1px solid #33204d; padding: 15px; border-radius: 4px; font-size: 13px; white-space: pre-wrap; display: none; color: #dcd2ea; overflow-wrap: break-word; }
+        .deep-search-results { margin-top: 12px; max-height: 220px; overflow-y: auto; background: #120a1a; border: 1px solid #33204d; padding: 12px; border-radius: 6px; font-size: 12px; white-space: pre-wrap; display: none; color: #dcd2ea; overflow-wrap: break-word; }
         .friends-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 10px; margin-bottom: 20px; }
         .friend-card { background: #1e1e1e; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: #fff; transition: transform 0.4s ease, background 0.2s, box-shadow 1s ease-out, border-color 1s ease-out; border: 1px solid #333; position: relative; overflow: hidden; width: 100%; }
         .friend-card:hover { transform: translateY(-3px); background: #252525; border-color: #555; }
@@ -179,10 +161,44 @@
         .badge-blue { background: #00bfff; color: #000; }
         .section-title { font-size: clamp(16px, 4vw, 18px); color: #ff9d3d; margin-bottom: 10px; margin-top: 20px; text-shadow: 0 0 10px rgba(255,123,0,0.35); border-bottom: 1px solid #4a2c6e; padding-bottom: 5px; }
         .section-title:first-of-type { margin-top: 0; }
-        .settings-card { background: #120a1a; border: 1px solid #33204d; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-        .settings-card h4 { color: #ffb84d; font-size: 15px; margin-bottom: 10px; }
-        .settings-card p { font-size: 13px; color: #b9a8d0; line-height: 1.5; margin-bottom: 10px; }
-        .bg-toggle-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 14px 16px; border-radius: 6px; border: 2px solid; cursor: pointer; font-size: 15px; font-weight: bold; transition: all 0.25s ease; }
+
+        /* CLEAN SETTINGS UI */
+        .settings-content { padding: 18px 20px 24px; }
+        .settings-intro { text-align: center; margin-bottom: 18px; }
+        .settings-intro h3 { color: #ff9d3d; font-size: clamp(17px, 4vw, 21px); margin-bottom: 6px; }
+        .settings-intro p { font-size: 12px; color: #8f7fa6; line-height: 1.5; }
+        .settings-section { background: #120a1a; border: 1px solid #33204d; border-radius: 10px; padding: 15px; margin-bottom: 12px; }
+        .settings-section:last-child { margin-bottom: 0; }
+        .settings-section-head { display: flex; gap: 11px; align-items: flex-start; margin-bottom: 12px; }
+        .settings-section-icon { width: 36px; height: 36px; border-radius: 9px; background: rgba(255,123,0,0.10); border: 1px solid rgba(255,123,0,0.22); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .settings-section-text h4 { color: #ffb84d; font-size: 14px; margin-bottom: 3px; line-height: 1.2; }
+        .settings-section-text p { font-size: 11.5px; color: #8f7fa6; line-height: 1.45; margin: 0; }
+        .settings-action-btn { width: 100%; padding: 12px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; border: 1px solid #9333ea; border-bottom: 3px solid #6b21a8; background: linear-gradient(to bottom, #6d33a0, #4a1f7a); color: #ffe9c7; transition: all 0.2s; }
+        .settings-action-btn:hover { background: linear-gradient(to bottom, #7c3aed, #5b21b6); transform: translateY(-1px); }
+        .settings-action-btn:active { transform: translateY(1px); border-bottom-width: 1px; }
+        .sound-picker { display: flex; flex-direction: column; gap: 8px; }
+        .sound-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #170d24; border: 1px solid #33204d; border-radius: 7px; padding: 10px 11px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; user-select: none; }
+        .sound-item:hover { border-color: #6a3d9c; background: #1c1129; }
+        .sound-item.selected { border-color: #39ff14; box-shadow: 0 0 10px rgba(57,255,20,0.18); background: #14201a; }
+        .sound-item-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+        .sound-radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #555; flex-shrink: 0; position: relative; transition: border-color 0.2s; }
+        .sound-item.selected .sound-radio { border-color: #39ff14; }
+        .sound-item.selected .sound-radio::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: #39ff14; }
+        .sound-meta { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+        .sound-name { font-size: 13px; font-weight: bold; color: #e6ddf2; }
+        .sound-desc { font-size: 11px; color: #8f7fa6; line-height: 1.3; }
+        .sound-preview-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #6a3d9c; background: #2b1247; color: #ffd9a8; font-size: 11px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .sound-preview-btn:hover { background: #3b1a5e; border-color: #ff7b00; transform: scale(1.06); }
+        .sound-preview-btn:active { transform: scale(0.96); }
+        .sound-preview-btn.playing { background: #39ff14; color: #0d0614; border-color: #39ff14; }
+        .sound-none-tag { font-size: 15px; opacity: 0.55; flex-shrink: 0; padding: 0 8px; }
+        .settings-toggle-row { display: flex; gap: 10px; align-items: flex-start; padding: 11px; background: #170d24; border: 1px solid #33204d; border-radius: 7px; cursor: pointer; transition: border-color 0.2s; }
+        .settings-toggle-row:hover { border-color: #6a3d9c; }
+        .settings-toggle-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #ff7b00; flex-shrink: 0; margin-top: 2px; cursor: pointer; }
+        .settings-toggle-info { display: flex; flex-direction: column; gap: 2px; }
+        .settings-toggle-title { font-size: 13px; font-weight: bold; color: #e6ddf2; }
+        .settings-toggle-desc { font-size: 11px; color: #8f7fa6; line-height: 1.4; }
+        .bg-toggle-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 13px 14px; border-radius: 7px; border: 2px solid; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.25s ease; }
         .bg-toggle-btn.off { background: #1a0f26; border-color: #4a2c6e; color: #a99cb8; }
         .bg-toggle-btn.off:hover { border-color: #6a3d9c; background: #201430; }
         .bg-toggle-btn.on { background: linear-gradient(to bottom, #1f4d3a, #143325); border-color: #39ff14; color: #b3ffcf; box-shadow: 0 0 14px rgba(57,255,20,0.35); animation: pulse-green 2s infinite; }
@@ -191,17 +207,13 @@
         .bg-toggle-btn.on .toggle-indicator { background: #39ff14; }
         .bg-toggle-btn .toggle-indicator::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: all 0.25s ease; }
         .bg-toggle-btn.on .toggle-indicator::after { transform: translateX(18px); }
-        .bg-status-text { font-size: 12px; margin-top: 8px; font-weight: normal; opacity: 0.85; color: #b9a8d0; }
-        .bg-tip { font-size: 12px; color: #ff8a80; margin-top: 10px; font-style: italic; line-height: 1.5; }
+        .bg-status-text { font-size: 11px; margin-top: 7px; font-weight: normal; color: #8f7fa6; }
+        .bg-tip { font-size: 11px; color: #ff8a80; margin-top: 8px; font-style: italic; line-height: 1.45; }
         @keyframes pulse-green { 0%, 100% { box-shadow: 0 0 8px rgba(57,255,20,0.3); } 50% { box-shadow: 0 0 18px rgba(57,255,20,0.7); } }
     </style>
 </head>
 <body>
-    <div class="spooky-bg" aria-hidden="true">
-        <span>🎃</span><span>👻</span><span>🦇</span><span>💀</span><span>🕷️</span><span>🕸️</span>
-    </div>
-
-    <div id="ai-core" style="display:none;" data-status="scanning" data-sources="youtube,google,tiktok,wikipedia,reddit"></div>
+    <div class="spooky-bg" aria-hidden="true"><span>🎃</span><span>👻</span><span>🦇</span><span>💀</span><span>🕷️</span><span>🕸️</span></div>
 
     <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999;"></canvas>
 
@@ -225,37 +237,27 @@
         </div>
         <div class="box">
             <div class="box-header">🕯️ Choose a Night of The Hollow</div>
-            <div class="box-content">
-                <div class="grid" id="yearGrid"></div>
-            </div>
+            <div class="box-content"><div class="grid" id="yearGrid"></div></div>
         </div>
     </div>
 
     <div class="overlay" id="agreementOverlay">
         <div class="agreement-modal">
-            <div class="modal-header">
-                <h2>🕸️ Quick Hello Before You Start</h2>
-            </div>
+            <div class="modal-header"><h2>🕸️ Quick Hello Before You Start</h2></div>
             <div class="agreement-content">
                 <h3>Welcome to the Hollow! 🎃</h3>
                 <div class="agreement-text" id="agreementText">
                     <p>Hey! 👋 Glad you found this page. Before you start scrolling through the guides, here's a quick rundown of what you should know. It's short, I promise.</p>
-
                     <p><strong>The big rule — read this first ⚠️</strong></p>
                     <p>You do <strong>NOT</strong> have to finish the Main Quest before doing a Side Quest. Both are open from the start. So if you want to chase the hidden badge first, go for it. Nobody's stopping you, and no rule is being broken.</p>
-
                     <p><strong>How the night unlocks work 🕯️</strong></p>
                     <p>A new night goes live every day at 2:00 PM PT. That's 5:00 PM ET, or 9:00 PM UTC. If a night button is glowing orange, its Side Quest and UGC are live <em>right now</em>. If it's not glowing, it's still locked — but you can always peek at the guide ahead of time so you're ready the second it drops.</p>
-
                     <p><strong>Don't forget this part 👻</strong></p>
                     <p>After you finish any quest, don't just close the game and move on. Head back to the main Hollow Hub and click the shimmering statue for that night. That's how you actually claim the reward. Skip it and you get nothing — so please don't skip it.</p>
-
                     <p><strong>Where these guides come from 📖</strong></p>
                     <p>Everything here is real info from the community — players who actually ran the quests and shared what worked. If a guide says "not verified" or looks incomplete, that just means the steps haven't been confirmed yet. You can open ⚙️ Settings and hit "Deep Search" to have the page try to find the latest leaked details and add them for you.</p>
-
                     <p><strong>One small favor 🤝</strong></p>
                     <p>Please be cool. Don't spam the page, don't try to break anything, and don't stress if a step doesn't work on the first try. Games get updated, steps change, and we do our best to keep it fresh. If something feels off, it's probably just the game being updated.</p>
-
                     <p>That's everything. Scroll down, tick the box, and let's go grab those badges. 🎃</p>
                 </div>
                 <div class="status-message status-scroll" id="statusMessage">⬇️ Scroll all the way down to unlock the checkbox</div>
@@ -269,51 +271,72 @@
     </div>
 
     <div class="overlay" id="settingsOverlay">
-        <div class="agreement-modal" style="max-width: 700px;">
+        <div class="agreement-modal" style="max-width: 640px;">
             <div class="modal-header">
-                <h2>⚙️ Advanced Settings &amp; AI Deep Search</h2>
+                <h2>⚙️ Settings</h2>
                 <button class="close-btn" onclick="closeSettings()">X</button>
             </div>
-            <div class="agreement-content">
-                <h3>Keyless AI Deep Search (Updates Guides Directly)</h3>
-                <p style="font-size: 14px; color: #b9a8d0; margin-bottom: 15px;">
-                    This search requires no API key. It automatically tries multiple free providers and, when successful, <strong>merges the found steps directly into every night's guide</strong> (Quest and Side Quest). You will see the new steps immediately.
-                </p>
-
-                <button class="confirm-btn enabled" onclick="deepSearchDrops()" style="width: 100%; background: linear-gradient(to bottom, #6d33a0, #4a1f7a); border-color: #9333ea; margin-bottom: 15px;">🔍 Deep Search &amp; Update All Guides</button>
-
-                <div id="deepSearchStatus" class="status-message" style="display: none;"></div>
-                <div id="deepSearchResults" class="deep-search-results"></div>
-
-                <h3 style="margin-top: 30px;">👻 Friends Settings</h3>
-                <div class="checkbox-container" style="background: #120a1a; border-color: #33204d;">
-                    <input type="checkbox" id="autoCopyToggle" onchange="toggleAutoCopy(this)">
-                    <label for="autoCopyToggle">Auto-Copy Username when someone comes online</label>
+            <div class="agreement-content settings-content">
+                <div class="settings-intro">
+                    <h3>⚙️ Settings</h3>
+                    <p>Everything here is optional — the guides work fine without touching a thing.</p>
                 </div>
-                <p style="font-size: 12px; color: #b9a8d0; margin-top: -5px;">
-                    When a player comes online, the page will scroll to them. If this is enabled, it will also automatically copy their username to your clipboard.
-                </p>
-                <p style="font-size: 11px; color: #ff8a80; margin-top: 5px; font-style: italic;">
-                    Note: Due to browser security, if you are tabbed out (e.g., playing Roblox), the page cannot copy to your clipboard. The username will be instantly copied the second you click back onto this tab.
-                </p>
 
-                <h3 style="margin-top: 25px;">📱 Background Mode</h3>
-                <div class="settings-card">
-                    <h4>🔊 Keep Alerts On When Phone is Locked</h4>
-                    <p>
-                        Turn this ON so the online sound still plays when your phone is locked or you're in another app.
-                    </p>
-                    <p>
-                        Uses a little extra battery.
-                    </p>
+                <div class="settings-section">
+                    <div class="settings-section-head">
+                        <div class="settings-section-icon">🤖</div>
+                        <div class="settings-section-text">
+                            <h4>AI Deep Search</h4>
+                            <p>Try to find fresh guide steps and merge them in automatically.</p>
+                        </div>
+                    </div>
+                    <button class="settings-action-btn" onclick="deepSearchDrops()">🔍 Search &amp; Update All Guides</button>
+                    <div id="deepSearchStatus" class="status-message" style="display: none;"></div>
+                    <div id="deepSearchResults" class="deep-search-results"></div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="settings-section-head">
+                        <div class="settings-section-icon">🔔</div>
+                        <div class="settings-section-text">
+                            <h4>Notification Sound</h4>
+                            <p>Plays when someone comes online. Tap a row to pick it, press ▶ to preview.</p>
+                        </div>
+                    </div>
+                    <div class="sound-picker" id="soundPicker"></div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="settings-section-head">
+                        <div class="settings-section-icon">👻</div>
+                        <div class="settings-section-text">
+                            <h4>Friends</h4>
+                            <p>Small helpers for the online alert.</p>
+                        </div>
+                    </div>
+                    <label class="settings-toggle-row" for="autoCopyToggle">
+                        <input type="checkbox" id="autoCopyToggle" onchange="toggleAutoCopy(this)">
+                        <div class="settings-toggle-info">
+                            <span class="settings-toggle-title">Auto-copy username</span>
+                            <span class="settings-toggle-desc">Copies their name when they come online. Works best when this tab is focused.</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="settings-section">
+                    <div class="settings-section-head">
+                        <div class="settings-section-icon">📱</div>
+                        <div class="settings-section-text">
+                            <h4>Background Mode</h4>
+                            <p>Keeps alerts alive when your phone is locked or you're in another app.</p>
+                        </div>
+                    </div>
                     <button class="bg-toggle-btn off" id="bgToggleBtn" onclick="toggleBackgroundMode()">
                         <span id="bgToggleLabel">🔇 Background Mode is OFF</span>
                         <span class="toggle-indicator"></span>
                     </button>
                     <p class="bg-status-text" id="bgStatusText">Tap to turn on.</p>
-                    <p class="bg-tip">
-                        Tip: If it stops after a while, that's your phone saving power. The sound will still play the moment you unlock.
-                    </p>
+                    <p class="bg-tip">Tip: If it stops after a while, your phone is saving power. The sound still plays the moment you unlock.</p>
                 </div>
             </div>
         </div>
@@ -344,8 +367,7 @@
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
         const year = now.getFullYear();
-        const todayFormatted = `${month}/${day}/${year}`;
-        document.getElementById('navDate').textContent = `Today: ${todayFormatted}`;
+        document.getElementById('navDate').textContent = `Today: ${month}/${day}/${year}`;
 
         const drops = [
             { name: "Night 1", time: "2026-10-22T21:00:00Z", years: [1], verified: true, hasTriggeredConfetti: true },
@@ -360,230 +382,127 @@
         ];
 
         function getDrop(y) { return drops.find(d => d.years.includes(y)); }
-        function isSecretClaimable(y) {
-            const d = getDrop(y);
-            return d ? Date.now() >= new Date(d.time).getTime() : false;
-        }
-        function getLocalTimeStr(utcStr) {
-            const d = new Date(utcStr);
-            return d.toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
-        }
+        function isSecretClaimable(y) { const d = getDrop(y); return d ? Date.now() >= new Date(d.time).getTime() : false; }
+        function getLocalTimeStr(utcStr) { return new Date(utcStr).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }); }
 
         function timeAgo(isoString) {
             if (!isoString) return null;
-            const date = new Date(isoString);
-            const nowMs = Date.now();
-            const diffMs = nowMs - date.getTime();
+            const diffMs = Date.now() - new Date(isoString).getTime();
             if (diffMs < 0) return 'just now';
-            const diffSecs = Math.floor(diffMs / 1000);
-            if (diffSecs < 60) return 'just now';
-            const diffMins = Math.floor(diffSecs / 60);
-            if (diffMins < 60) return diffMins === 1 ? '1 minute ago' : `${diffMins} minutes ago`;
-            const diffHours = Math.floor(diffMins / 60);
-            if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-            const diffDays = Math.floor(diffHours / 24);
-            if (diffDays < 7) return diffDays === 1 ? '1 day ago' : `${diffDays} days ago`;
-            const diffWeeks = Math.floor(diffDays / 7);
-            if (diffWeeks < 5) return diffWeeks === 1 ? '1 week ago' : `${diffWeeks} weeks ago`;
-            const diffMonths = Math.floor(diffDays / 30);
-            if (diffMonths < 12) return diffMonths === 1 ? '1 month ago' : `${diffMonths} months ago`;
-            const diffYears = Math.floor(diffDays / 365);
-            return diffYears === 1 ? '1 year ago' : `${diffYears} years ago`;
+            const s = Math.floor(diffMs / 1000);
+            if (s < 60) return 'just now';
+            const m = Math.floor(s / 60);
+            if (m < 60) return m === 1 ? '1 minute ago' : `${m} minutes ago`;
+            const h = Math.floor(m / 60);
+            if (h < 24) return h === 1 ? '1 hour ago' : `${h} hours ago`;
+            const d = Math.floor(h / 24);
+            if (d < 7) return d === 1 ? '1 day ago' : `${d} days ago`;
+            const w = Math.floor(d / 7);
+            if (w < 5) return w === 1 ? '1 week ago' : `${w} weeks ago`;
+            const mo = Math.floor(d / 30);
+            if (mo < 12) return mo === 1 ? '1 month ago' : `${mo} months ago`;
+            const yr = Math.floor(d / 365);
+            return yr === 1 ? '1 year ago' : `${yr} years ago`;
         }
 
         function fallbackAvatarUrl(name) {
             const initial = (name || '?').charAt(0).toUpperCase();
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" fill="#2a2a2a"/><text x="64" y="86" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="bold" fill="#666" text-anchor="middle">${initial}</text></svg>`;
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" fill="#2a2a2a"/><text x="64" y="86" font-family="Arial" font-size="64" font-weight="bold" fill="#666" text-anchor="middle">${initial}</text></svg>`;
             return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
         }
 
         const data = {
-            1: {
-                game: "DOORS",
-                monster: "Seek",
-                normal: {
-                    title: "Quest - The Candy Vault",
-                    steps: [
-                        { t: "Enter DOORS", d: "From The Hollow hub, walk through the first portal into DOORS." },
-                        { t: "Host The Candy Vault", d: "Choose 'The Candy Vault Floor' and start the run." },
-                        { t: "Explore Abe's Estate", d: "Search drawers for candy and keys while avoiding Abe and other entities." },
-                        { t: "Escape Before the Timer", d: "Once the vault opens you have 20 minutes. Eat candy you find and put unwanted candy into the cauldron." },
-                        { t: "Reach the Bottom Floor", d: "Descend all floors and exit the vault before the 20‑minute timer ends." },
-                        { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 1 statue." }
-                    ],
-                    loc: "DOORS – Candy Vault Floor",
-                    tip: "One person should watch Abe while the rest search for candy and keys. Use RIP terminals to trade candy for buffs.",
-                    warn: "You must pick 'The Candy Vault Floor' – other floors don't count.",
-                    reward: "Sweet Deceit badge + All-Seeking Antlers UGC"
-                },
-                secret: {
-                    title: "Side Quest - Floor 1 Maze (Lord Umberhallow)",
-                    intro: "This is the Hub floor puzzle, not an in-game quest. You can do it at any time!",
-                    verified: true,
-                    steps: [
-                        { t: "Enter the Hollow Hub", d: "Follow the highlighted path to the elevator." },
-                        { t: "Take the Elevator to Floor 1", d: "Press the button for the first floor." },
-                        { t: "Collect 5 Puzzle Pieces", d: "Explore the maze and find all five missing pieces while avoiding Seek." },
-                        { t: "Solve the Puzzle", d: "Place the pieces on the board and connect the start to the endpoint. Both ends should light up." },
-                        { t: "Grab the Night Relic", d: "Open the door, take the relic, and return to the elevator without being caught." },
-                        { t: "Claim Your Reward", d: "Return to the Hollow hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 1 Maze",
-                    tip: "Use the Puzzle Room and Elevator Room as safe zones – Seek cannot enter them.",
-                    warn: "You can do this Side Quest first!",
-                    reward: "Lord Umberhallow BLOXikin UGC + badge",
-                    visualDesc: "Elevator → Floor 1 → collect 5 pieces → puzzle board → relic → back to elevator."
-                }
+            1: { game: "DOORS", monster: "Seek",
+                normal: { title: "Quest - The Candy Vault", steps: [
+                    { t: "Enter DOORS", d: "From The Hollow hub, walk through the first portal into DOORS." },
+                    { t: "Host The Candy Vault", d: "Choose 'The Candy Vault Floor' and start the run." },
+                    { t: "Explore Abe's Estate", d: "Search drawers for candy and keys while avoiding Abe and other entities." },
+                    { t: "Escape Before the Timer", d: "Once the vault opens you have 20 minutes. Eat candy you find and put unwanted candy into the cauldron." },
+                    { t: "Reach the Bottom Floor", d: "Descend all floors and exit the vault before the 20‑minute timer ends." },
+                    { t: "Claim Your Reward", d: "Return to The Hollow hub and click the shimmering Night 1 statue." }
+                ], loc: "DOORS – Candy Vault Floor", tip: "One person should watch Abe while the rest search for candy and keys. Use RIP terminals to trade candy for buffs.", warn: "You must pick 'The Candy Vault Floor' – other floors don't count.", reward: "Sweet Deceit badge + All-Seeking Antlers UGC" },
+                secret: { title: "Side Quest - Floor 1 Maze (Lord Umberhallow)", intro: "This is the Hub floor puzzle, not an in-game quest. You can do it at any time!", verified: true, steps: [
+                    { t: "Enter the Hollow Hub", d: "Follow the highlighted path to the elevator." },
+                    { t: "Take the Elevator to Floor 1", d: "Press the button for the first floor." },
+                    { t: "Collect 5 Puzzle Pieces", d: "Explore the maze and find all five missing pieces while avoiding Seek." },
+                    { t: "Solve the Puzzle", d: "Place the pieces on the board and connect the start to the endpoint. Both ends should light up." },
+                    { t: "Grab the Night Relic", d: "Open the door, take the relic, and return to the elevator without being caught." },
+                    { t: "Claim Your Reward", d: "Return to the Hollow hub and claim your prize." }
+                ], loc: "The Hollow Hub – Floor 1 Maze", tip: "Use the Puzzle Room and Elevator Room as safe zones – Seek cannot enter them.", warn: "You can do this Side Quest first!", reward: "Lord Umberhallow BLOXikin UGC + badge", visualDesc: "Elevator → Floor 1 → collect 5 pieces → puzzle board → relic → back to elevator." }
             },
-            2: {
-                game: "Dandy's World",
-                monster: "Twisted Dandy",
-                normal: {
-                    title: "Quest - Dandy's World Challenge",
-                    steps: [
-                        { t: "Enter Dandy's World", d: "From The Hollow hub, portal into Dandy's World." },
-                        { t: "Collect 200 Pumpkins", d: "The confirmed event objective is to collect 200 pumpkins scattered around the floor while surviving and reaching the end." },
-                        { t: "Survive and Escape", d: "Make it to the end of the run to earn the most rewards." }
-                    ],
-                    loc: "Dandy's World – event mode",
-                    tip: "This objective is confirmed by IGN. The exact badge/UGC for the in-game quest is still being documented.",
-                    warn: "The in-game quest reward details are not yet fully confirmed.",
-                    reward: "In-game badge + UGC (details TBA)"
-                },
-                secret: {
-                    title: "Side Quest - Floor 2 Maze (Witches Brew-Nado)",
-                    intro: "This is the Hub floor puzzle. You can do it at any time!",
-                    verified: true,
-                    steps: [
-                        { t: "Take the Elevator to Floor 2", d: "From the Hollow hub, walk straight down the red carpet and select Floor 2." },
-                        { t: "Evade Twisted Dandy", d: "Navigate the maze while avoiding the Twisted Dandy entity." },
-                        { t: "Find the Dandy's World Puzzle Room", d: "The room usually spawns on the right side of the maze. Look for a playhouse-like room." },
-                        { t: "Solve the Pillar Puzzle", d: "Go upstairs. Rotate the five pillars so their lasers hit the center and the same logos face inward. You have only 11 moves." },
-                        { t: "Pull the Lever", d: "Once all lasers connect, pull the lever to get the Second Night Relic." },
-                        { t: "Return to the Elevator", d: "Carry the relic back to the elevator without being caught by Twisted Dandy." },
-                        { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
-                    ],
-                    loc: "The Hollow Hub – Floor 2 Maze",
-                    tip: "If Twisted Dandy catches you on the way back, you restart the floor. Bring a flashlight to spot him.",
-                    warn: "You can do this Side Quest first!",
-                    reward: "Witches Brew-Nado UGC + badge",
-                    visualDesc: "Elevator → Floor 2 → avoid Twisted Dandy → puzzle room → rotate 5 pillars → lever → relic."
-                }
+            2: { game: "Dandy's World", monster: "Twisted Dandy",
+                normal: { title: "Quest - Dandy's World Challenge", steps: [
+                    { t: "Enter Dandy's World", d: "From The Hollow hub, portal into Dandy's World." },
+                    { t: "Collect 200 Pumpkins", d: "The confirmed event objective is to collect 200 pumpkins scattered around the floor while surviving and reaching the end." },
+                    { t: "Survive and Escape", d: "Make it to the end of the run to earn the most rewards." }
+                ], loc: "Dandy's World – event mode", tip: "This objective is confirmed by IGN. The exact badge/UGC for the in-game quest is still being documented.", warn: "The in-game quest reward details are not yet fully confirmed.", reward: "In-game badge + UGC (details TBA)" },
+                secret: { title: "Side Quest - Floor 2 Maze (Witches Brew-Nado)", intro: "This is the Hub floor puzzle. You can do it at any time!", verified: true, steps: [
+                    { t: "Take the Elevator to Floor 2", d: "From the Hollow hub, walk straight down the red carpet and select Floor 2." },
+                    { t: "Evade Twisted Dandy", d: "Navigate the maze while avoiding the Twisted Dandy entity." },
+                    { t: "Find the Dandy's World Puzzle Room", d: "The room usually spawns on the right side of the maze. Look for a playhouse-like room." },
+                    { t: "Solve the Pillar Puzzle", d: "Go upstairs. Rotate the five pillars so their lasers hit the center and the same logos face inward. You have only 11 moves." },
+                    { t: "Pull the Lever", d: "Once all lasers connect, pull the lever to get the Second Night Relic." },
+                    { t: "Return to the Elevator", d: "Carry the relic back to the elevator without being caught by Twisted Dandy." },
+                    { t: "Claim Your Reward", d: "Return to the hub and claim your prize." }
+                ], loc: "The Hollow Hub – Floor 2 Maze", tip: "If Twisted Dandy catches you on the way back, you restart the floor. Bring a flashlight to spot him.", warn: "You can do this Side Quest first!", reward: "Witches Brew-Nado UGC + badge", visualDesc: "Elevator → Floor 2 → avoid Twisted Dandy → puzzle room → rotate 5 pillars → lever → relic." }
             },
-            3: {
-                game: "Demonology",
-                monster: "Biter",
+            3: { game: "Demonology", monster: "Biter",
                 normal: { title: "Quest - Demonology Event Quest", steps: [], loc: "Demonology – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 3 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 3 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
-            4: {
-                game: "99 Nights in the Forest",
-                monster: "The Deer",
+            4: { game: "99 Nights in the Forest", monster: "The Deer",
                 normal: { title: "Quest - 99 Nights Event Quest", steps: [], loc: "99 Nights in the Forest – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 4 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 4 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
-            5: {
-                game: "The Mimic",
-                monster: "Hiachi",
+            5: { game: "The Mimic", monster: "Hiachi",
                 normal: { title: "Quest - The Mimic Event Quest", steps: [], loc: "The Mimic – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 5 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 5 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
-            6: {
-                game: "Animal Hospital",
-                monster: "Mimic",
+            6: { game: "Animal Hospital", monster: "Mimic",
                 normal: { title: "Quest - Animal Hospital Event Quest", steps: [], loc: "Animal Hospital – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 6 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 6 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
-            7: {
-                game: "Scary Shawarma Kiosk",
-                monster: "The Inspector",
+            7: { game: "Scary Shawarma Kiosk", monster: "The Inspector",
                 normal: { title: "Quest - Scary Shawarma Event Quest", steps: [], loc: "Scary Shawarma Kiosk – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 7 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 7 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
-            8: {
-                game: "WARDEN",
-                monster: "The Overseer",
+            8: { game: "WARDEN", monster: "The Overseer",
                 normal: { title: "Quest - WARDEN Event Quest", steps: [], loc: "WARDEN – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 8 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 8 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             },
-            9: {
-                game: "Piggy",
-                monster: "Piggy",
+            9: { game: "Piggy", monster: "Piggy",
                 normal: { title: "Quest - Piggy Event Quest", steps: [], loc: "Piggy – event mode", tip: "", warn: "", reward: "" },
                 secret: { title: "Side Quest - Floor 9 Maze", intro: "Hub floor puzzle.", verified: false, steps: [], loc: "The Hollow Hub – Floor 9 Maze", tip: "", warn: "", reward: "", visualDesc: "" }
             }
         };
 
         (function loadMergedData() {
-            try {
-                const saved = localStorage.getItem('hollow_merged_data');
-                if (saved) {
-                    const parsed = JSON.parse(saved);
-                    for (const key in parsed) {
-                        if (data[key]) Object.assign(data[key], parsed[key]);
-                    }
-                }
-            } catch (e) { console.warn('Could not load merged data', e); }
+            try { const saved = localStorage.getItem('hollow_merged_data'); if (saved) { const p = JSON.parse(saved); for (const k in p) { if (data[k]) Object.assign(data[k], p[k]); } } } catch (e) {}
         })();
 
         const friendGroups = {
             black: [
-                { name: "Meowsiio", handle: "Meowsiio" },
-                { name: "Turtle", handle: "Turtlepla" },
-                { name: "Toka1iz", handle: "Toka1iz" },
-                { name: "Pwnion", handle: "Pwnion" },
-                { name: "Princeerik", handle: "Princeeriktheblue" },
-                { name: "Kxttyrei", handle: "Kxttyrei" },
-                { name: "Brandonisbulk", handle: "Brandonisbulk" },
-                { name: "Yuvha", handle: "Yuvha" },
-                { name: "Clockset", handle: "Clockset" },
-                { name: "EnderWin", handle: "EnderWin" },
-                { name: "Ztrabz", handle: "Ztrabz" },
-                { name: "Jazzyx3", handle: "Jazzyx3" },
-                { name: "MiracleDrops", handle: "MiracleDrops" },
-                { name: "luigiburger333", handle: "luigiburger333" },
-                { name: "Dextroagave", handle: "Dextroagave" },
-                { name: "L3Norm", handle: "L3Norm" },
-                { name: "Quiptid", handle: "Quiptid" },
-                { name: "sneakysnipers1", handle: "sneakysnipers1" },
-                { name: "purrsian-lily", handle: "purrsian_lily" },
-                { name: "Deathux", handle: "Deathux" },
-                { name: "Mxnav", handle: "Mxnav" },
-                { name: "meteor0id", handle: "meteor0id" }
+                { name: "Meowsiio", handle: "Meowsiio" }, { name: "Turtle", handle: "Turtlepla" }, { name: "Toka1iz", handle: "Toka1iz" },
+                { name: "Pwnion", handle: "Pwnion" }, { name: "Princeerik", handle: "Princeeriktheblue" }, { name: "Kxttyrei", handle: "Kxttyrei" },
+                { name: "Brandonisbulk", handle: "Brandonisbulk" }, { name: "Yuvha", handle: "Yuvha" }, { name: "Clockset", handle: "Clockset" },
+                { name: "EnderWin", handle: "EnderWin" }, { name: "Ztrabz", handle: "Ztrabz" }, { name: "Jazzyx3", handle: "Jazzyx3" },
+                { name: "MiracleDrops", handle: "MiracleDrops" }, { name: "luigiburger333", handle: "luigiburger333" }, { name: "Dextroagave", handle: "Dextroagave" },
+                { name: "L3Norm", handle: "L3Norm" }, { name: "Quiptid", handle: "Quiptid" }, { name: "sneakysnipers1", handle: "sneakysnipers1" },
+                { name: "purrsian-lily", handle: "purrsian_lily" }, { name: "Deathux", handle: "Deathux" }, { name: "Mxnav", handle: "Mxnav" }, { name: "meteor0id", handle: "meteor0id" }
             ],
             yellow: [
-                { name: "Waffletrades", handle: "Waffletrades" },
-                { name: "Kirbyyums", handle: "Kirbyyums" },
-                { name: "Master0y", handle: "Master0y" },
-                { name: "Crystalaco", handle: "Crystalaco" },
-                { name: "Da_pandagirl", handle: "Da_pandagirl" },
-                { name: "Hellitsvg", handle: "Hellitsvg" },
-                { name: "Atlantiszen", handle: "Atlantiszen" },
-                { name: "SLeghart", handle: "SLeghart" },
-                { name: "nealygamess", handle: "nealygamess" },
-                { name: "SHAFDOWOLF", handle: "SHAFDOWOLF" },
-                { name: "OzelGuy", handle: "OzelGuy" },
-                { name: "DeeterPlays", handle: "DeeterPlays" },
-                { name: "CH1Z3LED", handle: "CH1Z3LED" },
-                { name: "sudonrblx", handle: "sudonrblx" },
-                { name: "includ1ve", handle: "includ1ve" },
-                { name: "robey100", handle: "robey100" },
-                { name: "soyyyBee", handle: "soyyyBee" },
-                { name: "LOUDNAYU", handle: "LOUDNAYU" },
-                { name: "stormyxvreal", handle: "stormyxvreal" }
+                { name: "Waffletrades", handle: "Waffletrades" }, { name: "Kirbyyums", handle: "Kirbyyums" }, { name: "Master0y", handle: "Master0y" },
+                { name: "Crystalaco", handle: "Crystalaco" }, { name: "Da_pandagirl", handle: "Da_pandagirl" }, { name: "Hellitsvg", handle: "Hellitsvg" },
+                { name: "Atlantiszen", handle: "Atlantiszen" }, { name: "SLeghart", handle: "SLeghart" }, { name: "nealygamess", handle: "nealygamess" },
+                { name: "SHAFDOWOLF", handle: "SHAFDOWOLF" }, { name: "OzelGuy", handle: "OzelGuy" }, { name: "DeeterPlays", handle: "DeeterPlays" },
+                { name: "CH1Z3LED", handle: "CH1Z3LED" }, { name: "sudonrblx", handle: "sudonrblx" }, { name: "includ1ve", handle: "includ1ve" },
+                { name: "robey100", handle: "robey100" }, { name: "soyyyBee", handle: "soyyyBee" }, { name: "LOUDNAYU", handle: "LOUDNAYU" }, { name: "stormyxvreal", handle: "stormyxvreal" }
             ],
             blue: [
-                { name: "Th3_avocad0", handle: "Th3_avocad0" },
-                { name: "Brightgreenpart", handle: "Brightgreenpart" },
-                { name: "Guavamatchaa", handle: "Guavamatchaa" },
-                { name: "CoffeRuntime", handle: "CoffeRuntime" },
-                { name: "AngelEthereal", handle: "AngelEthereal" },
-                { name: "Echoplusjupiter", handle: "Echoplusjupiter" },
-                { name: "Nauticalcaptain", handle: "Nauticalcaptain" },
-                { name: "Caf3zlnho", handle: "Caf3zlnho" },
-                { name: "someslugcat", handle: "someslugcat" },
-                { name: "PolarisDirector", handle: "PolarisDirector" },
-                { name: "Meowsiio", handle: "Meowsiio" }
+                { name: "Th3_avocad0", handle: "Th3_avocad0" }, { name: "Brightgreenpart", handle: "Brightgreenpart" }, { name: "Guavamatchaa", handle: "Guavamatchaa" },
+                { name: "CoffeRuntime", handle: "CoffeRuntime" }, { name: "AngelEthereal", handle: "AngelEthereal" }, { name: "Echoplusjupiter", handle: "Echoplusjupiter" },
+                { name: "Nauticalcaptain", handle: "Nauticalcaptain" }, { name: "Caf3zlnho", handle: "Caf3zlnho" }, { name: "someslugcat", handle: "someslugcat" },
+                { name: "PolarisDirector", handle: "PolarisDirector" }, { name: "Meowsiio", handle: "Meowsiio" }
             ],
             white: "You just need to join a Roblox Plus player."
         };
@@ -598,7 +517,7 @@
                     if (!existing.groups.includes(group)) existing.groups.push(group);
                     return;
                 }
-                const entry = { ...p, group: group, groups: [group] };
+                const entry = { ...p, group, groups: [group] };
                 handleToEntry.set(key, entry);
                 allPlayers.push(entry);
             });
@@ -620,7 +539,6 @@
                 const y = parseInt(btn.getAttribute('data-year'));
                 const d = getDrop(y);
                 if (!d) return;
-                const localTime = getLocalTimeStr(d.time);
                 if (isSecretClaimable(y)) {
                     btn.classList.add('claimable');
                     btn.classList.remove('unverified', 'flashing-year');
@@ -628,7 +546,7 @@
                 } else {
                     btn.classList.remove('claimable', 'flashing-year');
                     if (!d.verified) btn.classList.add('unverified');
-                    btn.title = `Night ${y} - Side Quest and UGC unlock ${localTime} (${d.name})`;
+                    btn.title = `Night ${y} - Side Quest and UGC unlock ${getLocalTimeStr(d.time)} (${d.name})`;
                 }
             });
         }
@@ -638,7 +556,6 @@
         const overlay = document.getElementById('overlay');
         const mTitle = document.getElementById('modalTitle');
         const mBody = document.getElementById('modalBody');
-
         const agreementOverlay = document.getElementById('agreementOverlay');
         const agreementText = document.getElementById('agreementText');
         const statusMessage = document.getElementById('statusMessage');
@@ -650,16 +567,13 @@
         let countdownStarted = false;
 
         function checkAgreement() {
-            const hasAgreed = localStorage.getItem('hollow_agreed');
-            if (!hasAgreed) agreementOverlay.classList.add('active');
+            if (!localStorage.getItem('hollow_agreed')) agreementOverlay.classList.add('active');
         }
 
         agreementText.addEventListener('scroll', function() {
-            if (!hasScrolledToBottom) {
-                if (this.scrollTop + this.clientHeight >= this.scrollHeight - 15) {
-                    hasScrolledToBottom = true;
-                    startCountdown();
-                }
+            if (!hasScrolledToBottom && this.scrollTop + this.clientHeight >= this.scrollHeight - 15) {
+                hasScrolledToBottom = true;
+                startCountdown();
             }
         });
 
@@ -667,14 +581,13 @@
             if (countdownStarted) return;
             countdownStarted = true;
             statusMessage.className = 'status-message status-timer';
-            let seconds = 5;
-            statusMessage.textContent = `⏳ Please wait: ${seconds} seconds`;
-            const timer = setInterval(() => {
-                seconds--;
-                if (seconds > 0) {
-                    statusMessage.textContent = `⏳ Please wait: ${seconds} seconds`;
-                } else {
-                    clearInterval(timer);
+            let s = 5;
+            statusMessage.textContent = `⏳ Please wait: ${s} seconds`;
+            const t = setInterval(() => {
+                s--;
+                if (s > 0) statusMessage.textContent = `⏳ Please wait: ${s} seconds`;
+                else {
+                    clearInterval(t);
                     statusMessage.className = 'status-message status-ready';
                     statusMessage.textContent = '✅ You can now check the box below!';
                     agreementCheckbox.disabled = false;
@@ -706,180 +619,66 @@
             if (!data[year]) return;
             currentYear = year;
             mTitle.textContent = `Night ${year}: ${data[year].game} (Monster: ${data[year].monster})`;
-            mBody.innerHTML = `
-                <div class="choice-box">
-                    <h3>Which quest do you want?</h3>
-                    <button class="big-btn btn-normal" onclick="showGuide('normal')">Quest (Main Badge)</button>
-                    <button class="big-btn btn-secret" onclick="handleSecretClick(${year})">Side Quest (Hidden Badge)</button>
-                </div>
-            `;
+            mBody.innerHTML = `<div class="choice-box"><h3>Which quest do you want?</h3><button class="big-btn btn-normal" onclick="showGuide('normal')">Quest (Main Badge)</button><button class="big-btn btn-secret" onclick="handleSecretClick(${year})">Side Quest (Hidden Badge)</button></div>`;
             overlay.classList.add('active');
         }
 
         function handleSecretClick(year) {
             const d = getDrop(year);
-            const localTime = getLocalTimeStr(d.time);
             if (!isSecretClaimable(year)) {
-                const gamesList = d.years.map(yy => `Night ${yy} - ${data[yy].game}`).join(' &bull; ');
-                const verifiedLabel = d.verified ? '✅ Guide Verified' : '⚠️ Guide Not Yet Verified';
-                mBody.innerHTML = `
-                    <div style="text-align:center; padding: 30px 20px;">
-                        <div style="font-size: 50px; margin-bottom: 15px;">🔒</div>
-                        <h2 style="color: #ff6b6b; margin-bottom: 10px;">SIDE QUEST NOT LIVE YET</h2>
-                        <p style="font-size: 15px; color: #b9a8d0; margin-bottom: 15px;"><strong>This Side Quest is not available yet. But you can still read the guide!</strong></p>
-                        <div style="background: #2b1c07; border: 1px solid #ff9800; padding: 12px; border-radius: 4px; margin-bottom: 15px; text-align:left;">
-                            <strong style="color: #ffb84d;">⏰ Available in ${d.name} - ${localTime}</strong>
-                            <p style="font-size: 12px; color: #ffcc80; margin-top:6px; margin-bottom:4px;">The game for this night:</p>
-                            <p style="font-size: 12px; color: #ffcc80;">${gamesList}</p>
-                            <p style="font-size: 11px; color: #ffcc80; margin-top:8px; font-style:italic;">${verifiedLabel}</p>
-                        </div>
-                        <p style="font-size: 12px; color: #8f7fa6; margin-bottom: 15px;">You can read the full guide now and do it as soon as the night goes live. Remember: you can do either quest first!</p>
-                        <button class="big-btn btn-continue" onclick="showGuide('secret')">Continue Anyway (View Guide)</button>
-                        <button class="big-btn btn-back" onclick="openChoice(${year})">Go Back</button>
-                    </div>
-                `;
-            } else {
-                showGuide('secret');
-            }
+                const games = d.years.map(yy => `Night ${yy} - ${data[yy].game}`).join(' • ');
+                const vLabel = d.verified ? '✅ Guide Verified' : '⚠️ Guide Not Yet Verified';
+                mBody.innerHTML = `<div style="text-align:center;padding:30px 20px;"><div style="font-size:50px;margin-bottom:15px;">🔒</div><h2 style="color:#ff6b6b;margin-bottom:10px;">SIDE QUEST NOT LIVE YET</h2><p style="font-size:15px;color:#b9a8d0;margin-bottom:15px;"><strong>This Side Quest is not available yet. But you can still read the guide!</strong></p><div style="background:#2b1c07;border:1px solid #ff9800;padding:12px;border-radius:4px;margin-bottom:15px;text-align:left;"><strong style="color:#ffb84d;">⏰ Available in ${d.name} - ${getLocalTimeStr(d.time)}</strong><p style="font-size:12px;color:#ffcc80;margin-top:6px;margin-bottom:4px;">The game for this night:</p><p style="font-size:12px;color:#ffcc80;">${games}</p><p style="font-size:11px;color:#ffcc80;margin-top:8px;font-style:italic;">${vLabel}</p></div><p style="font-size:12px;color:#8f7fa6;margin-bottom:15px;">You can read the full guide now and do it as soon as the night goes live. Remember: you can do either quest first!</p><button class="big-btn btn-continue" onclick="showGuide('secret')">Continue Anyway (View Guide)</button><button class="big-btn btn-back" onclick="openChoice(${year})">Go Back</button></div>`;
+            } else showGuide('secret');
         }
 
         function showGuide(type) {
             const d = data[currentYear][type];
             const isSecret = type === 'secret';
-            const isAiUpdated = d.aiUpdated === true;
+            const isAi = d.aiUpdated === true;
             const hasSteps = d.steps && d.steps.length > 0;
-            let verifiedBadge = '';
+            let vBadge = '';
             if (isSecret) {
-                if (isAiUpdated) verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
-                else if (d.verified) verifiedBadge = '<span class="verified-badge">VERIFIED</span>';
-                else verifiedBadge = '<span class="unverified-badge">NOT VERIFIED</span>';
-            } else {
-                if (isAiUpdated) verifiedBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
-            }
-            mTitle.innerHTML = `${isSecret ? 'Side Quest' : 'Quest'}: ${d.title} ${verifiedBadge}`;
-            let html = `
-                <div class="guide-section">
-                    <div class="step-box ${isSecret ? 'secret' : ''} ${isSecret && !d.verified && !isAiUpdated ? 'unverified' : ''}">
-                        <h4>Step-by-Step Instructions:</h4>
-                        ${d.intro ? `<p style="margin-bottom:12px; font-style:italic; color:#b9a8d0; font-size:14px;">${d.intro}</p>` : ''}
-                        ${hasSteps ? `
-                        <ul class="step-list">
-                            ${d.steps.map((s, i) => `
-                                <li>
-                                    <div class="step-num">${i + 1}</div>
-                                    <span class="step-title">${s.t}</span>
-                                    ${s.d}
-                                </li>
-                            `).join('')}
-                        </ul>
-                        ` : `
-                        <div class="info-box info-unverified" style="margin-top:10px;">
-                            <strong>⏳ No steps yet</strong>
-                            <p>Use the "⚙️ Settings" panel to run an AI Deep Search. It will try to fetch the latest verified steps and merge them into this guide automatically.</p>
-                        </div>
-                        `}
-                    </div>
-            `;
-            if (isAiUpdated) {
-                html += `
-                    <div class="info-box" style="background: #0e2430; border-color: #00e5ff; color: #b3f0ff; margin-top: 15px;">
-                        <strong>🤖 AI Deep Search Insight:</strong>
-                        <p style="font-size: 13px; margin-top: 5px;">These steps were fetched by the AI Deep Search. They may be more up-to-date than the static guide. Always double-check in-game.</p>
-                    </div>
-                `;
-            }
-            if (isSecret && !d.verified && !isAiUpdated) {
-                html += `
-                    <div class="info-box info-unverified">
-                        <strong>⚠️ Guide Not Yet Verified</strong>
-                        <p>The exact step-by-step for this side quest has not been published by guide sites yet. Use the video guide below, or run a Deep Search from Settings.</p>
-                    </div>
-                `;
-            }
-            html += `
-                    <div class="info-box info-loc"><strong>Location:</strong> ${d.loc || 'Unknown'}</div>
-                    ${d.tip ? `<div class="info-box info-tip"><strong>Pro Tip:</strong> ${d.tip}</div>` : ''}
-                    ${d.warn ? `<div class="info-box info-warn"><strong>WARNING:</strong> ${d.warn}</div>` : ''}
-                    ${d.reward ? `<div class="info-box info-reward"><strong>Reward:</strong> ${d.reward}</div>` : ''}
-                    <button class="big-btn btn-visual" onclick="toggleVisual()">📷 Show Visual Guide (Where Exactly to Look)</button>
-                    <div class="visual-guide" id="visualGuide">
-                        <h5>👁️ Visual Guide - Where to Look:</h5>
-                        <div class="visual-box">
-                            <strong>${d.visualDesc || "Watch the video guide below for the exact location!"}</strong>
-                        </div>
-                        <p><strong>💡 Can't find it?</strong> Watch a video guide - seeing someone do it makes it much easier!</p>
-                    </div>
-                    <a class="big-btn btn-video" href="https://www.youtube.com/results?search_query=The+Hollow+Roblox+Night+${currentYear}+${encodeURIComponent(data[currentYear].game)}+quest+guide" target="_blank" rel="noopener noreferrer">▶ Watch Video Guide for Night ${currentYear}</a>
-                    <div class="info-box info-warn" style="margin-top:15px;">
-                        <strong>VERY IMPORTANT:</strong>
-                        After finishing steps, you MUST go back to the main Hollow Hub and click the shimmering statue for Night ${currentYear}!
-                    </div>
-                    <button class="big-btn btn-back" onclick="openChoice(${currentYear})">Go Back</button>
-                </div>
-            `;
+                if (isAi) vBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
+                else if (d.verified) vBadge = '<span class="verified-badge">VERIFIED</span>';
+                else vBadge = '<span class="unverified-badge">NOT VERIFIED</span>';
+            } else if (isAi) vBadge = '<span class="ai-verified-badge">AI UPDATED</span>';
+            mTitle.innerHTML = `${isSecret ? 'Side Quest' : 'Quest'}: ${d.title} ${vBadge}`;
+
+            let html = `<div class="guide-section"><div class="step-box ${isSecret ? 'secret' : ''} ${isSecret && !d.verified && !isAi ? 'unverified' : ''}"><h4>Step-by-Step Instructions:</h4>${d.intro ? `<p style="margin-bottom:12px;font-style:italic;color:#b9a8d0;font-size:14px;">${d.intro}</p>` : ''}${hasSteps ? `<ul class="step-list">${d.steps.map((s, i) => `<li><div class="step-num">${i+1}</div><span class="step-title">${s.t}</span>${s.d}</li>`).join('')}</ul>` : `<div class="info-box info-unverified" style="margin-top:10px;"><strong>⏳ No steps yet</strong><p>Use the "⚙️ Settings" panel to run an AI Deep Search. It will try to fetch the latest verified steps and merge them into this guide automatically.</p></div>`}</div>`;
+
+            if (isAi) html += `<div class="info-box" style="background:#0e2430;border-color:#00e5ff;color:#b3f0ff;margin-top:15px;"><strong>🤖 AI Deep Search Insight:</strong><p style="font-size:13px;margin-top:5px;">These steps were fetched by the AI Deep Search. They may be more up-to-date than the static guide. Always double-check in-game.</p></div>`;
+            if (isSecret && !d.verified && !isAi) html += `<div class="info-box info-unverified"><strong>⚠️ Guide Not Yet Verified</strong><p>The exact step-by-step for this side quest has not been published by guide sites yet. Use the video guide below, or run a Deep Search from Settings.</p></div>`;
+
+            html += `<div class="info-box info-loc"><strong>Location:</strong> ${d.loc || 'Unknown'}</div>${d.tip ? `<div class="info-box info-tip"><strong>Pro Tip:</strong> ${d.tip}</div>` : ''}${d.warn ? `<div class="info-box info-warn"><strong>WARNING:</strong> ${d.warn}</div>` : ''}${d.reward ? `<div class="info-box info-reward"><strong>Reward:</strong> ${d.reward}</div>` : ''}<button class="big-btn btn-visual" onclick="toggleVisual()">📷 Show Visual Guide (Where Exactly to Look)</button><div class="visual-guide" id="visualGuide"><h5>👁️ Visual Guide - Where to Look:</h5><div class="visual-box"><strong>${d.visualDesc || "Watch the video guide below for the exact location!"}</strong></div><p><strong>💡 Can't find it?</strong> Watch a video guide - seeing someone do it makes it much easier!</p></div><a class="big-btn btn-video" href="https://www.youtube.com/results?search_query=The+Hollow+Roblox+Night+${currentYear}+${encodeURIComponent(data[currentYear].game)}+quest+guide" target="_blank" rel="noopener noreferrer">▶ Watch Video Guide for Night ${currentYear}</a><div class="info-box info-warn" style="margin-top:15px;"><strong>VERY IMPORTANT:</strong> After finishing steps, you MUST go back to the main Hollow Hub and click the shimmering statue for Night ${currentYear}!</div><button class="big-btn btn-back" onclick="openChoice(${currentYear})">Go Back</button></div>`;
             mBody.innerHTML = html;
             mBody.scrollTop = 0;
         }
 
-        function toggleVisual() {
-            const guide = document.getElementById('visualGuide');
-            if (guide) guide.classList.toggle('show');
-        }
-
-        function closeModal() {
-            overlay.classList.remove('active');
-            currentYear = null;
-        }
+        function toggleVisual() { const g = document.getElementById('visualGuide'); if (g) g.classList.toggle('show'); }
+        function closeModal() { overlay.classList.remove('active'); currentYear = null; }
 
         const friendsOverlay = document.getElementById('friendsOverlay');
         const friendsTitle = document.getElementById('friendsTitle');
         const friendsBody = document.getElementById('friendsBody');
 
         function openFriends(e) {
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
             renderGhostGroups();
             friendsOverlay.classList.add('active');
-            if (pendingCopyHandle) {
-                navigator.clipboard.writeText(pendingCopyHandle).catch(() => {});
-                pendingCopyHandle = null;
-            }
+            if (pendingCopyHandle) { navigator.clipboard.writeText(pendingCopyHandle).catch(() => {}); pendingCopyHandle = null; }
         }
-
-        function closeFriends() {
-            friendsOverlay.classList.remove('active');
-        }
+        function closeFriends() { friendsOverlay.classList.remove('active'); }
 
         function renderGhostGroups() {
             friendsTitle.textContent = "👻 Select a Ghost Group";
-            friendsBody.innerHTML = `
-                <div style="text-align: center; margin-bottom: 20px; color: #b9a8d0;">
-                    Select a group below to view the players.
-                </div>
-                <div style="display: grid; gap: 12px; max-width: 400px; margin: 0 auto;">
-                    <button class="ghost-select-btn ghost-black" onclick="renderFriendList('black')">
-                        <span style="font-size: 20px;">👻</span> Black Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-yellow" onclick="renderFriendList('yellow')">
-                        <span style="font-size: 20px;">👻</span> Yellow Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-blue" onclick="renderFriendList('blue')">
-                        <span style="font-size: 20px;">👻</span> Blue Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-white" onclick="renderFriendList('white')">
-                        <span style="font-size: 20px;">👻</span> White Ghost
-                    </button>
-                    <button class="ghost-select-btn ghost-all" onclick="renderFriendList('all')">
-                        <span style="font-size: 20px;">🟢</span> All Online (Playing The Hollow)
-                    </button>
-                </div>
-            `;
+            friendsBody.innerHTML = `<div style="text-align:center;margin-bottom:20px;color:#b9a8d0;">Select a group below to view the players.</div><div style="display:grid;gap:12px;max-width:400px;margin:0 auto;"><button class="ghost-select-btn ghost-black" onclick="renderFriendList('black')"><span style="font-size:20px;">👻</span> Black Ghost</button><button class="ghost-select-btn ghost-yellow" onclick="renderFriendList('yellow')"><span style="font-size:20px;">👻</span> Yellow Ghost</button><button class="ghost-select-btn ghost-blue" onclick="renderFriendList('blue')"><span style="font-size:20px;">👻</span> Blue Ghost</button><button class="ghost-select-btn ghost-white" onclick="renderFriendList('white')"><span style="font-size:20px;">👻</span> White Ghost</button><button class="ghost-select-btn ghost-all" onclick="renderFriendList('all')"><span style="font-size:20px;">🟢</span> All Online (Playing The Hollow)</button></div>`;
         }
 
         function followerLabel(cache) {
             if (cache.followers === null || cache.followers === undefined) return 'Followers: …';
             return `Followers: ${cache.followers.toLocaleString()}`;
         }
-
         function lastSeenText(cache) {
             if (cache.isOnline !== false) return '';
             const ago = timeAgo(cache.lastOnline);
@@ -888,121 +687,136 @@
 
         function renderFriendList(filter) {
             const isAll = filter === 'all';
-
             if (filter === 'white') {
                 friendsTitle.textContent = `👻 White Ghost`;
-                friendsBody.innerHTML = `
-                    <div class="back-btn-container">
-                        <button class="btn-back" style="width: auto; padding: 8px 15px; margin-top: 0; font-size: 14px;" onclick="renderGhostGroups()">← Back to Ghosts</button>
-                    </div>
-                    <div style="text-align: center; padding: 40px 20px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333;">
-                        <div style="font-size: 40px; margin-bottom: 20px;">👻</div>
-                        <h3 style="color: #ffd9a8; margin-bottom: 15px;">White Ghost Group</h3>
-                        <p style="color: #b9a8d0; font-size: 16px; line-height: 1.6;">${friendGroups.white}</p>
-                    </div>
-                `;
+                friendsBody.innerHTML = `<div class="back-btn-container"><button class="btn-back" style="width:auto;padding:8px 15px;margin-top:0;font-size:14px;" onclick="renderGhostGroups()">← Back to Ghosts</button></div><div style="text-align:center;padding:40px 20px;background:#1e1e1e;border-radius:8px;border:1px solid #333;"><div style="font-size:40px;margin-bottom:20px;">👻</div><h3 style="color:#ffd9a8;margin-bottom:15px;">White Ghost Group</h3><p style="color:#b9a8d0;font-size:16px;line-height:1.6;">${friendGroups.white}</p></div>`;
                 return;
             }
-
             friendsTitle.textContent = isAll ? "👻 Online All Ghosts" : `👻 ${filter.charAt(0).toUpperCase() + filter.slice(1)} Ghost`;
-
-            let html = `
-                <div class="back-btn-container">
-                    <button class="btn-back" style="width: auto; padding: 8px 15px; margin-top: 0; font-size: 14px;" onclick="renderGhostGroups()">← Back to Ghosts</button>
-                </div>
-            `;
-
+            let html = `<div class="back-btn-container"><button class="btn-back" style="width:auto;padding:8px 15px;margin-top:0;font-size:14px;" onclick="renderGhostGroups()">← Back to Ghosts</button></div>`;
             const playersToRender = isAll ? allPlayers : friendGroups[filter].map(p => ({...p, group: filter}));
-            const filteredPlayers = isAll
-                ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline)
-                : playersToRender;
-
+            const filteredPlayers = isAll ? playersToRender.filter(p => playerDataCache[p.handle]?.isOnline) : playersToRender;
             if (filteredPlayers.length === 0 && !isAll) {
-                html += `<div style="text-align: center; color: #888; padding: 40px 20px;">No players found.</div>`;
+                html += `<div style="text-align:center;color:#888;padding:40px 20px;">No players found.</div>`;
                 friendsBody.innerHTML = html;
                 return;
             }
-
-            if (isAll) {
-                html += `
-                    <h3 class="section-title">🎮 Playing The Hollow</h3>
-                    <div class="friends-grid" id="hollowGrid"></div>
-                    <h3 class="section-title">🟢 Other Online</h3>
-                    <div class="friends-grid" id="onlineGrid"></div>
-                `;
-            } else {
-                html += `<div class="friends-grid" id="friendsGrid"></div>`;
-            }
-
+            if (isAll) html += `<h3 class="section-title">🎮 Playing The Hollow</h3><div class="friends-grid" id="hollowGrid"></div><h3 class="section-title">🟢 Other Online</h3><div class="friends-grid" id="onlineGrid"></div>`;
+            else html += `<div class="friends-grid" id="friendsGrid"></div>`;
             friendsBody.innerHTML = html;
 
             filteredPlayers.forEach(p => {
                 const profileUrl = `https://www.roblox.com/users/profile?username=${encodeURIComponent(p.handle)}`;
                 const cache = playerDataCache[p.handle] || { isOnline: false, isPlayingHollow: false, followers: null, displayName: p.name, justCameOnline: false, lastOnline: null, avatarUrl: null };
-
                 const displayAvatar = cache.avatarUrl || fallbackAvatarUrl(p.name);
-
-                const ghostBadge = isAll
-                    ? `<div class="ghost-badges">${(p.groups || [p.group]).map(g => `<span class="ghost-badge badge-${g}">${g}</span>`).join('')}</div>`
-                    : '';
+                const ghostBadge = isAll ? `<div class="ghost-badges">${(p.groups || [p.group]).map(g => `<span class="ghost-badge badge-${g}">${g}</span>`).join('')}</div>` : '';
                 const justOnlineClass = cache.justCameOnline ? 'just-online' : '';
                 const followerText = followerLabel(cache);
                 const lastSeen = lastSeenText(cache);
-
-                let statusText = 'Offline';
-                let statusColor = '#888';
-                if (cache.isPlayingHollow) {
-                    statusText = 'Playing The Hollow';
-                    statusColor = '#ff7b00';
-                } else if (cache.isOnline) {
-                    statusText = 'Online';
-                    statusColor = '#39ff14';
-                } else if (cache.isOnline === null) {
-                    statusText = 'Loading...';
-                }
-
+                let statusText = 'Offline', statusColor = '#888';
+                if (cache.isPlayingHollow) { statusText = 'Playing The Hollow'; statusColor = '#ff7b00'; }
+                else if (cache.isOnline) { statusText = 'Online'; statusColor = '#39ff14'; }
+                else if (cache.isOnline === null) statusText = 'Loading...';
                 const lastSeenDisplay = lastSeen ? '' : 'display: none;';
 
-                const cardHtml = `
-                    <a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card ${justOnlineClass}" data-username="${p.handle}">
-                        <div class="friend-top">
-                            <div class="friend-avatar-wrap">
-                                <img src="${displayAvatar}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}" loading="lazy">
-                                <div class="friend-status-icon">
-                                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                                </div>
-                            </div>
-                            <div class="friend-info">
-                                <div class="friend-name" data-displayname-for="${p.handle}">${cache.displayName || p.name}</div>
-                                <div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div>
-                                <div class="friend-status-text" data-status-for="${p.handle}" style="color: ${statusColor}">${statusText}</div>
-                                <div class="friend-lastseen" data-lastseen-for="${p.handle}" style="${lastSeenDisplay}">${lastSeen}</div>
-                                <div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px; color:#ffb84d;">${followerText}</div>
-                                ${ghostBadge}
-                            </div>
-                        </div>
-                        <div class="friend-add-btn">View Profile</div>
-                    </a>
-                `;
+                const cardHtml = `<a href="${profileUrl}" target="_blank" rel="noopener noreferrer" class="friend-card ${justOnlineClass}" data-username="${p.handle}"><div class="friend-top"><div class="friend-avatar-wrap"><img src="${displayAvatar}" alt="${p.name}" class="friend-avatar" data-avatar-for="${p.handle}" loading="lazy"><div class="friend-status-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div></div><div class="friend-info"><div class="friend-name" data-displayname-for="${p.handle}">${cache.displayName || p.name}</div><div class="friend-handle" onclick="copyUsername(event, '${p.handle}')" title="Click to copy username">@${p.handle}</div><div class="friend-status-text" data-status-for="${p.handle}" style="color: ${statusColor}">${statusText}</div><div class="friend-lastseen" data-lastseen-for="${p.handle}" style="${lastSeenDisplay}">${lastSeen}</div><div class="friend-followers" data-followers-for="${p.handle}" style="font-size:11px;color:#ffb84d;">${followerText}</div>${ghostBadge}</div></div><div class="friend-add-btn">View Profile</div></a>`;
 
                 if (isAll) {
-                    const targetGrid = cache.isPlayingHollow ? document.getElementById('hollowGrid') : document.getElementById('onlineGrid');
-                    if (targetGrid) targetGrid.insertAdjacentHTML('beforeend', cardHtml);
+                    const target = cache.isPlayingHollow ? document.getElementById('hollowGrid') : document.getElementById('onlineGrid');
+                    if (target) target.insertAdjacentHTML('beforeend', cardHtml);
                 } else {
-                    const targetGrid = document.getElementById('friendsGrid');
-                    if (targetGrid) targetGrid.insertAdjacentHTML('beforeend', cardHtml);
+                    const target = document.getElementById('friendsGrid');
+                    if (target) target.insertAdjacentHTML('beforeend', cardHtml);
                 }
             });
 
             if (isAll) {
-                const hollowGrid = document.getElementById('hollowGrid');
-                const onlineGrid = document.getElementById('onlineGrid');
-                if (hollowGrid) sortGrid(hollowGrid, filteredPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow));
-                if (onlineGrid) sortGrid(onlineGrid, filteredPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow));
+                const hg = document.getElementById('hollowGrid');
+                const og = document.getElementById('onlineGrid');
+                if (hg) sortGrid(hg, filteredPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow));
+                if (og) sortGrid(og, filteredPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow));
             } else {
-                const normalGrid = document.getElementById('friendsGrid');
-                if (normalGrid) sortGrid(normalGrid, filteredPlayers);
+                const ng = document.getElementById('friendsGrid');
+                if (ng) sortGrid(ng, filteredPlayers);
             }
+        }
+
+        // ==================================================================
+        // NOTIFICATION SOUNDS
+        // ==================================================================
+        const NOTIFICATION_SOUNDS = [
+            { id: 'divine', name: 'Divine Secret', desc: 'The original Hollow alert', url: 'https://www.myinstants.com/media/sounds/divine-secret-catch-fisch.mp3' },
+            { id: 'psst', name: 'Psst — Roblox DOORS', desc: 'The Screech whisper', url: 'https://www.myinstants.com/media/sounds/psst-roblox-doors.mp3' },
+            { id: 'monster', name: 'Monster Mash — Roblox Potion', desc: 'Spooky dance potion tune', url: 'https://www.myinstants.com/media/sounds/monster-mash-roblox-potion.mp3' },
+            { id: 'none', name: 'None (silent)', desc: 'No sound — you still get the popup', url: null }
+        ];
+
+        const SOUND_KEY = 'hollow_notification_sound';
+        let selectedSoundId = localStorage.getItem(SOUND_KEY) || 'divine';
+        if (!NOTIFICATION_SOUNDS.some(s => s.id === selectedSoundId)) selectedSoundId = 'divine';
+
+        function getSelectedSound() {
+            return NOTIFICATION_SOUNDS.find(s => s.id === selectedSoundId) || NOTIFICATION_SOUNDS[0];
+        }
+
+        const onlineSound = new Audio();
+        onlineSound.volume = 0.6;
+
+        function applySelectedSoundToAudio() {
+            const s = getSelectedSound();
+            if (s.url) { onlineSound.src = s.url; try { onlineSound.load(); } catch (e) {} }
+            else { try { onlineSound.pause(); onlineSound.removeAttribute('src'); onlineSound.load(); } catch (e) {} }
+        }
+        applySelectedSoundToAudio();
+
+        function playOnlineSound() {
+            const s = getSelectedSound();
+            if (!s.url) return;
+            try { onlineSound.currentTime = 0; onlineSound.play().catch(() => {}); } catch (e) {}
+        }
+
+        let previewAudio = null;
+        let previewBtnTimer = null;
+
+        function previewSound(event, id) {
+            if (event) { event.preventDefault(); event.stopPropagation(); }
+            const s = NOTIFICATION_SOUNDS.find(x => x.id === id);
+            if (!s || !s.url) return;
+            if (previewAudio) { try { previewAudio.pause(); previewAudio.currentTime = 0; } catch (e) {} }
+            previewAudio = new Audio(s.url);
+            previewAudio.volume = 0.6;
+            previewAudio.play().catch(() => {});
+            if (event && event.currentTarget && event.currentTarget.classList.contains('sound-preview-btn')) {
+                const btn = event.currentTarget;
+                btn.classList.add('playing');
+                btn.textContent = '❚❚';
+                if (previewBtnTimer) clearTimeout(previewBtnTimer);
+                const restore = () => { btn.classList.remove('playing'); btn.textContent = '▶'; };
+                previewAudio.addEventListener('ended', restore, { once: true });
+                previewBtnTimer = setTimeout(restore, 8000);
+            }
+        }
+
+        function selectSound(id) {
+            const s = NOTIFICATION_SOUNDS.find(x => x.id === id);
+            if (!s) return;
+            selectedSoundId = id;
+            localStorage.setItem(SOUND_KEY, id);
+            applySelectedSoundToAudio();
+            renderSoundPicker();
+            if (s.url) previewSound(null, id);
+        }
+
+        function renderSoundPicker() {
+            const wrap = document.getElementById('soundPicker');
+            if (!wrap) return;
+            wrap.innerHTML = NOTIFICATION_SOUNDS.map(s => {
+                const selected = s.id === selectedSoundId;
+                const right = s.url
+                    ? `<button class="sound-preview-btn" onclick="previewSound(event, '${s.id}')" title="Preview" aria-label="Preview ${s.name}">▶</button>`
+                    : `<span class="sound-none-tag" title="Silent">🔇</span>`;
+                return `<div class="sound-item ${selected ? 'selected' : ''}" onclick="selectSound('${s.id}')" role="button" tabindex="0"><div class="sound-item-left"><span class="sound-radio"></span><div class="sound-meta"><span class="sound-name">${s.name}</span><span class="sound-desc">${s.desc}</span></div></div>${right}</div>`;
+            }).join('');
         }
 
         // ==================================================================
@@ -1010,20 +824,13 @@
         // ==================================================================
         const BG_MODE_KEY = 'hollow_bg_mode_v2';
         let bgModeActive = localStorage.getItem(BG_MODE_KEY) === 'true';
-
-        let bgAudioCtx = null;
-        let bgAudioEl = null;
-        let bgSourceNode = null;
-        let wakeLockSentinel = null;
-        let heartbeatTimer = null;
-        let isStartingBg = false;
+        let bgAudioCtx = null, bgAudioEl = null, bgSourceNode = null, wakeLockSentinel = null, heartbeatTimer = null, isStartingBg = false;
 
         function updateBgUI() {
             const btn = document.getElementById('bgToggleBtn');
             const label = document.getElementById('bgToggleLabel');
             const status = document.getElementById('bgStatusText');
             if (!btn || !label || !status) return;
-
             if (bgModeActive) {
                 btn.className = 'bg-toggle-btn on';
                 label.textContent = '🟢 Background Mode is ON';
@@ -1040,49 +847,29 @@
             try {
                 if (wakeLockSentinel) return;
                 wakeLockSentinel = await navigator.wakeLock.request('screen');
-                console.log('Wake lock acquired');
                 wakeLockSentinel.addEventListener('release', () => {
-                    console.log('Wake lock released by system');
                     wakeLockSentinel = null;
-                    if (bgModeActive && document.visibilityState === 'visible') {
-                        setTimeout(() => { if (bgModeActive) tryAcquireWakeLock(); }, 500);
-                    }
+                    if (bgModeActive && document.visibilityState === 'visible') setTimeout(() => { if (bgModeActive) tryAcquireWakeLock(); }, 500);
                 });
-            } catch (e) {
-                console.warn('Wake lock request failed:', e);
-            }
+            } catch (e) {}
         }
 
-        function releaseWakeLock() {
-            if (wakeLockSentinel) {
-                try { wakeLockSentinel.release(); } catch {}
-                wakeLockSentinel = null;
-            }
-        }
+        function releaseWakeLock() { if (wakeLockSentinel) { try { wakeLockSentinel.release(); } catch {} wakeLockSentinel = null; } }
 
         async function startBackgroundMode() {
             if (isStartingBg) return;
             isStartingBg = true;
-
             try {
                 const AC = window.AudioContext || window.webkitAudioContext;
                 if (!bgAudioCtx) bgAudioCtx = new AC();
+                if (bgAudioCtx.state === 'suspended') try { await bgAudioCtx.resume(); } catch (e) {}
 
-                if (bgAudioCtx.state === 'suspended') {
-                    try { await bgAudioCtx.resume(); } catch (e) { console.warn('Initial resume failed:', e); }
-                }
-
-                const sampleRate = bgAudioCtx.sampleRate;
-                const bufferSize = 2 * sampleRate;
-                const emptyBuffer = bgAudioCtx.createBuffer(1, bufferSize, sampleRate);
-                const output = emptyBuffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) output[i] = 0;
-
+                const bufSize = 2 * bgAudioCtx.sampleRate;
+                const emptyBuf = bgAudioCtx.createBuffer(1, bufSize, bgAudioCtx.sampleRate);
                 if (bgSourceNode) { try { bgSourceNode.stop(); bgSourceNode.disconnect(); } catch {} }
                 bgSourceNode = bgAudioCtx.createBufferSource();
-                bgSourceNode.buffer = emptyBuffer;
+                bgSourceNode.buffer = emptyBuf;
                 bgSourceNode.loop = true;
-
                 const dest = bgAudioCtx.createMediaStreamDestination();
                 bgSourceNode.connect(dest);
 
@@ -1098,42 +885,26 @@
 
                 if ('mediaSession' in navigator) {
                     try {
-                        navigator.mediaSession.metadata = new MediaMetadata({
-                            title: 'The Hollow - Online Alerts',
-                            artist: 'Roblox Halloween Guide',
-                            album: 'Background Mode'
-                        });
-                        navigator.mediaSession.setActionHandler('play', () => {
-                            if (bgAudioEl) bgAudioEl.play().catch(() => {});
-                        });
+                        navigator.mediaSession.metadata = new MediaMetadata({ title: 'The Hollow - Online Alerts', artist: 'Roblox Halloween Guide', album: 'Background Mode' });
+                        navigator.mediaSession.setActionHandler('play', () => { if (bgAudioEl) bgAudioEl.play().catch(() => {}); });
                         navigator.mediaSession.setActionHandler('pause', () => {});
                     } catch (e) {}
                 }
-
-                if (navigator.audioSession) {
-                    try { navigator.audioSession.type = 'playback'; } catch (e) {}
-                }
+                if (navigator.audioSession) try { navigator.audioSession.type = 'playback'; } catch (e) {}
 
                 await bgAudioEl.play();
                 bgSourceNode.start(0);
-
                 await tryAcquireWakeLock();
-
                 startBgHeartbeat();
-
                 bgModeActive = true;
                 localStorage.setItem(BG_MODE_KEY, 'true');
                 updateBgUI();
-                console.log('Background mode ACTIVE');
             } catch (e) {
-                console.warn('Background mode failed:', e);
                 bgModeActive = false;
                 localStorage.setItem(BG_MODE_KEY, 'false');
                 updateBgUI();
                 stopBgHeartbeat();
-            } finally {
-                isStartingBg = false;
-            }
+            } finally { isStartingBg = false; }
         }
 
         function stopBackgroundMode() {
@@ -1142,72 +913,44 @@
             updateBgUI();
             stopBgHeartbeat();
             releaseWakeLock();
-
             try {
                 if (bgSourceNode) { bgSourceNode.stop(); bgSourceNode.disconnect(); bgSourceNode = null; }
                 if (bgAudioEl) { bgAudioEl.pause(); bgAudioEl.srcObject = null; }
-                if (bgAudioCtx && bgAudioCtx.state === 'running') {
-                    bgAudioCtx.suspend().catch(() => {});
-                }
-            } catch (e) { console.warn('Stop bg error:', e); }
-            console.log('Background mode OFF');
+                if (bgAudioCtx && bgAudioCtx.state === 'running') bgAudioCtx.suspend().catch(() => {});
+            } catch (e) {}
         }
 
         function startBgHeartbeat() {
             stopBgHeartbeat();
             heartbeatTimer = setInterval(async () => {
                 if (!bgModeActive) return;
-
                 if (bgAudioCtx && bgAudioEl) {
-                    const ctxZombie = bgAudioCtx.state === 'running' && bgAudioEl.paused;
-                    const ctxSuspended = bgAudioCtx.state === 'suspended';
-
-                    if (ctxZombie || ctxSuspended) {
-                        console.warn('Background audio recovery triggered');
-                        try {
-                            if (ctxSuspended) await bgAudioCtx.resume();
-                            if (bgAudioEl.paused) await bgAudioEl.play();
-                        } catch (e) { console.warn('Heartbeat recovery failed:', e); }
+                    const zombie = bgAudioCtx.state === 'running' && bgAudioEl.paused;
+                    const susp = bgAudioCtx.state === 'suspended';
+                    if (zombie || susp) {
+                        try { if (susp) await bgAudioCtx.resume(); if (bgAudioEl.paused) await bgAudioEl.play(); } catch (e) {}
                     }
                 }
-
-                if (document.visibilityState === 'visible' && !wakeLockSentinel) {
-                    tryAcquireWakeLock();
-                }
+                if (document.visibilityState === 'visible' && !wakeLockSentinel) tryAcquireWakeLock();
             }, 5000);
         }
 
-        function stopBgHeartbeat() {
-            if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
-        }
-
-        function toggleBackgroundMode() {
-            if (bgModeActive) stopBackgroundMode();
-            else startBackgroundMode();
-        }
+        function stopBgHeartbeat() { if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; } }
+        function toggleBackgroundMode() { if (bgModeActive) stopBackgroundMode(); else startBackgroundMode(); }
 
         async function recoverBackgroundMode() {
             if (!bgModeActive) return;
             try {
-                if (bgAudioCtx && bgAudioCtx.state === 'suspended') {
-                    await bgAudioCtx.resume();
-                }
-                if (bgAudioEl && bgAudioEl.paused) {
-                    await bgAudioEl.play();
-                }
-                if (document.visibilityState === 'visible') {
-                    await tryAcquireWakeLock();
-                }
-            } catch (e) { console.warn('Recovery failed:', e); }
+                if (bgAudioCtx && bgAudioCtx.state === 'suspended') await bgAudioCtx.resume();
+                if (bgAudioEl && bgAudioEl.paused) await bgAudioEl.play();
+                if (document.visibilityState === 'visible') await tryAcquireWakeLock();
+            } catch (e) {}
         }
-
         window.addEventListener('focus', recoverBackgroundMode);
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') recoverBackgroundMode();
-        });
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') recoverBackgroundMode(); });
 
         // ==================================================================
-        // 24/7 POLLING SYSTEM
+        // POLLING SYSTEM
         // ==================================================================
         const THE_HOLLOW_PLACE_ID = 116463962153167;
         const userIdCache = new Map();
@@ -1218,50 +961,30 @@
         let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
         let pendingCopyHandle = null;
 
-        const onlineSound = new Audio('https://www.myinstants.com/media/sounds/divine-secret-catch-fisch.mp3');
-        onlineSound.volume = 0.6;
-        function playOnlineSound() {
-            onlineSound.currentTime = 0;
-            onlineSound.play().catch(() => {});
-        }
-
         document.addEventListener('click', () => {
-            if (onlineSound.paused) {
-                onlineSound.play().then(() => onlineSound.pause()).catch(() => {});
-            }
+            const s = getSelectedSound();
+            if (s.url && onlineSound.paused) onlineSound.play().then(() => onlineSound.pause()).catch(() => {});
         }, { once: true });
 
         window.addEventListener('DOMContentLoaded', () => {
             const toggle = document.getElementById('autoCopyToggle');
             if (toggle) toggle.checked = autoCopyEnabled;
-            if ("Notification" in window) {
-                if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                    Notification.requestPermission();
-                }
-            }
+            if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
             updateBgUI();
+            renderSoundPicker();
         });
 
-        function toggleAutoCopy(el) {
-            autoCopyEnabled = el.checked;
-            localStorage.setItem('hollow_auto_copy', autoCopyEnabled);
-        }
+        function toggleAutoCopy(el) { autoCopyEnabled = el.checked; localStorage.setItem('hollow_auto_copy', autoCopyEnabled); }
 
         async function fetchWithTimeout(resource, options = {}) {
             const { timeout = 5000 } = options;
             const controller = new AbortController();
             const id = setTimeout(() => controller.abort(), timeout);
-            try {
-                const response = await fetch(resource, { ...options, signal: controller.signal });
-                return response;
-            } finally {
-                clearTimeout(id);
-            }
+            try { return await fetch(resource, { ...options, signal: controller.signal }); }
+            finally { clearTimeout(id); }
         }
 
-        // ==================================================================
-        // AVATARS — cached + parallel batched fetch
-        // ==================================================================
+        // ---- Avatars ----
         const AVATAR_CACHE_KEY = 'hollow_avatars_v2';
         const AVATAR_CACHE_TTL = 12 * 60 * 60 * 1000;
         const AVATAR_BATCH_SIZE = 10;
@@ -1272,36 +995,22 @@
             ids => `https://thumbnails.rotunnel.com/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=false`,
             ids => `https://thumbnails.rprxy.xyz/v1/users/avatar-headshot?userIds=${ids}&size=150x150&format=Png&isCircular=false`
         ];
-
-        let avatarCache = loadAvatarCache();
+        let avatarCache = (() => { try { const r = localStorage.getItem(AVATAR_CACHE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })();
         let avatarBulkInFlight = false;
 
-        function loadAvatarCache() {
-            try {
-                const raw = localStorage.getItem(AVATAR_CACHE_KEY);
-                return raw ? JSON.parse(raw) : {};
-            } catch { return {}; }
-        }
-
-        function saveAvatarCache() {
-            try { localStorage.setItem(AVATAR_CACHE_KEY, JSON.stringify(avatarCache)); } catch {}
-        }
+        function saveAvatarCache() { try { localStorage.setItem(AVATAR_CACHE_KEY, JSON.stringify(avatarCache)); } catch {} }
 
         function hydrateAvatarsFromCache() {
-            let hydrated = 0;
             for (const [uName, info] of userIdCache.entries()) {
                 const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                 if (!actualHandle || !playerDataCache[actualHandle]) continue;
                 const hit = avatarCache[info.id];
                 if (hit && hit.url) {
                     playerDataCache[actualHandle].avatarUrl = hit.url;
-                    hydrated++;
                     const img = document.querySelector(`[data-avatar-for="${actualHandle}"]`);
                     if (img) img.src = hit.url;
                 }
             }
-            if (hydrated > 0) console.log(`Hydrated ${hydrated} avatars from cache`);
-            return hydrated;
         }
 
         async function fetchAvatarBatch(userIds) {
@@ -1312,10 +1021,10 @@
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     const data = await res.json();
                     if (data && Array.isArray(data.data)) return data.data;
-                    throw new Error('Bad shape');
+                    throw new Error('Bad');
                 } catch (e) { lastErr = e; }
             }
-            throw lastErr || new Error('All avatar proxies failed');
+            throw lastErr || new Error('All failed');
         }
 
         function applyAvatarBatch(batchData) {
@@ -1339,52 +1048,30 @@
         async function fetchAllAvatars() {
             if (avatarBulkInFlight || userIdCache.size === 0) return;
             avatarBulkInFlight = true;
-
             try {
                 hydrateAvatarsFromCache();
-
                 const now = Date.now();
-                const idsNeedingFetch = [];
+                const ids = [];
                 for (const [uName, info] of userIdCache.entries()) {
                     const hit = avatarCache[info.id];
-                    if (!hit || !hit.url || (now - hit.at > AVATAR_CACHE_TTL)) {
-                        idsNeedingFetch.push(info.id);
-                    }
+                    if (!hit || !hit.url || (now - hit.at > AVATAR_CACHE_TTL)) ids.push(info.id);
                 }
-
-                if (idsNeedingFetch.length === 0) {
-                    console.log('All avatars served from cache');
-                    return;
-                }
-
+                if (ids.length === 0) return;
                 const batches = [];
-                for (let i = 0; i < idsNeedingFetch.length; i += AVATAR_BATCH_SIZE) {
-                    batches.push(idsNeedingFetch.slice(i, i + AVATAR_BATCH_SIZE));
-                }
-
-                let batchIdx = 0;
+                for (let i = 0; i < ids.length; i += AVATAR_BATCH_SIZE) batches.push(ids.slice(i, i + AVATAR_BATCH_SIZE));
+                let idx = 0;
                 async function worker() {
-                    while (batchIdx < batches.length) {
-                        const batch = batches[batchIdx++];
-                        try {
-                            const data = await fetchAvatarBatch(batch);
-                            applyAvatarBatch(data);
-                        } catch (e) {
-                            console.warn('Avatar batch failed:', e);
-                        }
+                    while (idx < batches.length) {
+                        const batch = batches[idx++];
+                        try { const d = await fetchAvatarBatch(batch); applyAvatarBatch(d); } catch (e) {}
                     }
                 }
                 await Promise.all(Array.from({ length: AVATAR_CONCURRENCY }, worker));
-
                 saveAvatarCache();
-            } finally {
-                avatarBulkInFlight = false;
-            }
+            } finally { avatarBulkInFlight = false; }
         }
 
-        // ==================================================================
-        // FOLLOWERS — cached + parallel refresh every 1s
-        // ==================================================================
+        // ---- Followers ----
         const FOLLOWER_CACHE_KEY = 'hollow_followers_v4';
         const FOLLOWER_REFRESH_MS = 1000;
         const FOLLOWER_CONCURRENCY = 6;
@@ -1394,29 +1081,17 @@
             id => `https://friends.rotunnel.com/v1/users/${id}/followers/count`,
             id => `https://friends.rprxy.xyz/v1/users/${id}/followers/count`
         ];
-
-        let followerCache = loadFollowerCache();
+        let followerCache = (() => { try { const r = localStorage.getItem(FOLLOWER_CACHE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })();
         let followerBulkInFlight = false;
 
-        function loadFollowerCache() {
-            try {
-                const raw = localStorage.getItem(FOLLOWER_CACHE_KEY);
-                return raw ? JSON.parse(raw) : {};
-            } catch { return {}; }
-        }
-
-        function saveFollowerCache() {
-            try { localStorage.setItem(FOLLOWER_CACHE_KEY, JSON.stringify(followerCache)); } catch {}
-        }
+        function saveFollowerCache() { try { localStorage.setItem(FOLLOWER_CACHE_KEY, JSON.stringify(followerCache)); } catch {} }
 
         function hydrateFollowersFromCache() {
             for (const [uName, info] of userIdCache.entries()) {
                 const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                 if (!actualHandle || !playerDataCache[actualHandle]) continue;
                 const hit = followerCache[info.id];
-                if (hit && typeof hit.count === 'number') {
-                    playerDataCache[actualHandle].followers = hit.count;
-                }
+                if (hit && typeof hit.count === 'number') playerDataCache[actualHandle].followers = hit.count;
             }
             updateUILive();
         }
@@ -1429,10 +1104,10 @@
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     const data = await res.json();
                     if (data && typeof data.count === 'number') return data.count;
-                    throw new Error('Bad shape');
+                    throw new Error('Bad');
                 } catch (e) { lastErr = e; }
             }
-            throw lastErr || new Error('All follower proxies failed');
+            throw lastErr || new Error('All failed');
         }
 
         function applyFollowerCount(handle, userId, count) {
@@ -1455,17 +1130,12 @@
                         const [uName, info] = entries[idx++];
                         const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                         if (!actualHandle) continue;
-                        try {
-                            const count = await fetchFollowerCount(info.id);
-                            applyFollowerCount(actualHandle, info.id, count);
-                        } catch (e) {}
+                        try { const c = await fetchFollowerCount(info.id); applyFollowerCount(actualHandle, info.id, c); } catch (e) {}
                     }
                 }
                 await Promise.all(Array.from({ length: FOLLOWER_CONCURRENCY }, worker));
                 saveFollowerCache();
-            } finally {
-                followerBulkInFlight = false;
-            }
+            } finally { followerBulkInFlight = false; }
         }
 
         async function initFriendSystem() {
@@ -1478,42 +1148,28 @@
                     timeout: 10000
                 });
                 const data = await res.json();
-
                 data.data.forEach(user => {
                     userIdCache.set(user.name.toLowerCase(), { id: user.id, displayName: user.displayName || user.name });
                     allUserIds.push(user.id);
-
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === user.name.toLowerCase())?.handle || user.name;
                     if (!playerDataCache[actualHandle]) {
-                        playerDataCache[actualHandle] = {
-                            isOnline: null,
-                            isPlayingHollow: false,
-                            followers: null,
-                            displayName: user.displayName || user.name,
-                            avatarUrl: null,
-                            lastOnline: null,
-                            justCameOnline: false
-                        };
+                        playerDataCache[actualHandle] = { isOnline: null, isPlayingHollow: false, followers: null, displayName: user.displayName || user.name, avatarUrl: null, lastOnline: null, justCameOnline: false };
                     }
                 });
-
                 hydrateFollowersFromCache();
                 hydrateAvatarsFromCache();
-
                 fetchAllAvatars();
                 setInterval(pollPresence, 1000);
                 pollPresence();
                 refreshAllFollowers();
                 setInterval(refreshAllFollowers, FOLLOWER_REFRESH_MS);
                 setInterval(fetchAllAvatars, 5 * 60 * 1000);
-
-            } catch (e) { console.warn("Init failed", e); }
+            } catch (e) {}
         }
 
         async function pollPresence() {
             if (allUserIds.length === 0 || isPolling) return;
             isPolling = true;
-
             try {
                 const res = await fetchWithTimeout(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, {
                     method: 'POST',
@@ -1522,63 +1178,40 @@
                     cache: 'no-store',
                     timeout: 3000
                 });
-
                 if (!res.ok) { isPolling = false; return; }
-
                 const data = await res.json();
-
                 const presenceMap = {};
-                data.userPresences.forEach(p => {
-                    presenceMap[p.userId] = {
-                        isOnline: p.userPresenceType > 0,
-                        isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID || p.rootPlaceId === THE_HOLLOW_PLACE_ID,
-                        lastOnline: p.lastOnline
-                    };
-                });
-
-                let someoneCameOnline = false;
-                let newOnlineHandle = null;
-
+                data.userPresences.forEach(p => { presenceMap[p.userId] = { isOnline: p.userPresenceType > 0, isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID || p.rootPlaceId === THE_HOLLOW_PLACE_ID, lastOnline: p.lastOnline }; });
+                let someoneCameOnline = false, newOnlineHandle = null;
                 for (const [uName, info] of userIdCache.entries()) {
                     const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
                     if (actualHandle && playerDataCache[actualHandle]) {
                         const cache = playerDataCache[actualHandle];
                         const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false, lastOnline: null };
-
-                        const wasOnline = cache.isOnline;
-                        const isNowOnline = pData.isOnline;
-
+                        const wasOnline = cache.isOnline, isNowOnline = pData.isOnline;
                         cache.isOnline = isNowOnline;
                         cache.isPlayingHollow = pData.isPlayingHollow;
                         cache.lastOnline = pData.lastOnline;
-
                         if (!isFirstPresencePoll && !wasOnline && isNowOnline) {
                             cache.justCameOnline = true;
                             someoneCameOnline = true;
                             newOnlineHandle = actualHandle;
-
                             const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
                             if (card) card.classList.add('just-online');
-
                             setTimeout(() => {
                                 cache.justCameOnline = false;
-                                const currentCard = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
-                                if (currentCard) currentCard.classList.remove('just-online');
+                                const c = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
+                                if (c) c.classList.remove('just-online');
                             }, 60000);
                         }
                     }
                 }
-
                 isFirstPresencePoll = false;
                 updateUILive();
-
                 if (someoneCameOnline && newOnlineHandle) {
                     playOnlineSound();
                     if ("Notification" in window && Notification.permission === "granted" && !document.hasFocus()) {
-                        new Notification("Player Online!", {
-                            body: `${newOnlineHandle} just came online!`,
-                            icon: "https://www.roblox.com/favicon.ico"
-                        });
+                        new Notification("Player Online!", { body: `${newOnlineHandle} just came online!`, icon: "https://www.roblox.com/favicon.ico" });
                     }
                     setTimeout(() => {
                         const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
@@ -1589,18 +1222,14 @@
                         }
                     }, 500);
                 }
-
-            } catch (e) { console.warn("Presence poll failed", e); }
-
+            } catch (e) {}
             isPolling = false;
         }
 
         function updateUILive() {
             if (!friendsOverlay.classList.contains('active')) return;
-
             const title = friendsTitle.textContent;
             if (title.includes('Select')) return;
-
             const isAll = title.includes('All');
             let filterGroup = 'all';
             if (!isAll) {
@@ -1609,91 +1238,51 @@
                 else if (title.includes('Blue')) filterGroup = 'blue';
                 else if (title.includes('White')) return;
             }
-
             const hollowGrid = document.getElementById('hollowGrid');
             const onlineGrid = document.getElementById('onlineGrid');
             const normalGrid = document.getElementById('friendsGrid');
-
-            if (!hollowGrid && !onlineGrid && !normalGrid) {
-                renderFriendList(isAll ? 'all' : filterGroup);
-                return;
-            }
-
+            if (!hollowGrid && !onlineGrid && !normalGrid) { renderFriendList(isAll ? 'all' : filterGroup); return; }
             const currentPlayers = isAll ? allPlayers : friendGroups[filterGroup].map(p => ({...p, group: filterGroup}));
             let needsRerenderAll = false;
-
             currentPlayers.forEach(p => {
                 const cache = playerDataCache[p.handle];
                 if (!cache) return;
-
                 const card = document.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 const statusEl = card ? card.querySelector(`[data-status-for="${p.handle}"]`) : null;
                 const followersEl = card ? card.querySelector(`[data-followers-for="${p.handle}"]`) : null;
                 const lastSeenEl = card ? card.querySelector(`[data-lastseen-for="${p.handle}"]`) : null;
-
                 if (statusEl) {
-                    if (cache.isPlayingHollow) {
-                        statusEl.textContent = 'Playing The Hollow';
-                        statusEl.style.color = '#ff7b00';
-                    } else if (cache.isOnline) {
-                        statusEl.textContent = 'Online';
-                        statusEl.style.color = '#39ff14';
-                    } else if (cache.isOnline === null) {
-                        statusEl.textContent = 'Loading...';
-                        statusEl.style.color = '#888';
-                    } else {
-                        statusEl.textContent = 'Offline';
-                        statusEl.style.color = '#888';
-                    }
+                    if (cache.isPlayingHollow) { statusEl.textContent = 'Playing The Hollow'; statusEl.style.color = '#ff7b00'; }
+                    else if (cache.isOnline) { statusEl.textContent = 'Online'; statusEl.style.color = '#39ff14'; }
+                    else if (cache.isOnline === null) { statusEl.textContent = 'Loading...'; statusEl.style.color = '#888'; }
+                    else { statusEl.textContent = 'Offline'; statusEl.style.color = '#888'; }
                 }
-
                 if (followersEl) followersEl.textContent = followerLabel(cache);
-
                 if (lastSeenEl) {
                     const ls = lastSeenText(cache);
-                    if (ls) {
-                        lastSeenEl.textContent = ls;
-                        lastSeenEl.style.display = 'block';
-                    } else {
-                        lastSeenEl.style.display = 'none';
-                    }
+                    if (ls) { lastSeenEl.textContent = ls; lastSeenEl.style.display = 'block'; }
+                    else lastSeenEl.style.display = 'none';
                 }
-
                 if (isAll) {
-                    if (cache.isOnline && !card) {
-                        needsRerenderAll = true;
-                    } else if (!cache.isOnline && card) {
-                        card.remove();
-                    } else if (cache.isOnline && card) {
-                        const isInHollowGrid = hollowGrid && hollowGrid.contains(card);
-                        const isInOnlineGrid = onlineGrid && onlineGrid.contains(card);
-                        if (cache.isPlayingHollow && isInOnlineGrid) hollowGrid.appendChild(card);
-                        else if (!cache.isPlayingHollow && isInHollowGrid) onlineGrid.appendChild(card);
+                    if (cache.isOnline && !card) needsRerenderAll = true;
+                    else if (!cache.isOnline && card) card.remove();
+                    else if (cache.isOnline && card) {
+                        const inH = hollowGrid && hollowGrid.contains(card);
+                        const inO = onlineGrid && onlineGrid.contains(card);
+                        if (cache.isPlayingHollow && inO) hollowGrid.appendChild(card);
+                        else if (!cache.isPlayingHollow && inH) onlineGrid.appendChild(card);
                     }
                 }
             });
-
-            if (needsRerenderAll) {
-                renderFriendList('all');
-                return;
-            }
-
+            if (needsRerenderAll) { renderFriendList('all'); return; }
             if (isAll) {
                 if (hollowGrid) sortGrid(hollowGrid, currentPlayers.filter(p => playerDataCache[p.handle]?.isPlayingHollow));
                 if (onlineGrid) sortGrid(onlineGrid, currentPlayers.filter(p => playerDataCache[p.handle]?.isOnline && !playerDataCache[p.handle]?.isPlayingHollow));
-            } else if (normalGrid) {
-                sortGrid(normalGrid, currentPlayers);
-            }
+            } else if (normalGrid) sortGrid(normalGrid, currentPlayers);
         }
 
         function sortGrid(grid, players) {
-            const sorted = [...players].sort((a, b) => {
-                const dataA = playerDataCache[a.handle] || { followers: 0 };
-                const dataB = playerDataCache[b.handle] || { followers: 0 };
-                const fA = dataA.followers ?? 0;
-                const fB = dataB.followers ?? 0;
-                return fB - fA;
-            });
+            const sorted = [...players].sort((a, b) => ((playerDataCache[b.handle]?.followers ?? 0) - (playerDataCache[a.handle]?.followers ?? 0)));
             sorted.forEach(p => {
                 const card = grid.querySelector(`.friend-card[data-username="${p.handle}"]`);
                 if (card) grid.appendChild(card);
@@ -1701,139 +1290,82 @@
         }
 
         function copyUsername(event, username) {
-            event.preventDefault();
-            event.stopPropagation();
+            event.preventDefault(); event.stopPropagation();
             navigator.clipboard.writeText(username).then(() => {
-                const handleEl = event.currentTarget;
-                const originalText = handleEl.textContent;
-                handleEl.textContent = 'Copied!';
-                handleEl.style.color = '#39ff14';
-                setTimeout(() => {
-                    handleEl.textContent = originalText;
-                    handleEl.style.color = '#b0b0b0';
-                }, 1500);
-            }).catch(err => console.error('Failed to copy: ', err));
+                const el = event.currentTarget;
+                const orig = el.textContent;
+                el.textContent = 'Copied!';
+                el.style.color = '#39ff14';
+                setTimeout(() => { el.textContent = orig; el.style.color = '#b0b0b0'; }, 1500);
+            }).catch(() => {});
         }
 
         window.addEventListener('load', () => {
             setTimeout(initFriendSystem, 1000);
             if (bgModeActive) {
-                const resumeOnGesture = () => {
-                    if (bgModeActive && (!bgAudioEl || bgAudioEl.paused)) {
-                        startBackgroundMode();
-                    }
-                    document.removeEventListener('click', resumeOnGesture);
-                    document.removeEventListener('touchstart', resumeOnGesture);
+                const resume = () => {
+                    if (bgModeActive && (!bgAudioEl || bgAudioEl.paused)) startBackgroundMode();
+                    document.removeEventListener('click', resume);
+                    document.removeEventListener('touchstart', resume);
                 };
-                document.addEventListener('click', resumeOnGesture);
-                document.addEventListener('touchstart', resumeOnGesture);
+                document.addEventListener('click', resume);
+                document.addEventListener('touchstart', resume);
             }
         });
 
         function openSettings(e) {
             if (e) e.preventDefault();
             updateBgUI();
+            renderSoundPicker();
             document.getElementById('settingsOverlay').classList.add('active');
         }
-
-        function closeSettings() {
-            document.getElementById('settingsOverlay').classList.remove('active');
-        }
+        function closeSettings() { document.getElementById('settingsOverlay').classList.remove('active'); }
 
         // ==================================================================
         // AI DEEP SEARCH
         // ==================================================================
         const AI_PROVIDERS = [
-            {
-                name: 'KeylessAI',
-                url: 'https://keylessai.thryx.workers.dev/v1/chat/completions',
-                body: (prompt) => JSON.stringify({
-                    model: 'openai-fast',
-                    messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.1
-                })
-            },
-            {
-                name: 'OVHcloud',
-                url: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions',
-                body: (prompt) => JSON.stringify({
-                    model: 'Meta-Llama-3_3-70B-Instruct',
-                    messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.1
-                })
-            },
-            {
-                name: 'Pollinations',
-                url: 'https://text.pollinations.ai/openai/chat/completions',
-                body: (prompt) => JSON.stringify({
-                    model: 'openai',
-                    messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.1
-                })
-            }
+            { name: 'KeylessAI', url: 'https://keylessai.thryx.workers.dev/v1/chat/completions', body: p => JSON.stringify({ model: 'openai-fast', messages: [{ role: 'user', content: p }], temperature: 0.1 }) },
+            { name: 'OVHcloud', url: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions', body: p => JSON.stringify({ model: 'Meta-Llama-3_3-70B-Instruct', messages: [{ role: 'user', content: p }], temperature: 0.1 }) },
+            { name: 'Pollinations', url: 'https://text.pollinations.ai/openai/chat/completions', body: p => JSON.stringify({ model: 'openai', messages: [{ role: 'user', content: p }], temperature: 0.1 }) }
         ];
 
         async function tryProvider(provider, prompt, retries = 3) {
-            for (let attempt = 1; attempt <= retries; attempt++) {
+            for (let i = 1; i <= retries; i++) {
                 try {
-                    const response = await fetch(provider.url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: provider.body(prompt)
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-                        const text = data.choices?.[0]?.message?.content;
-                        if (text) return { provider: provider.name, text };
-                        throw new Error('Empty response');
+                    const res = await fetch(provider.url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: provider.body(prompt) });
+                    if (res.ok) {
+                        const d = await res.json();
+                        const t = d.choices?.[0]?.message?.content;
+                        if (t) return { provider: provider.name, text: t };
+                        throw new Error('Empty');
                     }
-                    if (response.status === 429 || response.status === 503) {
-                        if (attempt < retries) {
-                            await new Promise(r => setTimeout(r, 1200 * attempt));
-                            continue;
-                        }
-                    }
-                    throw new Error(`HTTP ${response.status}`);
-                } catch (err) {
-                    if (attempt === retries) throw err;
-                    await new Promise(r => setTimeout(r, 1000 * attempt));
-                }
+                    if ((res.status === 429 || res.status === 503) && i < retries) { await new Promise(r => setTimeout(r, 1200 * i)); continue; }
+                    throw new Error(`HTTP ${res.status}`);
+                } catch (e) { if (i === retries) throw e; await new Promise(r => setTimeout(r, 1000 * i)); }
             }
-            throw new Error(`All retries failed`);
+            throw new Error('Failed');
         }
 
         function mergeAIData(aiJson) {
-            let updatedCount = 0;
-            for (const nightKey in aiJson) {
-                const nightNum = parseInt(nightKey);
-                if (!data[nightNum]) continue;
-                const aiNight = aiJson[nightKey];
-                if (aiNight.normal && Array.isArray(aiNight.normal.steps) && aiNight.normal.steps.length > 0) {
-                    data[nightNum].normal.steps = aiNight.normal.steps;
-                    if (aiNight.normal.title) data[nightNum].normal.title = aiNight.normal.title;
-                    if (aiNight.normal.loc) data[nightNum].normal.loc = aiNight.normal.loc;
-                    if (aiNight.normal.tip) data[nightNum].normal.tip = aiNight.normal.tip;
-                    if (aiNight.normal.warn) data[nightNum].normal.warn = aiNight.normal.warn;
-                    if (aiNight.normal.reward) data[nightNum].normal.reward = aiNight.normal.reward;
-                    data[nightNum].normal.aiUpdated = true;
-                    updatedCount++;
+            let n = 0;
+            for (const k in aiJson) {
+                const num = parseInt(k);
+                if (!data[num]) continue;
+                const a = aiJson[k];
+                if (a.normal?.steps?.length > 0) {
+                    data[num].normal.steps = a.normal.steps;
+                    ['title', 'loc', 'tip', 'warn', 'reward'].forEach(f => { if (a.normal[f]) data[num].normal[f] = a.normal[f]; });
+                    data[num].normal.aiUpdated = true; n++;
                 }
-                if (aiNight.secret && Array.isArray(aiNight.secret.steps) && aiNight.secret.steps.length > 0) {
-                    data[nightNum].secret.steps = aiNight.secret.steps;
-                    if (aiNight.secret.title) data[nightNum].secret.title = aiNight.secret.title;
-                    if (aiNight.secret.loc) data[nightNum].secret.loc = aiNight.secret.loc;
-                    if (aiNight.secret.tip) data[nightNum].secret.tip = aiNight.secret.tip;
-                    if (aiNight.secret.warn) data[nightNum].secret.warn = aiNight.secret.warn;
-                    if (aiNight.secret.reward) data[nightNum].secret.reward = aiNight.secret.reward;
-                    if (aiNight.secret.visualDesc) data[nightNum].secret.visualDesc = aiNight.secret.visualDesc;
-                    data[nightNum].secret.aiUpdated = true;
-                    updatedCount++;
+                if (a.secret?.steps?.length > 0) {
+                    data[num].secret.steps = a.secret.steps;
+                    ['title', 'loc', 'tip', 'warn', 'reward', 'visualDesc'].forEach(f => { if (a.secret[f]) data[num].secret[f] = a.secret[f]; });
+                    data[num].secret.aiUpdated = true; n++;
                 }
             }
-            try {
-                localStorage.setItem('hollow_merged_data', JSON.stringify(data));
-            } catch (e) { console.warn('Could not save merged data', e); }
-            return updatedCount;
+            try { localStorage.setItem('hollow_merged_data', JSON.stringify(data)); } catch (e) {}
+            return n;
         }
 
         async function deepSearchDrops() {
@@ -1841,7 +1373,7 @@
             const resultsEl = document.getElementById('deepSearchResults');
             statusEl.style.display = 'block';
             statusEl.className = 'status-message status-timer';
-            statusEl.textContent = '🔍 Deep searching and updating guides…';
+            statusEl.textContent = '🔍 Deep searching…';
             resultsEl.style.display = 'none';
 
             const prompt = `You are an expert Roblox guide researcher. Provide the EXACT, VERIFIED step-by-step instructions for The Hollow (Roblox Halloween event) for Nights 3 through 9.
@@ -1849,65 +1381,45 @@
 Return ONLY a valid JSON object (no markdown, no code fences). Keys: "3", "4", "5", "6", "7", "8", "9".
 Each value:
 {
-  "normal": {
-    "title": "Quest title",
-    "steps": [{"t": "Step title", "d": "Description"}],
-    "loc": "Location",
-    "tip": "Pro tip",
-    "warn": "Warning",
-    "reward": "Reward"
-  },
-  "secret": {
-    "title": "Side quest title",
-    "steps": [{"t": "...", "d": "..."}],
-    "loc": "...",
-    "tip": "...",
-    "warn": "...",
-    "reward": "...",
-    "visualDesc": "..."
-  }
+  "normal": { "title": "Quest title", "steps": [{"t": "Step title", "d": "Description"}], "loc": "Location", "tip": "Pro tip", "warn": "Warning", "reward": "Reward" },
+  "secret": { "title": "Side quest title", "steps": [{"t": "...", "d": "..."}], "loc": "...", "tip": "...", "warn": "...", "reward": "...", "visualDesc": "..." }
 }
 
 Only include steps you are confident about from real community guides. If you don't know a night's steps, use an empty array for that night. Do not invent fake steps. Be concise.`;
 
-            let lastError = null;
-            for (const provider of AI_PROVIDERS) {
+            let lastErr = null;
+            for (const p of AI_PROVIDERS) {
                 try {
-                    statusEl.textContent = `🔍 Trying ${provider.name}…`;
-                    const result = await tryProvider(provider, prompt);
-                    let jsonText = result.text.trim();
-                    const firstBrace = jsonText.indexOf('{');
-                    const lastBrace = jsonText.lastIndexOf('}');
-                    if (firstBrace !== -1 && lastBrace !== -1) jsonText = jsonText.slice(firstBrace, lastBrace + 1);
-                    let aiJson;
-                    try { aiJson = JSON.parse(jsonText); }
-                    catch (parseErr) { throw new Error('AI returned invalid JSON. Try again.'); }
-                    const updated = mergeAIData(aiJson);
+                    statusEl.textContent = `🔍 Trying ${p.name}…`;
+                    const r = await tryProvider(p, prompt);
+                    let txt = r.text.trim();
+                    const fb = txt.indexOf('{'), lb = txt.lastIndexOf('}');
+                    if (fb !== -1 && lb !== -1) txt = txt.slice(fb, lb + 1);
+                    let ai;
+                    try { ai = JSON.parse(txt); } catch { throw new Error('Invalid JSON'); }
+                    const n = mergeAIData(ai);
                     statusEl.className = 'status-message status-ready';
-                    statusEl.textContent = `✅ ${result.provider} answered! ${updated} guide section(s) updated.`;
+                    statusEl.textContent = `✅ ${r.provider} answered! ${n} guide section(s) updated.`;
                     resultsEl.style.display = 'block';
-                    resultsEl.textContent = `Updated via ${result.provider}.\nGuides merged successfully. Open any night to see the new steps.`;
-                    alert(`Deep search complete via ${result.provider}! ${updated} guide sections were updated. Check the nights now.`);
+                    resultsEl.textContent = `Updated via ${r.provider}. Guides merged.`;
+                    alert(`Deep search complete via ${r.provider}! ${n} sections updated.`);
                     if (currentYear !== null && overlay.classList.contains('active')) {
                         if (mTitle.textContent.includes('Quest:')) showGuide('normal');
                         else if (mTitle.textContent.includes('Side Quest:')) showGuide('secret');
                     }
                     return;
-                } catch (err) {
-                    console.warn(`Provider ${provider.name} failed:`, err);
-                    lastError = err;
-                }
+                } catch (e) { lastErr = e; }
             }
             statusEl.className = 'status-message';
             statusEl.style.background = '#2b0f0f';
             statusEl.style.color = '#ff8a80';
             statusEl.style.borderColor = '#f44336';
-            statusEl.textContent = `❌ All free AI providers are busy (${lastError?.message || 'rate limited'}). Wait 30–60 seconds and try again.`;
+            statusEl.textContent = `❌ All providers busy (${lastErr?.message || 'rate limited'}). Try again in 30–60s.`;
         }
 
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-        friendsOverlay.addEventListener('click', (e) => { if (e.target === friendsOverlay) closeFriends(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeSettings(); closeFriends(); } });
+        overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+        friendsOverlay.addEventListener('click', e => { if (e.target === friendsOverlay) closeFriends(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeSettings(); closeFriends(); } });
 
         window.addEventListener('load', checkAgreement);
 
@@ -1915,53 +1427,28 @@ Only include steps you are confident about from real community guides. If you do
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
 
-        let confettiParticles = [];
-        let confettiAnimationId = null;
+        let confettiParticles = [], confettiAnimationId = null;
 
-        function triggerConfetti(dropName) {
-            if (localStorage.getItem(`confetti_triggered_${dropName}`)) return;
-            localStorage.setItem(`confetti_triggered_${dropName}`, 'true');
+        function triggerConfetti(name) {
+            if (localStorage.getItem(`confetti_triggered_${name}`)) return;
+            localStorage.setItem(`confetti_triggered_${name}`, 'true');
             confettiParticles = [];
             const colors = ['#ff7b00', '#9c27b0', '#39ff14', '#ffd700', '#ff3131', '#00e5ff', '#ffffff', '#8b00ff'];
             for (let i = 0; i < 250; i++) {
-                confettiParticles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    size: Math.random() * 8 + 4,
-                    speedY: Math.random() * 3 + 2,
-                    speedX: Math.random() * 4 - 2,
-                    rotation: Math.random() * 360,
-                    rotationSpeed: Math.random() * 10 - 5
-                });
+                confettiParticles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height - canvas.height, color: colors[Math.floor(Math.random() * colors.length)], size: Math.random() * 8 + 4, speedY: Math.random() * 3 + 2, speedX: Math.random() * 4 - 2, rotation: Math.random() * 360, rotationSpeed: Math.random() * 10 - 5 });
             }
             if (!confettiAnimationId) animateConfetti();
-            setTimeout(() => {
-                cancelAnimationFrame(confettiAnimationId);
-                confettiAnimationId = null;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                confettiParticles = [];
-            }, 5000);
+            setTimeout(() => { cancelAnimationFrame(confettiAnimationId); confettiAnimationId = null; ctx.clearRect(0, 0, canvas.width, canvas.height); confettiParticles = []; }, 5000);
         }
 
         function animateConfetti() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = confettiParticles.length - 1; i >= 0; i--) {
-                let p = confettiParticles[i];
-                p.y += p.speedY;
-                p.x += p.speedX;
-                p.rotation += p.rotationSpeed;
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate((p.rotation * Math.PI) / 180);
-                ctx.fillStyle = p.color;
-                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-                ctx.restore();
+                const p = confettiParticles[i];
+                p.y += p.speedY; p.x += p.speedX; p.rotation += p.rotationSpeed;
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate((p.rotation * Math.PI) / 180); ctx.fillStyle = p.color; ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size); ctx.restore();
                 if (p.y > canvas.height) confettiParticles.splice(i, 1);
             }
             if (confettiParticles.length > 0) confettiAnimationId = requestAnimationFrame(animateConfetti);
@@ -1970,8 +1457,7 @@ Only include steps you are confident about from real community guides. If you do
         function checkDropCountdown() {
             const nowMs = Date.now();
             drops.forEach(d => {
-                const dropTime = new Date(d.time).getTime();
-                const diff = dropTime - nowMs;
+                const diff = new Date(d.time).getTime() - nowMs;
                 if (diff > 0 && diff <= 10000) {
                     d.years.forEach(y => {
                         const btn = document.querySelector(`.year-btn[data-year="${y}"]`);
@@ -1984,8 +1470,10 @@ Only include steps you are confident about from real community guides. If you do
                 }
             });
         }
-
         setInterval(checkDropCountdown, 500);
+
+        // Initial sound picker render (before settings opens)
+        renderSoundPicker();
     </script>
 </body>
 </html>
