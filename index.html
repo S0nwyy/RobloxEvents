@@ -34,7 +34,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 .nav-links{display:flex;flex-wrap:wrap;gap:8px;align-items:center;max-width:100%}
 .nav-links a{color:#ffd9a8;text-decoration:none;font-size:11px;font-weight:bold;padding:5px 8px;border-radius:3px;transition:.2s;white-space:nowrap}
 .nav-links a:hover{background:rgba(255,123,0,.22);transform:translateY(-2px);color:#fff}
-.date-display{background:rgba(0,0,0,.45);color:#ffb84d;padding:4px 8px;border-radius:3px;font-size:10px;font-weight:bold;border:1px solid rgba(255,123,0,.45);white-space:nowrap}
+.date-display{background:rgba(0,0,0,.45);color:#ffb84d;padding:4px 8px;border-radius:3px;font-size:10px;font-weight:bold;border:1px solid rgba(255,123,0,.45);white-space:nowrap;font-variant-numeric:tabular-nums}
 .container{max-width:900px;margin:30px auto;padding:0 15px;animation:fadeIn .8s ease-out;position:relative;z-index:1;width:100%}
 .box{background:#1a0f26;border:1px solid #4a2c6e;border-radius:6px;box-shadow:0 1px 6px rgba(0,0,0,.6),0 0 22px rgba(156,39,176,.10);margin-bottom:20px;animation:slideUp .6s ease-out;width:100%;overflow:hidden}
 .box-header{background:linear-gradient(to bottom,#2b1247,#1a0b2e);border-bottom:1px solid #4a2c6e;padding:8px 12px;font-weight:bold;font-size:13px;color:#ffb84d;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;min-height:38px}
@@ -75,23 +75,21 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 }
 .countdown-pill.expanded .pill-icon{transform:rotate(15deg) scale(1.15)}
 .countdown-pill .pill-text-wrap{
-  display:inline-grid;
-  grid-template-columns:1fr 0fr;
-  transition:grid-template-columns .45s cubic-bezier(0.65,0,0.35,1);
-  will-change:grid-template-columns;
+  display:inline-flex;align-items:center;gap:0;
+  transition:gap .45s cubic-bezier(0.65,0,0.35,1);
+  will-change:gap;
+  overflow:hidden;
 }
-.countdown-pill.expanded .pill-text-wrap{
-  grid-template-columns:0fr 1fr;
-}
+.countdown-pill.expanded .pill-text-wrap{gap:4px}
 .countdown-pill .pill-collapsed,
 .countdown-pill .pill-expanded{
   overflow:hidden;white-space:nowrap;min-width:0;text-align:left;
-  transition:opacity .3s ease;
+  transition:max-width .45s cubic-bezier(0.65,0,0.35,1),opacity .3s ease;
 }
-.countdown-pill .pill-collapsed{opacity:1}
-.countdown-pill .pill-expanded{opacity:0;transition-delay:0s}
-.countdown-pill.expanded .pill-collapsed{opacity:0;transition-delay:.05s}
-.countdown-pill.expanded .pill-expanded{opacity:1;transition-delay:.15s}
+.countdown-pill .pill-collapsed{max-width:300px;opacity:1}
+.countdown-pill .pill-expanded{max-width:0;opacity:0}
+.countdown-pill.expanded .pill-collapsed{max-width:0;opacity:0}
+.countdown-pill.expanded .pill-expanded{max-width:420px;opacity:1;transition-delay:.1s}
 .overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(5,0,10,.78);z-index:1000;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(4px)}
 .overlay.active{display:flex;animation:fadeIn .3s ease-out}
 .modal{background:#170d24;border:2px solid #ff7b00;border-radius:6px;width:100%;max-width:800px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 5px 30px rgba(0,0,0,.85),0 0 40px rgba(255,123,0,.15);animation:slideUp .4s ease-out;overflow:hidden}
@@ -216,6 +214,8 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 .settings-action-btn:active{transform:translateY(1px);border-bottom-width:1px}
 .settings-action-btn.danger{border-color:#c62828;border-bottom-color:#8e0000;background:linear-gradient(to bottom,#8e2424,#5a1010);color:#ffd9d9;margin-top:8px}
 .settings-action-btn.danger:hover{background:linear-gradient(to bottom,#b52a2a,#7a1f1f)}
+.settings-action-btn.notif-good{border-color:#2e7d32;border-bottom-color:#1b5e20;background:linear-gradient(to bottom,#2e7d32,#1b5e20);color:#d7ffd9}
+.settings-action-btn.notif-good:hover{background:linear-gradient(to bottom,#388e3c,#2e7d32)}
 .ds-meta{display:flex;flex-direction:column;gap:6px;background:#170d24;border:1px solid #33204d;border-radius:7px;padding:11px;font-size:12px}
 .ds-meta-row{display:flex;justify-content:space-between;gap:10px;color:#b9a8d0}
 .ds-meta-row span:first-child{color:#8f7fa6}
@@ -254,7 +254,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 .bg-toggle-btn.locked .toggle-indicator{background:#2a2a2a;opacity:.6}
 .bg-toggle-btn .toggle-indicator::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:all .25s ease}
 .bg-toggle-btn.on .toggle-indicator::after{transform:translateX(18px)}
-.bg-status-text{font-size:11px;margin-top:7px;font-weight:normal;color:#8f7fa6}
+.bg-status-text{font-size:11px;margin-top:7px;font-weight:normal;color:#8f7fa6;line-height:1.4}
 .bg-tip{font-size:11px;color:#ff8a80;margin-top:8px;font-style:italic;line-height:1.45}
 .confirm-modal{background:#170d24;border:3px solid #ff7b00;border-radius:8px;width:100%;max-width:420px;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.9),0 0 50px rgba(255,123,0,.25);animation:slideUp .3s ease-out;overflow:hidden}
 .confirm-modal .confirm-head{padding:16px 18px;background:linear-gradient(to bottom,#4a0f0f,#2b0f0f);border-bottom:2px solid #ff7b00;color:#ffb84d;font-size:16px;font-weight:bold;display:flex;align-items:center;gap:10px}
@@ -342,6 +342,15 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 <div class="settings-intro">
 <h3>⚙️ Settings</h3>
 <p>Everything here is optional — the guides work fine without touching a thing.</p>
+</div>
+<div class="settings-section">
+<div class="settings-section-head">
+<div class="settings-section-icon">🔔</div>
+<div class="settings-section-text"><h4>Browser Notifications</h4><p>Get an alert when a player comes online, even if this tab is in the background. You only need to enable this once.</p></div>
+</div>
+<p class="bg-status-text" id="notifStatusText" style="margin-bottom:10px;">🔕 Checking status…</p>
+<button class="settings-action-btn" id="notifBtn" onclick="requestNotificationPermission()" style="display:none;">🔔 Enable Notifications</button>
+<button class="settings-action-btn notif-good" id="notifTestBtn" onclick="testNotification()" style="display:none;margin-top:8px;">🧪 Send Test Notification</button>
 </div>
 <div class="settings-section">
 <div class="settings-section-head">
@@ -437,7 +446,6 @@ function isMobileOrTablet(){
 }
 const IS_MOBILE_TABLET = isMobileOrTablet();
 
-/* Detects if device has a real hover-capable pointer (mouse) */
 function supportsHover(){
   try { return window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches; }
   catch(e) { return false; }
@@ -445,13 +453,7 @@ function supportsHover(){
 const CAN_HOVER = supportsHover();
 
 /* ================= DATES & LOCAL TIME ================= */
-const now = new Date();
-const month = String(now.getMonth() + 1).padStart(2, '0');
-const day = String(now.getDate()).padStart(2, '0');
-const year = now.getFullYear();
-document.getElementById('navDate').textContent = `Today: ${month}/${day}/${year}`;
-
-const CLAIM_DEADLINE = new Date('2026-11-02T12:00:00-08:00');
+const CLAIM_DEADLINE = new Date(2026, 10, 2, 23, 59, 59, 999); // End of Nov 2, local time
 
 function getTZLabel(){
   try {
@@ -472,24 +474,57 @@ function getLocalStr(iso){
     return TZ_LABEL ? `${str} ${TZ_LABEL}` : str;
   } catch(e) { return iso; }
 }
+function getShortLocal(dateObj){
+  try {
+    const opts = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+    return dateObj.toLocaleString(navigator.language || 'en-US', opts);
+  } catch(e) { return dateObj.toISOString(); }
+}
 const EVENT_END_LABEL = getLocalStr(CLAIM_DEADLINE.toISOString());
 
+/* Live navbar clock — shows the user's local date & time */
+function updateNavClock(){
+  const el = document.getElementById('navDate');
+  if (!el) return;
+  const n = new Date();
+  const dateStr = n.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+  const timeStr = n.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit', second:'2-digit', hour12:true });
+  el.textContent = `${dateStr} • ${timeStr}` + (TZ_LABEL ? ` ${TZ_LABEL}` : '');
+}
+updateNavClock();
+setInterval(updateNavClock, 1000);
+
+/* Local-midnight unlock times: each night unlocks at 00:00 local time on its day,
+   so if it's already that calendar day for you, the night shows as unlocked. */
+function localMidnightISO(y, m, d) {
+  return new Date(y, m - 1, d, 0, 0, 0, 0).toISOString();
+}
+
 const drops = [
-  { name:"Night 1", time:"2026-10-22T14:00:00-07:00", years:[1], verified:true },
-  { name:"Night 2", time:"2026-10-23T14:00:00-07:00", years:[2], verified:true },
-  { name:"Night 3", time:"2026-10-24T14:00:00-07:00", years:[3], verified:false },
-  { name:"Night 4", time:"2026-10-25T14:00:00-07:00", years:[4], verified:true },
-  { name:"Night 5", time:"2026-10-26T14:00:00-07:00", years:[5], verified:false },
-  { name:"Night 6", time:"2026-10-27T14:00:00-07:00", years:[6], verified:false },
-  { name:"Night 7", time:"2026-10-28T14:00:00-07:00", years:[7], verified:false },
-  { name:"Night 8", time:"2026-10-29T14:00:00-07:00", years:[8], verified:false },
-  { name:"Night 9", time:"2026-10-30T14:00:00-07:00", years:[9], verified:false }
+  { name:"Night 1", time:localMidnightISO(2026, 10, 22), years:[1], verified:true },
+  { name:"Night 2", time:localMidnightISO(2026, 10, 23), years:[2], verified:true },
+  { name:"Night 3", time:localMidnightISO(2026, 10, 24), years:[3], verified:false },
+  { name:"Night 4", time:localMidnightISO(2026, 10, 25), years:[4], verified:true },
+  { name:"Night 5", time:localMidnightISO(2026, 10, 26), years:[5], verified:false },
+  { name:"Night 6", time:localMidnightISO(2026, 10, 27), years:[6], verified:false },
+  { name:"Night 7", time:localMidnightISO(2026, 10, 28), years:[7], verified:false },
+  { name:"Night 8", time:localMidnightISO(2026, 10, 29), years:[8], verified:false },
+  { name:"Night 9", time:localMidnightISO(2026, 10, 30), years:[9], verified:false }
 ];
 
 function getDrop(y){ return drops.find(d => d.years.includes(y)); }
 function isEventOver(){ return Date.now() > CLAIM_DEADLINE.getTime(); }
-function isNightLive(y){ const d = getDrop(y); if (!d) return false; return Date.now() >= new Date(d.time).getTime() && !isEventOver(); }
-function isNightUnlocked(y){ const d = getDrop(y); return d ? Date.now() >= new Date(d.time).getTime() : false; }
+
+function isNightUnlocked(y){
+  const d = getDrop(y);
+  if (!d) return false;
+  return Date.now() >= new Date(d.time).getTime();
+}
+
+function isNightLive(y){
+  if (isEventOver()) return false;
+  return isNightUnlocked(y);
+}
 
 function timeUntil(date){
   const diff = date.getTime() - Date.now();
@@ -505,7 +540,6 @@ function timeUntil(date){
   return `${sec}s`;
 }
 
-/* Full breakdown always showing seconds — used when expanded */
 function timeUntilFull(date){
   const diff = date.getTime() - Date.now();
   if (diff <= 0) return null;
@@ -635,30 +669,37 @@ const MERGED_KEY = 'hollow_merged_data';
   } catch(e) { console.warn('Could not load merged data', e); }
 })();
 
-/* ================= FRIEND GROUPS ================= */
+/* ================= FRIEND GROUPS (updated) ================= */
 const friendGroups = {
   black: [
-    {name:"Meowsiio",handle:"Meowsiio"},{name:"Turtle",handle:"Turtlepla"},{name:"Toka1iz",handle:"Toka1iz"},
-    {name:"Pwnion",handle:"Pwnion"},{name:"Princeerik",handle:"Princeeriktheblue"},{name:"Kxttyrei",handle:"Kxttyrei"},
-    {name:"Brandonisbulk",handle:"Brandonisbulk"},{name:"Yuvha",handle:"Yuvha"},{name:"Clockset",handle:"Clockset"},
-    {name:"EnderWin",handle:"EnderWin"},{name:"Ztrabz",handle:"Ztrabz"},{name:"Jazzyx3",handle:"Jazzyx3"},
-    {name:"MiracleDrops",handle:"MiracleDrops"},{name:"luigiburger333",handle:"luigiburger333"},{name:"Dextroagave",handle:"Dextroagave"},
-    {name:"L3Norm",handle:"L3Norm"},{name:"Quiptid",handle:"Quiptid"},{name:"sneakysnipers1",handle:"sneakysnipers1"},
-    {name:"purrsian-lily",handle:"purrsian_lily"},{name:"Deathux",handle:"Deathux"},{name:"Mxnav",handle:"Mxnav"},{name:"meteor0id",handle:"meteor0id"}
+    { name:"Meowsiio", handle:"Meowsiio" },
+    { name:"Turtle", handle:"Turtlepla" },
+    { name:"Toka1iz", handle:"Toka1iz" },
+    { name:"Pwnion", handle:"Pwnion" },
+    { name:"Princeerik", handle:"Princeeriktheblue" },
+    { name:"Kxttyrei", handle:"Kxttyrei" },
+    { name:"Brandonisbulk", handle:"Brandonisbulk" },
+    { name:"Yuvha", handle:"Yuvha" }
   ],
   yellow: [
-    {name:"Waffletrades",handle:"Waffletrades"},{name:"Kirbyyums",handle:"Kirbyyums"},{name:"Master0y",handle:"Master0y"},
-    {name:"Crystalaco",handle:"Crystalaco"},{name:"Da_pandagirl",handle:"Da_pandagirl"},{name:"Hellitsvg",handle:"Hellitsvg"},
-    {name:"Atlantiszen",handle:"Atlantiszen"},{name:"SLeghart",handle:"SLeghart"},{name:"nealygamess",handle:"nealygamess"},
-    {name:"SHAFDOWOLF",handle:"SHAFDOWOLF"},{name:"OzelGuy",handle:"OzelGuy"},{name:"DeeterPlays",handle:"DeeterPlays"},
-    {name:"CH1Z3LED",handle:"CH1Z3LED"},{name:"sudonrblx",handle:"sudonrblx"},{name:"includ1ve",handle:"includ1ve"},
-    {name:"robey100",handle:"robey100"},{name:"soyyyBee",handle:"soyyyBee"},{name:"LOUDNAYU",handle:"LOUDNAYU"},{name:"stormyxvreal",handle:"stormyxvreal"}
+    { name:"Waffletrades", handle:"Waffletrades" },
+    { name:"Conor3D", handle:"Conor3D" },
+    { name:"Kirbyyums", handle:"Kirbyyums" },
+    { name:"Master0y", handle:"Master0y" },
+    { name:"Da_pandagirl", handle:"Da_pandagirl" },
+    { name:"Helloitsvg", handle:"Helloitsvg" },
+    { name:"Atlantiszen", handle:"Atlantiszen" },
+    { name:"Meowsiio", handle:"Meowsiio" }
   ],
   blue: [
-    {name:"Th3_avocad0",handle:"Th3_avocad0"},{name:"Brightgreenpart",handle:"Brightgreenpart"},{name:"Guavamatchaa",handle:"Guavamatchaa"},
-    {name:"CoffeRuntime",handle:"CoffeRuntime"},{name:"AngelEthereal",handle:"AngelEthereal"},{name:"Echoplusjupiter",handle:"Echoplusjupiter"},
-    {name:"Nauticalcaptain",handle:"Nauticalcaptain"},{name:"Caf3zlnho",handle:"Caf3zlnho"},{name:"someslugcat",handle:"someslugcat"},
-    {name:"PolarisDirector",handle:"PolarisDirector"},{name:"Meowsiio",handle:"Meowsiio"}
+    { name:"Meowsiio", handle:"Meowsiio" },
+    { name:"Th3_avocad0", handle:"Th3_avocad0" },
+    { name:"Brightgreenpart", handle:"Brightgreenpart" },
+    { name:"Guavamatchaa", handle:"Guavamatchaa" },
+    { name:"CoffeRuntime", handle:"CoffeRuntime" },
+    { name:"AngelEthereal", handle:"AngelEthereal" },
+    { name:"Echoplusjupiter", handle:"Echoplusjupiter" },
+    { name:"Nauticalcaptain", handle:"Nauticalcaptain" }
   ],
   white: "You just need to join a Roblox Plus player."
 };
@@ -693,10 +734,26 @@ function refreshClaimable(){
     const d = getDrop(y);
     if (!d) return;
     const over = isEventOver();
-    if (over) { btn.classList.remove('claimable','flashing-year'); btn.classList.add('expired'); btn.title = `Event ended on ${EVENT_END_LABEL}`; return; }
+
+    if (over) {
+      btn.classList.remove('claimable','flashing-year');
+      btn.classList.add('expired');
+      btn.title = `Event ended on ${EVENT_END_LABEL}`;
+      return;
+    }
+
     btn.classList.remove('expired');
-    if (isNightLive(y)) { btn.classList.add('claimable'); btn.classList.remove('unverified','flashing-year'); btn.title = `Night ${y} is LIVE — claim by ${EVENT_END_LABEL}`; }
-    else { btn.classList.remove('claimable','flashing-year'); if (!d.verified) btn.classList.add('unverified'); btn.title = `Night ${y} unlocks ${getLocalStr(d.time)} — claim by ${EVENT_END_LABEL}`; }
+
+    if (isNightLive(y)) {
+      btn.classList.add('claimable');
+      btn.classList.remove('unverified','flashing-year');
+      btn.title = `Night ${y} is LIVE — claim by ${EVENT_END_LABEL}`;
+    } else {
+      btn.classList.remove('claimable','flashing-year');
+      if (!d.verified) btn.classList.add('unverified');
+      else btn.classList.remove('unverified');
+      btn.title = `Night ${y} unlocks ${getLocalStr(d.time)} — claim by ${EVENT_END_LABEL}`;
+    }
   });
 }
 
@@ -721,7 +778,7 @@ function updateEventCountdown(){
   if (isEventOver()) {
     pillIcon.textContent = '⏰';
     pillCollapsedEl.textContent = 'Event ended';
-    pillExpandedEl.textContent = `Event ended on ${EVENT_END_LABEL}`;
+    pillExpandedEl.textContent = `Ended ${EVENT_END_LABEL}`;
     pillEl.classList.add('state-ended');
     pillEl.classList.remove('state-live');
     return;
@@ -733,19 +790,19 @@ function updateEventCountdown(){
     pillIcon.textContent = '⏳';
     const short = timeUntil(nextDrop.t);
     const full = timeUntilFull(nextDrop.t);
+    const targetLocal = getShortLocal(nextDrop.t);
     pillCollapsedEl.textContent = short ? `Next in ${short}` : 'Unlocking now!';
-    pillExpandedEl.textContent = full ? `Next unlock in ${full}` : 'Unlocking now!';
+    pillExpandedEl.textContent = full ? `in ${full} · ${targetLocal}` : 'Unlocking now!';
     pillEl.classList.remove('state-ended','state-live');
   } else {
     pillIcon.textContent = '✅';
     pillCollapsedEl.textContent = 'All nights live';
-    pillExpandedEl.textContent = `Claim your UGC by ${EVENT_END_LABEL}`;
+    pillExpandedEl.textContent = `Claim by ${EVENT_END_LABEL}`;
     pillEl.classList.add('state-live');
     pillEl.classList.remove('state-ended');
   }
 }
 
-// Interaction: hover on desktop, tap on mobile/tablet
 if (CAN_HOVER) {
   pillEl.addEventListener('mouseenter', () => setPillExpanded(true));
   pillEl.addEventListener('mouseleave', () => setPillExpanded(false));
@@ -811,18 +868,20 @@ function openChoice(year){
   currentYear = year;
   mTitle.textContent = `Night ${year}: ${data[year].game} (Monster: ${data[year].monster})`;
   const live = isNightLive(year);
+  const unlocked = isNightUnlocked(year);
   const over = isEventOver();
   mBody.innerHTML = `<div class="choice-box"><h3>Which quest do you want?</h3>
     ${over ? `<div class="info-box info-warn"><strong>EVENT ENDED</strong><p>Rewards can no longer be claimed. Guides are still readable.</p></div>` : ''}
-    ${!live && !over ? `<div class="info-box info-tip"><strong>This night unlocks ${getLocalStr(getDrop(year).time)}</strong><p>You can still read the guide now and do it the second it goes live.</p></div>` : ''}
+    ${!unlocked && !over ? `<div class="info-box info-tip"><strong>This night unlocks ${getLocalStr(getDrop(year).time)}</strong><p>You can still read the guide now and do it the second it goes live.</p></div>` : ''}
     <button class="big-btn btn-normal" onclick="showGuide('normal')">Quest (Main Badge)</button>
     <button class="big-btn btn-secret" onclick="handleSecretClick(${year})">Side Quest (Hidden Badge)</button></div>`;
   overlay.classList.add('active');
 }
 
 function handleSecretClick(year){
-  const d = getDrop(year);
-  if (!isNightUnlocked(year)) {
+  const unlocked = isNightUnlocked(year);
+  if (!unlocked) {
+    const d = getDrop(year);
     const games = d.years.map(yy => `Night ${yy} - ${data[yy].game}`).join(' • ');
     mBody.innerHTML = `<div style="text-align:center;padding:30px 20px;"><div style="font-size:50px;margin-bottom:15px;">🔒</div><h2 style="color:#ff6b6b;margin-bottom:10px;">SIDE QUEST NOT LIVE YET</h2><p style="font-size:15px;color:#b9a8d0;margin-bottom:15px;"><strong>This Side Quest is not available yet. But you can still read the guide!</strong></p><div style="background:#2b1c07;border:1px solid #ff9800;padding:12px;border-radius:4px;margin-bottom:15px;text-align:left;"><strong style="color:#ffb84d;">⏰ Unlocks ${getLocalStr(d.time)}</strong><p style="font-size:12px;color:#ffcc80;margin-top:6px;">${games}</p></div><button class="big-btn btn-continue" onclick="showGuide('secret')">Continue Anyway (View Guide)</button><button class="big-btn btn-back" onclick="openChoice(${year})">Go Back</button></div>`;
   } else showGuide('secret');
@@ -867,6 +926,99 @@ function showGuide(type){
 
 function toggleVisual(){ const g = document.getElementById('visualGuide'); if (g) g.classList.toggle('show'); }
 function closeModal(){ overlay.classList.remove('active'); currentYear = null; }
+
+/* ================= NOTIFICATIONS ================= */
+const NOTIF_ASKED_KEY = 'hollow_notif_asked_v2';
+
+function getNotifPermission(){
+  if (!("Notification" in window)) return 'unsupported';
+  return Notification.permission;
+}
+
+function updateNotifUI(){
+  const statusEl = document.getElementById('notifStatusText');
+  const btn = document.getElementById('notifBtn');
+  const testBtn = document.getElementById('notifTestBtn');
+  if (!statusEl || !btn) return;
+  const perm = getNotifPermission();
+  if (perm === 'granted') {
+    statusEl.textContent = '🔔 Notifications are ON. You\'ll get an alert when players come online while this tab isn\'t focused.';
+    statusEl.style.color = '#9be7a0';
+    btn.style.display = 'none';
+    if (testBtn) testBtn.style.display = 'block';
+  } else if (perm === 'denied') {
+    statusEl.textContent = '🚫 Notifications are blocked by your browser. Click the lock / site-settings icon in your address bar, allow notifications, then reload this page.';
+    statusEl.style.color = '#ff8a80';
+    btn.style.display = 'none';
+    if (testBtn) testBtn.style.display = 'none';
+  } else if (perm === 'unsupported') {
+    statusEl.textContent = '❌ Your browser doesn\'t support notifications.';
+    statusEl.style.color = '#ff8a80';
+    btn.style.display = 'none';
+    if (testBtn) testBtn.style.display = 'none';
+  } else {
+    statusEl.textContent = '🔕 Notifications are off. Click the button below to enable them. (You only need to do this once.)';
+    statusEl.style.color = '#ffb84d';
+    btn.style.display = 'block';
+    if (testBtn) testBtn.style.display = 'none';
+  }
+}
+
+function showEnabledTestNotification(){
+  try {
+    new Notification("🔔 Notifications Enabled!", {
+      body: "You'll be alerted when players come online, even if this tab is in the background.",
+      icon: 'https://www.roblox.com/favicon.ico',
+      tag: 'hollow-notif-enabled'
+    });
+  } catch(e) {}
+}
+
+function requestNotificationPermission(){
+  if (!("Notification" in window)) { showToast('❌ Your browser does not support notifications.'); return; }
+  if (Notification.permission === 'granted') { showToast('🔔 Notifications are already enabled!'); updateNotifUI(); return; }
+  if (Notification.permission === 'denied') { showToast('🚫 Notifications are blocked. Enable them in your browser settings for this site.'); updateNotifUI(); return; }
+  localStorage.setItem(NOTIF_ASKED_KEY, 'true');
+  Notification.requestPermission().then(p => {
+    updateNotifUI();
+    if (p === 'granted') {
+      showToast('🔔 Notifications enabled!');
+      showEnabledTestNotification();
+    } else if (p === 'denied') {
+      showToast('🚫 Notifications blocked. You can enable them in browser settings.');
+    }
+  });
+}
+
+function testNotification(){
+  if (!("Notification" in window) || Notification.permission !== 'granted') return;
+  try {
+    new Notification("🧪 Test Notification", {
+      body: "If you can see this, notifications are working!",
+      icon: 'https://www.roblox.com/favicon.ico',
+      tag: 'hollow-notif-test-' + Date.now()
+    });
+    showToast('🧪 Test notification sent!');
+  } catch(e) { showToast('❌ Could not send test notification.'); }
+}
+
+/* Request notification permission once, on the first user click.
+   After that, the flag is stored and we never ask again. */
+function maybeRequestNotificationsOnce(){
+  try {
+    if (localStorage.getItem(NOTIF_ASKED_KEY) === 'true') return;
+    if (!("Notification" in window)) { localStorage.setItem(NOTIF_ASKED_KEY, 'true'); return; }
+    if (Notification.permission !== 'default') { localStorage.setItem(NOTIF_ASKED_KEY, 'true'); updateNotifUI(); return; }
+    localStorage.setItem(NOTIF_ASKED_KEY, 'true');
+    Notification.requestPermission().then(p => {
+      updateNotifUI();
+      if (p === 'granted') {
+        showToast('🔔 Notifications enabled!');
+        showEnabledTestNotification();
+      }
+    });
+  } catch(e) {}
+}
 
 /* ================= FRIENDS UI ================= */
 const friendsOverlay = document.getElementById('friendsOverlay');
@@ -1196,6 +1348,9 @@ let pendingCopyHandle = null;
 
 let audioUnlocked = false;
 document.addEventListener('click', () => {
+  /* Ask for notifications once — on the first user gesture */
+  maybeRequestNotificationsOnce();
+
   if (audioUnlocked) return;
   const s = getSelectedSound();
   if (!s.url) { audioUnlocked = true; return; }
@@ -1206,15 +1361,15 @@ document.addEventListener('click', () => {
     if (p && p.then) { p.then(() => { try { onlineSound.pause(); onlineSound.currentTime = 0; onlineSound.volume = origVol; } catch(e) {} audioUnlocked = true; }).catch(() => { onlineSound.volume = origVol; audioUnlocked = true; }); }
     else { onlineSound.pause(); onlineSound.currentTime = 0; onlineSound.volume = origVol; audioUnlocked = true; }
   } catch(e) { audioUnlocked = true; }
-}, { once: true });
+});
 
 window.addEventListener('DOMContentLoaded', () => {
   const toggle = document.getElementById('autoCopyToggle');
   if (toggle) toggle.checked = autoCopyEnabled;
-  if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission();
   updateBgUI();
   renderSoundPicker();
   renderDeepSearchMeta();
+  updateNotifUI();
 });
 
 function toggleAutoCopy(el){ autoCopyEnabled = el.checked; localStorage.setItem('hollow_auto_copy', autoCopyEnabled); }
@@ -1407,7 +1562,17 @@ async function pollPresence(){
     updateUILive();
     if (someoneCameOnline && newOnlineHandle) {
       playOnlineSound();
-      if ("Notification" in window && Notification.permission === "granted" && !document.hasFocus()) new Notification("Player Online!", { body: `${newOnlineHandle} just came online!`, icon: 'https://www.roblox.com/favicon.ico' });
+      /* Browser notification when the tab is not focused */
+      const tabInactive = (document.visibilityState === 'hidden') || !document.hasFocus();
+      if ("Notification" in window && Notification.permission === "granted" && tabInactive) {
+        try {
+          const notif = new Notification("👻 Player Online!", {
+            body: `${newOnlineHandle} just came online!`,
+            icon: 'https://www.roblox.com/favicon.ico',
+            tag: 'hollow-online-' + newOnlineHandle
+          });
+        } catch(e) { console.warn('Notification failed:', e); }
+      }
       setTimeout(() => {
         const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`); if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         if (autoCopyEnabled) { if (!document.hasFocus()) pendingCopyHandle = newOnlineHandle; else navigator.clipboard.writeText(newOnlineHandle).catch(() => {}); }
@@ -1647,7 +1812,7 @@ Only include the keys for nights listed: ${missingNights.join(', ')}. Empty "ste
 }
 
 /* ================= SETTINGS OPEN/CLOSE ================= */
-function openSettings(e){ if (e) e.preventDefault(); closePill(); updateBgUI(); renderSoundPicker(); renderDeepSearchMeta(); document.getElementById('settingsOverlay').classList.add('active'); }
+function openSettings(e){ if (e) e.preventDefault(); closePill(); updateBgUI(); renderSoundPicker(); renderDeepSearchMeta(); updateNotifUI(); document.getElementById('settingsOverlay').classList.add('active'); }
 function closeSettings(){ stopPreviewSound(); document.getElementById('settingsOverlay').classList.remove('active'); }
 
 /* ================= GLOBAL ================= */
@@ -1707,6 +1872,7 @@ window.addEventListener('load', () => {
 renderSoundPicker();
 renderDeepSearchMeta();
 updateBgUI();
+updateNotifUI();
 </script>
 </body>
 </html>
