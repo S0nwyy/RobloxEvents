@@ -51,7 +51,6 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 .year-btn.unverified{border-color:#5c4a73;opacity:.85}
 .year-btn.expired{opacity:.4;cursor:not-allowed;filter:grayscale(.6)}
 .year-btn.flashing-year{animation:flashWarning .5s infinite!important}
-/* Smooth expandable countdown pill */
 .countdown-pill{
   display:inline-flex;align-items:center;flex-shrink:0;
   padding:5px 12px;border-radius:20px;
@@ -205,6 +204,24 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 .settings-intro p{font-size:12px;color:#8f7fa6;line-height:1.5}
 .settings-section{background:#120a1a;border:1px solid #33204d;border-radius:10px;padding:15px;margin-bottom:12px}
 .settings-section:last-child{margin-bottom:0}
+#notifSection{
+  max-height:500px;
+  transition:max-height .55s cubic-bezier(0.4,0,0.2,1),
+             padding .55s cubic-bezier(0.4,0,0.2,1),
+             margin .55s cubic-bezier(0.4,0,0.2,1),
+             opacity .4s ease,
+             border-width .55s cubic-bezier(0.4,0,0.2,1);
+  overflow:hidden;
+}
+#notifSection.notif-collapsed{
+  max-height:0 !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+  margin-bottom:0 !important;
+  border-width:0 !important;
+  opacity:0 !important;
+  pointer-events:none;
+}
 .settings-section-head{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px}
 .settings-section-icon{width:36px;height:36px;border-radius:9px;background:rgba(255,123,0,.10);border:1px solid rgba(255,123,0,.22);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .settings-section-text h4{color:#ffb84d;font-size:14px;margin-bottom:3px;line-height:1.2}
@@ -343,7 +360,7 @@ html,body{width:100%;max-width:100%;overflow-x:hidden;background:#0d0614;backgro
 <h3>⚙️ Settings</h3>
 <p>Everything here is optional — the guides work fine without touching a thing.</p>
 </div>
-<div class="settings-section">
+<div class="settings-section" id="notifSection">
 <div class="settings-section-head">
 <div class="settings-section-icon">🔔</div>
 <div class="settings-section-text"><h4>Browser Notifications</h4><p>Get an alert when a player comes online, even if this tab is in the background. You only need to enable this once.</p></div>
@@ -453,7 +470,7 @@ function supportsHover(){
 const CAN_HOVER = supportsHover();
 
 /* ================= DATES & LOCAL TIME ================= */
-const CLAIM_DEADLINE = new Date(2026, 10, 2, 23, 59, 59, 999); // End of Nov 2, local time
+const CLAIM_DEADLINE = new Date(2026, 10, 2, 23, 59, 59, 999);
 
 function getTZLabel(){
   try {
@@ -482,7 +499,6 @@ function getShortLocal(dateObj){
 }
 const EVENT_END_LABEL = getLocalStr(CLAIM_DEADLINE.toISOString());
 
-/* Live navbar clock — shows the user's local date & time */
 function updateNavClock(){
   const el = document.getElementById('navDate');
   if (!el) return;
@@ -494,8 +510,6 @@ function updateNavClock(){
 updateNavClock();
 setInterval(updateNavClock, 1000);
 
-/* Local-midnight unlock times: each night unlocks at 00:00 local time on its day,
-   so if it's already that calendar day for you, the night shows as unlocked. */
 function localMidnightISO(y, m, d) {
   return new Date(y, m - 1, d, 0, 0, 0, 0).toISOString();
 }
@@ -669,7 +683,7 @@ const MERGED_KEY = 'hollow_merged_data';
   } catch(e) { console.warn('Could not load merged data', e); }
 })();
 
-/* ================= FRIEND GROUPS (updated) ================= */
+/* ================= FRIEND GROUPS ================= */
 const friendGroups = {
   black: [
     { name:"Meowsiio", handle:"Meowsiio" },
@@ -787,6 +801,7 @@ function updateEventCountdown(){
   const nextDrop = drops.map(d => ({ d, t: new Date(d.time) })).find(x => x.t.getTime() > Date.now());
 
   if (nextDrop) {
+    // Still waiting for at least one night to unlock
     pillIcon.textContent = '⏳';
     const short = timeUntil(nextDrop.t);
     const full = timeUntilFull(nextDrop.t);
@@ -795,11 +810,22 @@ function updateEventCountdown(){
     pillExpandedEl.textContent = full ? `in ${full} · ${targetLocal}` : 'Unlocking now!';
     pillEl.classList.remove('state-ended','state-live');
   } else {
-    pillIcon.textContent = '✅';
-    pillCollapsedEl.textContent = 'All nights live';
-    pillExpandedEl.textContent = `Claim by ${EVENT_END_LABEL}`;
-    pillEl.classList.add('state-live');
-    pillEl.classList.remove('state-ended');
+    // All nights are live — count down to the claim deadline
+    const untilEnd = timeUntil(CLAIM_DEADLINE);
+    if (untilEnd) {
+      pillIcon.textContent = '🎃';
+      const full = timeUntilFull(CLAIM_DEADLINE);
+      pillCollapsedEl.textContent = `Event ends in ${untilEnd}`;
+      pillExpandedEl.textContent = full ? `Claim rewards before ${EVENT_END_LABEL} · ${full} left` : `Claim by ${EVENT_END_LABEL}`;
+      pillEl.classList.add('state-live');
+      pillEl.classList.remove('state-ended');
+    } else {
+      pillIcon.textContent = '⏰';
+      pillCollapsedEl.textContent = 'Event ended';
+      pillExpandedEl.textContent = `Ended ${EVENT_END_LABEL}`;
+      pillEl.classList.add('state-ended');
+      pillEl.classList.remove('state-live');
+    }
   }
 }
 
@@ -928,25 +954,38 @@ function toggleVisual(){ const g = document.getElementById('visualGuide'); if (g
 function closeModal(){ overlay.classList.remove('active'); currentYear = null; }
 
 /* ================= NOTIFICATIONS ================= */
-const NOTIF_ASKED_KEY = 'hollow_notif_asked_v2';
-
 function getNotifPermission(){
   if (!("Notification" in window)) return 'unsupported';
   return Notification.permission;
 }
 
-function updateNotifUI(){
+function updateNotifUI(animate){
+  const section = document.getElementById('notifSection');
   const statusEl = document.getElementById('notifStatusText');
   const btn = document.getElementById('notifBtn');
   const testBtn = document.getElementById('notifTestBtn');
-  if (!statusEl || !btn) return;
+  if (!section || !statusEl || !btn) return;
   const perm = getNotifPermission();
+
   if (perm === 'granted') {
-    statusEl.textContent = '🔔 Notifications are ON. You\'ll get an alert when players come online while this tab isn\'t focused.';
-    statusEl.style.color = '#9be7a0';
-    btn.style.display = 'none';
-    if (testBtn) testBtn.style.display = 'block';
-  } else if (perm === 'denied') {
+    const alreadyCollapsed = section.classList.contains('notif-collapsed');
+    if (animate === true && !alreadyCollapsed) {
+      section.style.maxHeight = section.offsetHeight + 'px';
+      void section.offsetHeight;
+      requestAnimationFrame(() => {
+        section.classList.add('notif-collapsed');
+        setTimeout(() => { section.style.maxHeight = ''; }, 700);
+      });
+    } else {
+      section.classList.add('notif-collapsed');
+    }
+    return;
+  }
+
+  section.classList.remove('notif-collapsed');
+  section.style.maxHeight = '';
+
+  if (perm === 'denied') {
     statusEl.textContent = '🚫 Notifications are blocked by your browser. Click the lock / site-settings icon in your address bar, allow notifications, then reload this page.';
     statusEl.style.color = '#ff8a80';
     btn.style.display = 'none';
@@ -976,16 +1015,18 @@ function showEnabledTestNotification(){
 
 function requestNotificationPermission(){
   if (!("Notification" in window)) { showToast('❌ Your browser does not support notifications.'); return; }
-  if (Notification.permission === 'granted') { showToast('🔔 Notifications are already enabled!'); updateNotifUI(); return; }
-  if (Notification.permission === 'denied') { showToast('🚫 Notifications are blocked. Enable them in your browser settings for this site.'); updateNotifUI(); return; }
-  localStorage.setItem(NOTIF_ASKED_KEY, 'true');
+  if (Notification.permission === 'granted') { updateNotifUI(true); return; }
+  if (Notification.permission === 'denied') { showToast('🚫 Notifications are blocked. Enable them in your browser settings for this site.'); updateNotifUI(false); return; }
   Notification.requestPermission().then(p => {
-    updateNotifUI();
     if (p === 'granted') {
       showToast('🔔 Notifications enabled!');
+      updateNotifUI(true);
       showEnabledTestNotification();
     } else if (p === 'denied') {
       showToast('🚫 Notifications blocked. You can enable them in browser settings.');
+      updateNotifUI(false);
+    } else {
+      updateNotifUI(false);
     }
   });
 }
@@ -1000,24 +1041,6 @@ function testNotification(){
     });
     showToast('🧪 Test notification sent!');
   } catch(e) { showToast('❌ Could not send test notification.'); }
-}
-
-/* Request notification permission once, on the first user click.
-   After that, the flag is stored and we never ask again. */
-function maybeRequestNotificationsOnce(){
-  try {
-    if (localStorage.getItem(NOTIF_ASKED_KEY) === 'true') return;
-    if (!("Notification" in window)) { localStorage.setItem(NOTIF_ASKED_KEY, 'true'); return; }
-    if (Notification.permission !== 'default') { localStorage.setItem(NOTIF_ASKED_KEY, 'true'); updateNotifUI(); return; }
-    localStorage.setItem(NOTIF_ASKED_KEY, 'true');
-    Notification.requestPermission().then(p => {
-      updateNotifUI();
-      if (p === 'granted') {
-        showToast('🔔 Notifications enabled!');
-        showEnabledTestNotification();
-      }
-    });
-  } catch(e) {}
 }
 
 /* ================= FRIENDS UI ================= */
@@ -1342,15 +1365,24 @@ const userIdCache = new Map();
 const playerDataCache = {};
 let allUserIds = [];
 let isPolling = false;
-let isFirstPresencePoll = true;
 let autoCopyEnabled = localStorage.getItem('hollow_auto_copy') === 'true';
 let pendingCopyHandle = null;
 
+/* Presence bookkeeping — eliminates false "just came online" alerts:
+   - presenceState[handle].online: last KNOWN state (null = unknown yet)
+   - presenceState[handle].lastNotifiedAt: debounce timestamp
+   - presenceInitPolls: counts successful polls since load
+   - We only alert on a genuine false -> true transition AFTER enough polls to be confident,
+     and only if we didn't already notify the same user recently. */
+const presenceState = {};
+let presenceInitPolls = 0;
+let lastPresencePollTime = 0;
+const PRESENCE_SETTLE_POLLS = 2;      // wait for N successful polls before enabling alerts
+const NOTIFY_DEBOUNCE_MS = 30000;     // don't alert the same user twice in a row
+const POLL_GAP_GRACE_MS = 30000;      // if the last poll was long ago, skip notifications for that one poll
+
 let audioUnlocked = false;
 document.addEventListener('click', () => {
-  /* Ask for notifications once — on the first user gesture */
-  maybeRequestNotificationsOnce();
-
   if (audioUnlocked) return;
   const s = getSelectedSound();
   if (!s.url) { audioUnlocked = true; return; }
@@ -1369,7 +1401,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateBgUI();
   renderSoundPicker();
   renderDeepSearchMeta();
-  updateNotifUI();
+  updateNotifUI(false);
 });
 
 function toggleAutoCopy(el){ autoCopyEnabled = el.checked; localStorage.setItem('hollow_auto_copy', autoCopyEnabled); }
@@ -1537,49 +1569,108 @@ async function initFriendSystem(){
 async function pollPresence(){
   if (allUserIds.length === 0 || isPolling) return;
   isPolling = true;
+  const pollTime = Date.now();
+  const gapSinceLastPoll = lastPresencePollTime ? (pollTime - lastPresencePollTime) : 0;
+  const isGapLarge = lastPresencePollTime > 0 && gapSinceLastPoll > POLL_GAP_GRACE_MS;
+  let hadSuccess = false;
   try {
     const res = await fetchWithTimeout(`https://presence.rotunnel.com/v1/presence/users?t=${Date.now()}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userIds: allUserIds }), cache: 'no-store', timeout: 3000 });
     if (!res.ok) { isPolling = false; return; }
     const data = await res.json();
+    if (!data || !Array.isArray(data.userPresences)) { isPolling = false; return; }
+
     const presenceMap = {};
-    data.userPresences.forEach(p => { presenceMap[p.userId] = { isOnline: p.userPresenceType > 0, isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID || p.rootPlaceId === THE_HOLLOW_PLACE_ID, lastOnline: p.lastOnline }; });
+    data.userPresences.forEach(p => {
+      presenceMap[p.userId] = {
+        isOnline: p.userPresenceType > 0,
+        isPlayingHollow: p.placeId === THE_HOLLOW_PLACE_ID || p.rootPlaceId === THE_HOLLOW_PLACE_ID,
+        lastOnline: p.lastOnline
+      };
+    });
+
+    /* Notifications only allowed once we've had enough clean polls AND the last poll wasn't too long ago
+       (avoids false "came online" bursts after the tab was suspended). */
+    const alertsAllowed = presenceInitPolls >= PRESENCE_SETTLE_POLLS && !isGapLarge;
+
     let someoneCameOnline = false, newOnlineHandle = null;
+
     for (const [uName, info] of userIdCache.entries()) {
       const actualHandle = allPlayers.find(p => p.handle.toLowerCase() === uName)?.handle;
-      if (actualHandle && playerDataCache[actualHandle]) {
-        const cache = playerDataCache[actualHandle];
-        const pData = presenceMap[info.id] || { isOnline: false, isPlayingHollow: false, lastOnline: null };
-        const wasOnline = cache.isOnline, isNowOnline = pData.isOnline;
-        cache.isOnline = isNowOnline; cache.isPlayingHollow = pData.isPlayingHollow; cache.lastOnline = pData.lastOnline;
-        if (!isFirstPresencePoll && !wasOnline && isNowOnline) {
-          cache.justCameOnline = true; someoneCameOnline = true; newOnlineHandle = actualHandle;
-          const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`); if (card) card.classList.add('just-online');
-          setTimeout(() => { cache.justCameOnline = false; const c = document.querySelector(`.friend-card[data-username="${actualHandle}"]`); if (c) c.classList.remove('just-online'); }, 60000);
-        }
+      if (!actualHandle || !playerDataCache[actualHandle]) continue;
+
+      const pData = presenceMap[info.id];
+      if (!pData) continue; // unknown this poll — don't update, don't alert
+
+      const cache = playerDataCache[actualHandle];
+      const state = presenceState[actualHandle] || (presenceState[actualHandle] = { online: null, lastNotifiedAt: 0 });
+
+      const wasOnline = state.online; // last KNOWN state
+      const isNowOnline = pData.isOnline;
+
+      // Update cache for UI
+      cache.isOnline = isNowOnline;
+      cache.isPlayingHollow = pData.isPlayingHollow;
+      cache.lastOnline = pData.lastOnline;
+
+      // Only fire a notification if:
+      //  - alerts are currently allowed (settled + no long gap)
+      //  - we had an explicit previous state of "offline" (false), not null/unknown
+      //  - they are online now (real transition)
+      //  - we haven't notified this user recently (debounce)
+      const isRealTransition = wasOnline === false && isNowOnline === true;
+      const debounced = (pollTime - state.lastNotifiedAt) > NOTIFY_DEBOUNCE_MS;
+      if (alertsAllowed && isRealTransition && debounced) {
+        state.lastNotifiedAt = pollTime;
+        cache.justCameOnline = true;
+        someoneCameOnline = true;
+        newOnlineHandle = actualHandle;
+        const card = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
+        if (card) card.classList.add('just-online');
+        setTimeout(() => {
+          cache.justCameOnline = false;
+          const c = document.querySelector(`.friend-card[data-username="${actualHandle}"]`);
+          if (c) c.classList.remove('just-online');
+        }, 60000);
       }
+
+      // Save current known state for next poll's comparison
+      state.online = isNowOnline;
     }
-    isFirstPresencePoll = false;
+
+    hadSuccess = true;
+    presenceInitPolls++;
+    lastPresencePollTime = pollTime;
+
     updateUILive();
+
     if (someoneCameOnline && newOnlineHandle) {
       playOnlineSound();
-      /* Browser notification when the tab is not focused */
       const tabInactive = (document.visibilityState === 'hidden') || !document.hasFocus();
       if ("Notification" in window && Notification.permission === "granted" && tabInactive) {
         try {
-          const notif = new Notification("👻 Player Online!", {
+          new Notification("👻 Player Online!", {
             body: `${newOnlineHandle} just came online!`,
             icon: 'https://www.roblox.com/favicon.ico',
-            tag: 'hollow-online-' + newOnlineHandle
+            tag: 'hollow-online-' + newOnlineHandle + '-' + pollTime
           });
-        } catch(e) { console.warn('Notification failed:', e); }
+        } catch(e) {}
       }
       setTimeout(() => {
-        const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`); if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        if (autoCopyEnabled) { if (!document.hasFocus()) pendingCopyHandle = newOnlineHandle; else navigator.clipboard.writeText(newOnlineHandle).catch(() => {}); }
+        const card = document.querySelector(`.friend-card[data-username="${newOnlineHandle}"]`);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (autoCopyEnabled) {
+          if (!document.hasFocus()) pendingCopyHandle = newOnlineHandle;
+          else navigator.clipboard.writeText(newOnlineHandle).catch(() => {});
+        }
       }, 500);
     }
   } catch(e) {}
-  isPolling = false;
+  finally {
+    isPolling = false;
+    if (!hadSuccess) {
+      // Leave lastPresencePollTime alone so a natural gap check can still trigger on the next success.
+    }
+  }
 }
 
 function updateUILive(){
@@ -1812,7 +1903,7 @@ Only include the keys for nights listed: ${missingNights.join(', ')}. Empty "ste
 }
 
 /* ================= SETTINGS OPEN/CLOSE ================= */
-function openSettings(e){ if (e) e.preventDefault(); closePill(); updateBgUI(); renderSoundPicker(); renderDeepSearchMeta(); updateNotifUI(); document.getElementById('settingsOverlay').classList.add('active'); }
+function openSettings(e){ if (e) e.preventDefault(); closePill(); updateBgUI(); renderSoundPicker(); renderDeepSearchMeta(); updateNotifUI(false); document.getElementById('settingsOverlay').classList.add('active'); }
 function closeSettings(){ stopPreviewSound(); document.getElementById('settingsOverlay').classList.remove('active'); }
 
 /* ================= GLOBAL ================= */
@@ -1872,7 +1963,7 @@ window.addEventListener('load', () => {
 renderSoundPicker();
 renderDeepSearchMeta();
 updateBgUI();
-updateNotifUI();
+updateNotifUI(false);
 </script>
 </body>
 </html>
